@@ -1,0 +1,451 @@
+{
+	"applicationUrlEth": "",
+	"applicationUrlHttp": "",
+	"deployBlockNumber": "",
+	"deploymentAddresses": {},
+	"deploymentDir": "",
+	"files": [],
+	"lastPackageDate": "",
+	"registerContentHashBlockNumber": -1,
+	"registerContentHashTrHash": "",
+	"registerUrlBlockNumber": -1,
+	"registerUrlTrHash": "",
+	"startUrl": "/index.html",
+	"title": "CreditCommons",
+	"states": [
+		{
+			"accounts": [
+				{
+					"address": "38f388fadf4a6a35c61c3f88194ec5ae162c8944",
+					"balance": {
+						"unit": 10,
+						"value": "1"
+					},
+					"name": "user1",
+					"secret": "cb73d9408c4720e230387d956eb0f829d8a4dd2c1055f96257167e14e7169074"
+				},
+				{
+					"address": "06400992be45bc64a52b5c55d3df84596d6cb4a1",
+					"balance": {
+						"unit": 10,
+						"value": "1"
+					},
+					"name": "user2",
+					"secret": "db95780d2f30ca8211eec37cc110cc58a2d4f9308dea00ede6717a585efa2eb7"
+				},
+				{
+					"address": "fa4b795b491cc1975e89f3c78972c3e2e827c882",
+					"balance": {
+						"unit": 10,
+						"value": "1"
+					},
+					"name": "user3",
+					"secret": "090f51d202f847d2468fc87fb06f92c469b8a1927b4aecea796b6831f1331382"
+				},
+				{
+					"address": "b0dcdc575ef06dc30aaea069d8043c9d463c931c",
+					"balance": {
+						"unit": 10,
+						"value": "1"
+					},
+					"name": "user4",
+					"secret": "e9bf58b523b4c94255cad51b3f7efdc85a0c970bf42f1d191c126bb6f49bfb9d"
+				},
+				{
+					"address": "1d24e2844a506d246a37fef51f7c0e0743c9b910",
+					"balance": {
+						"unit": 10,
+						"value": "1"
+					},
+					"name": "user5",
+					"secret": "dc8be11764848bebfa5c947ec1301e90cd8806e1f3e77b49474b023441ce710a"
+				}
+			],
+			"blocks": [
+				{
+					"hash": "",
+					"number": 1,
+					"status": "mined",
+					"transactions": [
+						{
+							"contractId": "creditCommons",
+							"functionId": "creditCommons",
+							"gas": {
+								"value": "1533778"
+							},
+							"gasAuto": true,
+							"gasPrice": {
+								"unit": 18,
+								"value": "100000"
+							},
+							"isContractCreation": true,
+							"isFunctionCall": true,
+							"label": "creditCommons.creditCommons()",
+							"parameters": {},
+							"saveStatus": true,
+							"sender": "cb73d9408c4720e230387d956eb0f829d8a4dd2c1055f96257167e14e7169074",
+							"value": {
+								"unit": 18,
+								"value": "0"
+							}
+						}
+					]
+				},
+				{
+					"hash": "",
+					"number": 2,
+					"status": "mined",
+					"transactions": [
+						{
+							"contractId": "<creditCommons - 0>",
+							"functionId": "createExchange",
+							"gas": {
+								"value": "132327"
+							},
+							"gasAuto": true,
+							"gasPrice": {
+								"unit": 18,
+								"value": "100000"
+							},
+							"isContractCreation": false,
+							"isFunctionCall": true,
+							"label": "<creditCommons - 0>.createExchange()",
+							"parameters": {
+								"_CES_ExID": "AAAA",
+								"_owner": "0x06400992be45bc64a52b5c55d3df84596d6cb4a1"
+							},
+							"saveStatus": true,
+							"sender": "cb73d9408c4720e230387d956eb0f829d8a4dd2c1055f96257167e14e7169074",
+							"value": {
+								"unit": 18,
+								"value": "0"
+							}
+						},
+						{
+							"contractId": "<creditCommons - 0>",
+							"functionId": "createExchange",
+							"gas": {
+								"value": "92327"
+							},
+							"gasAuto": true,
+							"gasPrice": {
+								"unit": 18,
+								"value": "100000"
+							},
+							"isContractCreation": false,
+							"isFunctionCall": true,
+							"label": "<creditCommons - 0>.createExchange()",
+							"parameters": {
+								"_CES_ExID": "BBBB",
+								"_owner": "0xfa4b795b491cc1975e89f3c78972c3e2e827c882"
+							},
+							"saveStatus": true,
+							"sender": "cb73d9408c4720e230387d956eb0f829d8a4dd2c1055f96257167e14e7169074",
+							"value": {
+								"unit": 18,
+								"value": "0"
+							}
+						}
+					]
+				},
+				{
+					"hash": "",
+					"number": 3,
+					"status": "mined",
+					"transactions": [
+						{
+							"contractId": "<creditCommons - 0>",
+							"functionId": "modifyExchange",
+							"gas": {
+								"value": "250000"
+							},
+							"gasAuto": true,
+							"gasPrice": {
+								"unit": 18,
+								"value": "100000"
+							},
+							"isContractCreation": false,
+							"isFunctionCall": true,
+							"label": "creditCommons.modifyExchange()",
+							"parameters": {
+								"_CES_ExID": "",
+								"_cID": "AAAA",
+								"_communityN": "BRIXTON MUNICIPALITY",
+								"_coor": "0x06400992be45bc64a52b5c55d3df84596d6cb4a1",
+								"_creditL": "7000",
+								"_currencyN": "BRISTON POUND",
+								"_currencyS": "BRX",
+								"_debitL": "5000",
+								"_exchangeBC": "70",
+								"_owner": "<creditCommons - 0>",
+								"g_member": "<creditCommons - 0>"
+							},
+							"saveStatus": true,
+							"sender": "db95780d2f30ca8211eec37cc110cc58a2d4f9308dea00ede6717a585efa2eb7",
+							"value": {
+								"unit": 18,
+								"value": "0"
+							}
+						},
+						{
+							"contractId": "<creditCommons - 0>",
+							"functionId": "modifyExchange",
+							"gas": {
+								"value": "250000"
+							},
+							"gasAuto": true,
+							"gasPrice": {
+								"unit": 18,
+								"value": "100000"
+							},
+							"isContractCreation": false,
+							"isFunctionCall": true,
+							"label": "creditCommons.modifyExchange()",
+							"parameters": {
+								"_cID": "BBBB",
+								"_communityN": "SOLIDARIDAD MADRID",
+								"_currencyN": "PESETA",
+								"_currencyS": "PST",
+								"_coor": "0xfa4b795b491cc1975e89f3c78972c3e2e827c882",
+								"_exchangeBC": "120",
+								"_debitL": "4000",
+								"_creditL": "10000"
+							},
+							"saveStatus": true,
+							"sender": "090f51d202f847d2468fc87fb06f92c469b8a1927b4aecea796b6831f1331382",
+							"value": {
+								"unit": 18,
+								"value": "0"
+							}
+						}
+					]
+				},
+				{
+					"hash": "",
+					"number": 4,
+					"status": "mined",
+					"transactions": [
+						{
+							"contractId": "<creditCommons - 0>",
+							"functionId": "registerMember",
+							"gas": {
+								"value": "250000"
+							},
+							"gasAuto": true,
+							"gasPrice": {
+								"unit": 18,
+								"value": "100000"
+							},
+							"isContractCreation": false,
+							"isFunctionCall": true,
+							"label": "creditCommons.registerMember()",
+							"parameters": {
+								"g_cID": "",
+								"_member": "0x06400992be45bc64a52b5c55d3df84596d6cb4a1",
+								"_CES_memberID": "0001",
+								"_alias": "John"
+							},
+							"saveStatus": true,
+							"sender": "db95780d2f30ca8211eec37cc110cc58a2d4f9308dea00ede6717a585efa2eb7",
+							"value": {
+								"unit": 18,
+								"value": "0"
+							}
+						},
+						{
+							"contractId": "<creditCommons - 0>",
+							"functionId": "registerMember",
+							"gas": {
+								"value": "250000"
+							},
+							"gasAuto": true,
+							"gasPrice": {
+								"unit": 18,
+								"value": "100000"
+							},
+							"isContractCreation": false,
+							"isFunctionCall": true,
+							"label": "creditCommons.registerMember()",
+							"parameters": {
+								"_member": "0xb0dcdc575ef06dc30aaea069d8043c9d463c931c",
+								"_CES_memberID": "0002",
+								"_alias": "Mary"
+							},
+							"saveStatus": true,
+							"sender": "db95780d2f30ca8211eec37cc110cc58a2d4f9308dea00ede6717a585efa2eb7",
+							"value": {
+								"unit": 18,
+								"value": "0"
+							}
+						},
+						{
+							"contractId": "<creditCommons - 0>",
+							"functionId": "registerMember",
+							"gas": {
+								"value": "250000"
+							},
+							"gasAuto": true,
+							"gasPrice": {
+								"unit": 18,
+								"value": "100000"
+							},
+							"isContractCreation": false,
+							"isFunctionCall": true,
+							"label": "creditCommons.registerMember()",
+							"parameters": {
+								"_member": "0xfa4b795b491cc1975e89f3c78972c3e2e827c882",
+								"_CES_memberID": "0001",
+								"_alias": "Juan"
+							},
+							"saveStatus": true,
+							"sender": "090f51d202f847d2468fc87fb06f92c469b8a1927b4aecea796b6831f1331382",
+							"value": {
+								"unit": 18,
+								"value": "0"
+							}
+						},
+						{
+							"contractId": "<creditCommons - 0>",
+							"functionId": "registerMember",
+							"gas": {
+								"value": "250000"
+							},
+							"gasAuto": true,
+							"gasPrice": {
+								"unit": 18,
+								"value": "100000"
+							},
+							"isContractCreation": false,
+							"isFunctionCall": true,
+							"label": "creditCommons.registerMember()",
+							"parameters": {
+								"_member": "0x1d24e2844a506d246a37fef51f7c0e0743c9b910",
+								"_CES_memberID": "0002",
+								"_alias": "Mary"
+							},
+							"saveStatus": true,
+							"sender": "090f51d202f847d2468fc87fb06f92c469b8a1927b4aecea796b6831f1331382",
+							"value": {
+								"unit": 18,
+								"value": "0"
+							}
+						}
+					]
+				},
+				{
+					"hash": "",
+					"number": 5,
+					"status": "mined",
+					"transactions": [
+						{
+							"contractId": "<creditCommons - 0>",
+							"functionId": "transfer",
+							"gas": {
+								"value": "250000"
+							},
+							"gasAuto": true,
+							"gasPrice": {
+								"unit": 18,
+								"value": "100000"
+							},
+							"isContractCreation": false,
+							"isFunctionCall": true,
+							"label": "creditCommons.transfer()",
+							"parameters": {
+								"_CES_memberID": "",
+								"_alias": "",
+								"_fromAmount": "150",
+								"_member": "<creditCommons - 0>",
+								"_to": "0x1d24e2844a506d246a37fef51f7c0e0743c9b910"
+							},
+							"saveStatus": true,
+							"sender": "e9bf58b523b4c94255cad51b3f7efdc85a0c970bf42f1d191c126bb6f49bfb9d",
+							"value": {
+								"unit": 18,
+								"value": "0"
+							}
+						}
+					]
+				},
+				{
+					"hash": "",
+					"number": 6,
+					"status": "mined",
+					"transactions": [
+						{
+							"contractId": "<creditCommons - 0>",
+							"functionId": "getUserParameters",
+							"gas": {
+								"value": "250000"
+							},
+							"gasAuto": true,
+							"gasPrice": {
+								"unit": 18,
+								"value": "100000"
+							},
+							"isContractCreation": false,
+							"isFunctionCall": true,
+							"label": "creditCommons.getUserParameters()",
+							"parameters": {
+								"_to": "<creditCommons - 0>",
+								"_fromAmount": "",
+								"g_member": "0x1d24e2844a506d246a37fef51f7c0e0743c9b910"
+							},
+							"saveStatus": true,
+							"sender": "cb73d9408c4720e230387d956eb0f829d8a4dd2c1055f96257167e14e7169074",
+							"value": {
+								"unit": 18,
+								"value": "0"
+							}
+						}
+					]
+				},
+				{
+					"hash": "",
+					"number": -1,
+					"status": "pending",
+					"transactions": []
+				}
+			],
+			"contracts": [],
+			"miner": {
+				"address": "38f388fadf4a6a35c61c3f88194ec5ae162c8944",
+				"balance": {
+					"objectName": "",
+					"value": "1",
+					"unit": 10
+				},
+				"name": "user1",
+				"secret": "cb73d9408c4720e230387d956eb0f829d8a4dd2c1055f96257167e14e7169074"
+			},
+			"title": "Default_1",
+			"transactions": [
+				{
+					"contractId": "admin",
+					"functionId": "admin",
+					"gas": {
+						"value": "250000"
+					},
+					"gasAuto": true,
+					"gasPrice": {
+						"unit": 18,
+						"value": "100000"
+					},
+					"isContractCreation": true,
+					"isFunctionCall": true,
+					"label": "Sample.Sample()",
+					"parameters": {
+						"v": 12
+					},
+					"saveStatus": true,
+					"sender": "cb73d9408c4720e230387d956eb0f829d8a4dd2c1055f96257167e14e7169074",
+					"value": {
+						"unit": 18,
+						"value": "0"
+					}
+				}
+			]
+		}
+	],
+	"defaultStateIndex": 0
+}
