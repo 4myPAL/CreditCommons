@@ -16,10 +16,14 @@ contract creditCommons {
                 baseUnits = 100;
         }
 	
-	event NewGroup(address indexed _groupAddressN, string _groupNameN);
-	event ModifyGroup (address indexed _groupAddressM, address indexed _ownerAddressM, string _groupNameM, string _currencyNameM, uint _rateM, uint _debitLimitM, uint _creditLimitM, bool _openM);
-	event NewMember (address indexed memberAddressN, string memberAliasN);
-	event Transaction (address indexed from, uint fromAmount, address indexed to, int toAmount);
+	event NewGroup(address indexed _groupAddressN, string _groupNameN, uint _NGTimeStamp);
+	event ModifyGroup (address indexed _groupAddressM, uint _MGTimeStamp);
+	event NewMember (address indexed memberAddressN, string memberAliasN, uint _NMTimeStamp);
+	event JoinGroup (address _memberJG, string _aliasJG, address _groupJG, string _groupNameJG, uint _JGTimeStamp);
+	event ResignGroup (address _memberRG, string _aliasRG, address _groupRG, string _groupNameRG, uint _RGTimeStamp);
+	event Transaction (address indexed _sender, uint _senderAmount, address indexed _receiver, int _recieverAmount, uint _tTimeStamp);
+	event Post (address indexed _senderPost, address indexed _receiverPost, string indexed _issuePost, string _contentPost, uint _PostTimeStamp);
+
 
 	// @notice function to name a new sysAdmin
     function transferSysAdmin(address newSysAdmin) {
@@ -28,7 +32,7 @@ contract creditCommons {
 		}
     }
 	
-	// @notice create a structure to file all group and their parameters
+	// @notice create a structure to file all groups and their parameters
 	struct groups {
 		string groupName;
 		string currencyName;
@@ -44,24 +48,25 @@ contract creditCommons {
 	mapping(address => groups) group;
 	
 	// @notice create an index of exchanges for listing purposes
-	string[] groupIndex;
+	address[] groupIndex;
 	
-	// @notice A group can be created by any account that is not in a group. A group is also an account and is identified by its account number. A new group therefore contains two accounts: its own, and its creators.
+	// @notice A group can be created by any account in the system that is not in a group. A group is also an account and is identified by its account number. A new group therefore contains two accounts: its own, and its creators.
 	function createGroup (address _owner, string _groupName) {
-		// @notice the user exists in the system and the user is not in a group
-		if ((bytes(user[msg.sender].alias) != 0) && (bytes(user[msg.sender].group) == 0)) {
+		// @notice the member exists in the system and the member is not in a group
+		if ((bytes(member[msg.sender].alias).length != 0) && (member[msg.sender].group == address(0))) {
 					group[msg.sender].owner = msg.sender;
 					group[msg.sender].groupName = _groupName;
-					user[_owner].group = msg.sender;
+					member[_owner].group = msg.sender;
 					groupIndex [groupIndex.length ++] = msg.sender;
-					NewGroup(msg.sender, _groupName);
+					NewGroup(msg.sender, _groupName, now);
 				}
 	}
 	
 	// @notice transfer group ownership. Old owner or sysAdmin can transfer group ownership to another member of the group
 	function transferGroupOwner (address _group, address _newOwner) {
-		if (((msg.sender == group[_group].owner) || (msg.sender == sysAdmin)) && (user[_newOwner].group = _group)) {
+		if (((msg.sender == group[_group].owner) || (msg.sender == sysAdmin)) && (member[_newOwner].group == _group)) {
         		group[_group].owner = _newOwner;
+										ModifyGroup (_group, now);
 		}
 	}
 		
@@ -71,11 +76,11 @@ contract creditCommons {
 				// @notice if a value for a parameter is given, change the parameter, if empty retain old value
   				if (bytes(_groupName).length != 0) {group[_group].groupName = _groupName;}
 				if (bytes(_currencyName).length != 0) {group[_group].currencyName = _currencyName;}
-				if (bytes(_rate).length != 0) {group[_group].rate = _rate;}	
-				if (bytes(_debitLimit).length != 0) {group[_group].debitLimit = _debitL;}
-				if (bytes(_creditLimit).length != 0) {group[_group].creditLimit = _creditL;}
-				if (bytes(__open).length != 0) {group[_group].open = _open;}	
-					ModifyGroup (_group, group[_group].owner, group[_group].groupName, group[_group].currencyName, group[_group].rate, group[_group].debitLimit, group[_group].creditLimit, group[_group].open);
+				if (_rate != 0) {group[_group].rate = _rate;}	
+				if (_debitLimit != 0) {group[_group].debitLimit = _debitLimit;}
+				if (_creditLimit!= 0) {group[_group].creditLimit = _creditLimit;}
+				if (_open == true) {group[_group].open = true;}	
+					ModifyGroup (_group, now);
 					}
 	}
 
@@ -95,70 +100,110 @@ contract creditCommons {
 			}
 	}
 	
-	// @notice create a structure to file all users
-	struct users {
+	// @notice create a structure to file all members
+	struct members {
 		// @parameter key ID parameters
 		address group;	
-		// @parameter balance is expressed in the user currency. Can only be modified by system operations
-		int balance;	
+		// @parameter balance is expressed in the member currency. Can only be modified by system operations
+		int balance;
+		uint mDebitLimit;
+		uint mCreditLimit;
 		// parameter additional information. Can be extended
 		string alias;
 	}
 	
-	// @notice map the users structure into an array indexed by the users ethereum address (another option is to struture them by their CES Member ID)
-	mapping(address => users) public user;
+	// @notice map the members structure into an array indexed by the members ethereum address (another option is to struture them by their CES Member ID)
+	mapping(address => members) public member;
 	
-	// @notice create an index of users for listing purposes
-	string[] memberIndex;
+	// @notice create an index of members for listing purposes
+	address[] memberIndex;
 	
 	// @notice anybody with an ethereum account can register in the system
-	function register (string _alias) {
+	function registerSystem (string _alias) {
+		// @notice the caller provides a valid alias
 		if (bytes(_alias).length != 0) {
-		user[msg.sender].alias = _alias;
-		user[msg.sender].group = "";
-		user[msg.sender].balance = 0;
-		NewMember (msg.sender, _alias);
+		// @notice the caller is not already the system
+			if (bytes(_alias).length == 0) {
+			member[msg.sender].alias = _alias;
+			member[msg.sender].group = address(0);
+			member[msg.sender].balance = 0;
+			NewMember (msg.sender, _alias, now);
+				}
 			}
 		}
 
-
 	function modifyAlias(string _newAlias) {
-			user[msg.sender].alias = _newAlias;
+			member[msg.sender].alias = _newAlias;
 		}
 	
-	function getUserParameters (address g_member) constant returns (string g_CES_ExchID, string g_CES_memberID, string g_alias, int g_balance) {
-		g_CES_ExchID = user[g_member].CES_ExchID;
-		g_CES_memberID = user[g_member].CES_memberID;
-		g_alias = user[g_member].alias;
-		g_balance = user[g_member].balance;
+	// @notice anybody in the system can join a group
+	function joinGroup (address _groupJ) {
+		// @notice the group exists
+		if (bytes(group[msg.sender].groupName).length != 0){
+			// @notice the member is in the system
+			if (bytes(member[msg.sender].alias).length != 0) {
+				// @notice the member is not at another group. He must resign first
+				if (member[msg.sender].group == address(0)) {
+					member[msg.sender].group = _groupJ;
+					member[msg.sender].balance = 0;
+						JoinGroup (msg.sender, member[msg.sender].alias, _groupJ, group[_groupJ].groupName, now);
+				}			
+			}	
+		}
 	}
 	
-		function getUPbyIndex (uint _mIndex) {
+	function resignGroup (address _groupR) {
+			// @notice the member belongs the group 
+			if (member[msg.sender].group == _groupR) {
+				// @notice the member is not owner of the group
+				if (group[member[msg.sender].group].owner != msg.sender) {
+					// @notice the member balance is zero
+					if (member[msg.sender].balance == 0) {
+						delete member[msg.sender].group;
+						ResignGroup (msg.sender, member[msg.sender].alias, _groupR, group[_groupR].groupName, now);						
+					}					
+				}
+			}
+	}
+	
+	function getMemberParameters (address _memberG) constant returns (address _groupG, string _groupNameG, int _balanceG, string _aliasG) {
+		_groupG = member[_memberG].group;
+		_groupNameG = group[_memberG].groupName;
+		_balanceG = member[_memberG].balance;
+		_aliasG = member[_memberG].alias;
+	}
+	
+		function getMPbyIndex (uint _mIndex) {
 		if (_mIndex < memberIndex.length ++) {
-		getExchangeParameters (exchangeIndex[_mIndex]);
+		getMemberParameters (memberIndex[_mIndex]);
 			}
 	}
 	
 	// @notice funtion transfer form the member of the same exchange or to the member of another exchange. The amount is expressed in the sender currency
 	function transfer (address _to, uint _fromAmount) {		
 		// @notice the given amount is converted to cents in order to work with only integers
-		int _frA = int (_fromAmount);
+		int _intFromAmount = int (_fromAmount);
 		// @the amount is converted to the receiver currency
-		int _exchS = int (exchange[user[msg.sender].CES_ExchID].exchangeBaseCurrency);
-		int _exchR = int(exchange[user[_to].CES_ExchID].exchangeBaseCurrency);
-		int _toAmount = _frA * _exchS/ _exchR;
+		int _rateSender = int (group[member[msg.sender].group].rate);
+		int _rateReceiver = int (group[member[_to].group].rate);
+		int _toAmount = _intFromAmount * _rateSender/ _rateReceiver;
 		// @notice we find out the sender debit limit and the receiver credit limit at their respective exchange communities
-		uint _fromDL = exchange[user[msg.sender].CES_ExchID].debitLimit;
-		uint _toCL = exchange[user[_to].CES_ExchID].creditLimit;
+		uint _fromDLimit = group[member[msg.sender].group].debitLimit;
+		uint _toCLimit = group[member[_to].group].creditLimit;
 		// @notice if the limits ar not surpassed, we proceed with the transfer
-		int _fromDLint = - int(_fromDL);
-		int _toCLint = int( _toCL);
-		if (((user[msg.sender].balance - _frA) > _fromDLint) && ((user[_to].balance + _toAmount) < _toCLint)) {
-		user[msg.sender].balance -= _frA;
-		user[_to].balance += _toAmount;
+		int _intFromDLimit = - int(_fromDLimit);
+		int _intToCLimit = int(_toCLimit);
+		if (((member[msg.sender].balance - _intFromAmount) > _intFromDLimit) && ((member[_to].balance + _toAmount) < _intToCLimit)) {
+		member[msg.sender].balance -= _intFromAmount;
+		member[_to].balance += _toAmount;
 		}
-		Transaction (msg.sender, _fromAmount, _to, _toAmount);
+		Transaction (msg.sender, _fromAmount, _to, _toAmount, now);
 	}
 	
+	// @notice function to post messages to groups or members
+	function post (address _to, string _issue, string _text) {
+		Post (msg.sender, _to, _issue, _text, now);
+	}
+		
 }
 
