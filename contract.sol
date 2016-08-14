@@ -11,7 +11,6 @@ contract creditCommons {
 	function creditCommons() {
 				// @param the intitial sysAdmin is the address from which the contract is created
 				sysAdmin = msg.sender;
-				// @notice we work with cents. Rounded to integer cents
         }
 	
 	event NewGroup(address indexed _creator, uint indexed _groupIDN, string _groupNameN, uint _NGTimeStamp);
@@ -32,9 +31,9 @@ contract creditCommons {
 	
 	// @notice create a structure to file all groups and their parameters
 	struct groups {
+		address owner;
 		string groupName;
 		string currencyName;
-		address owner;
 		// @parameter the exchange rate against the base currency is given in percentage (100 = 1/1)
 		uint rate;
 		uint debitLimit;
@@ -49,16 +48,22 @@ contract creditCommons {
 	uint[] groupIndex;
 	
 	// @notice A group can be created by any account in the system that is not in a group. A group is also an account and is identified by its account number. A new group therefore contains two accounts: its own, and its creators.
-	function createGroup (string _groupName) {
-		// @notice the member exists in the system and the member is not in a group
-		if ((bytes(member[msg.sender].alias).length != 0) && (member[msg.sender].group == 0)) {
-					uint groupID = now;		
+	function createGroup (string _groupName, string _currencyName, uint _rate, uint _debitLimit, uint _creditLimit, bool _open) {
+		// @notice the member exists in the system and the member is not in a group and the name is valid
+		// if ((member[msg.sender].isMember = true) && (member[msg.sender].group == 0) && (bytes(_groupName).length != 0)) {
+			uint groupID = now;	
+			uint index = groupIndex.length + 1;
 					group[groupID].owner = msg.sender;
 					group[groupID].groupName = _groupName;
-					member[msg.sender].group = groupID;
-					groupIndex [groupIndex.length ++] = groupID;
-					NewGroup(msg.sender, groupID, _groupName, now);
-				}
+					group[groupID].currencyName = _currencyName;
+					group[groupID].rate = _rate;
+					group[groupID].debitLimit = _debitLimit;
+					group[groupID].creditLimit = _creditLimit;
+					group[groupID].open = _open;
+							groupIndex[index] = groupID;
+							NewGroup(msg.sender, groupID, _groupName, now);
+							joinGroup (groupID);
+				//}
 	}
 	
 	// @notice transfer group ownership. Old owner or sysAdmin can transfer group ownership to another member of the group
@@ -102,7 +107,7 @@ contract creditCommons {
 	// @notice create a structure to file all members
 	struct members {
 		// @parameter key ID parameters
-		uint memberID;
+		bool isMember;
 		uint group;	
 		// @parameter balance is expressed in the member currency. Can only be modified by system operations
 		int balance;
@@ -113,7 +118,7 @@ contract creditCommons {
 	}
 	
 	// @notice map the members structure into an array indexed by the members ethereum address (another option is to struture them by their CES Member ID)
-	mapping(address => members) public member;
+	mapping(address => members) member;
 	
 	// @notice create an index of members for listing purposes
 	address[] memberIndex;
@@ -123,11 +128,13 @@ contract creditCommons {
 		// @notice the caller provides a valid alias
 		if (bytes(_alias).length != 0) {
 		// @notice the caller is not already the system
-			if (bytes(_alias).length == 0) {
-			member[msg.sender].memberID = now;
+			if (member[msg.sender].isMember != true) {
+			member[msg.sender].isMember = true;
 			member[msg.sender].alias = _alias;
 			member[msg.sender].group = 0;
-			delete member[msg.sender].balance;
+			member[msg.sender].balance = 0;
+			member[msg.sender].mDebitLimit = 0;
+			member[msg.sender].mCreditLimit = 0;
 		NewMember (msg.sender, _alias, now);
 				}
 			}
@@ -140,11 +147,11 @@ contract creditCommons {
 	// @notice anybody in the system can join a group
 	function joinGroup (uint _groupJ) {
 			// @notice the member is in the system
-			if (bytes(member[msg.sender].alias).length != 0) {
+			if (member[msg.sender].isMember = true) {
 				// @notice the group exists
 				if (bytes(group[_groupJ].groupName).length != 0){
 					// @notice the member is not in a group
-					if (member[msg.sender].group == 0)
+					if (member[msg.sender].group != 0)
 					member[msg.sender].group = _groupJ;
 					member[msg.sender].balance = 0;
 					member[msg.sender].mDebitLimit = group[_groupJ].debitLimit;
@@ -154,19 +161,21 @@ contract creditCommons {
 		}
 	}
 	
-	function resignGroup (uint _groupR) {
-			// @notice the member belongs the group 
-			if (_groupR == member[msg.sender].group) {
+	function resignGroup () {
+				uint _groupR = member[msg.sender].group;
+				string _groupRN = group[_groupR].groupName;
 				// @notice the member is not owner of the group
 				if (group[member[msg.sender].group].owner != msg.sender) {
 					// @notice the member balance is zero
 					if (member[msg.sender].balance == 0) {
-						delete member[msg.sender].group;
-						ResignGroup (msg.sender, member[msg.sender].alias, _groupR, group[_groupR].groupName, now);						
+						member[msg.sender].group = 0;
+						member[msg.sender].mDebitLimit = 0;
+						member[msg.sender].mCreditLimit = 0;
+						ResignGroup (msg.sender, member[msg.sender].alias, _groupR, _groupRN, now);						
 					}					
 				}
 			}
-	}
+
 	
 	function modifyMemberLimits (address _groupMember, uint _newDebitLimit, uint _newCreditLimit) {
 		// @notice only the group owner can do 
@@ -176,11 +185,13 @@ contract creditCommons {
 		}
 	}
 	
-	function getMemberParameters (address _memberG) constant returns (uint _groupG, string _groupNameG, int _balanceG, string _aliasG) {
-		_groupG = member[_memberG].group;
-		_groupNameG = group[_groupG].groupName;
-		_balanceG = member[_memberG].balance;
+	function getMemberParameters (address _memberG) constant returns (bool _isMemberG, string _aliasG, uint _groupG, int _balanceG, uint _mDebitLimitG, uint _mCreditLimit) {
+		_isMemberG= member[_memberG].isMember;
 		_aliasG = member[_memberG].alias;
+		_groupG = member[_memberG].group;
+		_balanceG = member[_memberG].balance;
+		_mDebitLimitG = member[_memberG].mDebitLimit;
+		_mCreditLimit = member[_memberG].mCreditLimit;
 	}
 	
 		
@@ -195,8 +206,10 @@ contract creditCommons {
 		// @notice the given amount is converted to cents in order to work with only integers
 		int _intFromAmount = int (_fromAmount);
 		// @the amount is converted to the receiver currency
-		int _rateSender = int (group[member[msg.sender].group].rate);
-		int _rateReceiver = int (group[member[_to].group].rate);
+		uint _rateSenderU = group[member[msg.sender].group].rate;
+		uint _rateReceiverU = group[member[_to].group].rate;
+		int _rateSender = int(_rateSenderU);
+		int _rateReceiver = int(_rateReceiverU);
 		int _toAmount = _intFromAmount * _rateSender/ _rateReceiver;
 		int _intFromDLimit = - int(member[msg.sender].mDebitLimit);
 		int _intToCLimit = int(member[msg.sender].mCreditLimit);
@@ -219,4 +232,5 @@ contract creditCommons {
 	}
 		
 }
+
 
