@@ -1,6 +1,6 @@
 <html lang="en">
 <head>
-  <title>Home</title>
+  <title>Groups</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -13,6 +13,21 @@
 	  	window.onload = function () {	
 	  document.getElementById('me').innerHTML = "ETH Account: <b>" + myCoinbase + "<br></b> Member ID: <b>" + myID + "</b> Alias: <b>" + myAlias + "<br></b>Group ID: <b>" + myGroupID + "</b> Group: <b>" + myGroupName + "</b>";
 		}
+		
+		var newGroup = creditCommons.newGroup({}, {fromBlock: 0, toBlock: 'latest'}, function(error, result) {
+		var row= "";
+		newGroup.watch(function(error, result){
+		row += Date(result.args._NGTimeStamp) + "&emsp;" + result.args._groupIDN + "&emsp;" + result.args._groupNameN + "&emsp;" + _creator + "<br/>";
+		document.getElementById('listNewGroups').innerHTML = row;
+		});
+	});
+	  	var modifiedGroup = creditCommons.ModifyGroup({}, {fromBlock: 0, toBlock: 'latest'}, function(error, result) {
+		var row= "";
+		newGroup.watch(function(error, result){
+		row += Date(result.args._MGTimeStamp) + "&emsp;" + result.args._groupIDM + "&emsp;" + result.args._groupNameM + "&emsp;" + _modifier + "<br/>";
+		document.getElementById('listModGroups').innerHTML = row;
+		});
+	});
 	
 	</script>
     <style>
@@ -31,7 +46,8 @@
     <ul class="nav navbar-nav">
       <li class="active"><a href="index.html">Home - Login</a></li>
       <li><a href="transactions.html">Transactions</a></li>
-      <li><a href="groups.html">Groups</a></li> 
+      <li><a href="groups.html">Groups</a></li>
+      <li><a href="members.html">Members</a></li>
       <li><a href="posts.html">Posts</a></li> 
       <li><a href="polls.html">Polls</a></li> 
 	  <li><a href="monetary.html">Monetary</a></li> 
@@ -43,6 +59,11 @@
 	<div class="row">     
     <div class="col-sm-12">
 	<h3> Groups</h3>
+	<h3>Events</h3>
+		<h4>New Groups</h4>
+		<div  id="listNewGroups"></div>
+		<h4>Modified Groups</h4>
+		<div  id="listModGroups"></div>		
 
 				</div>
 		</div>
