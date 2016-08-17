@@ -10,20 +10,6 @@
   <script type="text/javascript" src="bignumber.js"></script>
   <script type="text/javascript" src="cc.js"></script>
   <script type="text/javascript" >
-	  	window.onload = function () {	
-	document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase + "<br></b> Credit Commons Member: <b>" + isMember + "</b> Alias: <b>" + myAlias + "<br></b>Group ID: <b>" + myGroupID + "</b>";
-	document.getElementById('balance').innerText = myBalance + " " + currencyName;
-	document.getElementById('debitLimit').innerText = myBalance + " " + currencyName;
-	document.getElementById('ceditLimit').innerText = myCreditLimit + " " + currencyName;
-	document.getElementById('groupOwner').innerText = owner;
-	document.getElementById('groupID').innerText = myGroupID;
-	document.getElementById('groupName').innerText = groupName;
-	document.getElementById('currency').innerText = currencyName;
-	document.getElementById('rate').innerText = rate + " " + currencyName;
-	document.getElementById('debitLimitG').innerText = debitLimit + " " + currencyName;
-	document.getElementById('creditLimitG').innerText = creditLimit + " " + currencyName;
-					}
-		
 	</script>
     <style>
     .navbar {
@@ -39,7 +25,7 @@
       <a class="navbar-brand" href="http://creditcommons.net/">Credit Commons</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><a href="index.html">Home - Login</a></li>
+      <li class="active"><><a href="index.html">Home</a></li>
       <li><a href="transactions.html">Transactions</a></li>
       <li><a href="groups.html">Groups</a></li>
       <li><a href="members.html">Members</a></li>	
@@ -53,14 +39,21 @@
 		<small><p class="bg-info" id="me"></p></small>  
 	<div class="row">     
     <div class="col-sm-12">
-	<h3>Login</h3>
-    <form class="form-horizontal" role="form">
-  	 	<div class="form-group">
-			<label class="control-label col-sm-4" for="groupOwner">Account:</label>
-		    <div class="col-sm-8"><input type="text" class="form-control" id="MyAccount" placeholder="Enter your ethereum account"></div>
-		 </div>
+	 <form class="form-horizontal" role="form">
+				<div class="form-group">
+				  <div class="col-sm-6">
+					<select class="form-control" id="myAccount" onchange="login()">
+     				<script type="text/javascript">
+						var options = "";
+						for (i = 0; i < nrAcc; i++) { 
+    					options += "<option>" + accounts[i] + "</option>";
+						}
+						document.write(options);
+					  </script>
+					  </select>
+					</div>
+				</div>
 	</form>
-		 <button type="submit" class="btn btn-default" onClick="login();"> Login</button>
 	<h3>Register at Credit Commons</h3>
 		<form class="form-horizontal" role="form">
   	 	<div class="form-group">
