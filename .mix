@@ -50,6 +50,15 @@
 					},
 					"name": "user4",
 					"secret": "e9bf58b523b4c94255cad51b3f7efdc85a0c970bf42f1d191c126bb6f49bfb9d"
+				},
+				{
+					"address": "def62cd4e6e3adb121f7ea434ade36e94b328241",
+					"balance": {
+						"unit": 10,
+						"value": "1"
+					},
+					"name": "user5",
+					"secret": "1ee573fdbb639de8f9bc0a39415c80959119748cfcd5bb2b114dab2ed07ff71d"
 				}
 			],
 			"blocks": [
@@ -205,14 +214,16 @@
 							},
 							"isContractCreation": false,
 							"isFunctionCall": true,
-							"label": "<creditCommons - 0>.createGroup()",
+							"label": "creditCommons.createGroup()",
 							"parameters": {
 								"_creditLimit": "15000",
-								"_currencyName": "HR",
+								"_currencyName": "HOUR",
 								"_debitLimit": "7000",
 								"_groupName": "DESPERADO",
-								"_open": "true",
-								"_rate": "70"
+								"_open": "1",
+								"_rate": "70",
+								"_groupID": "",
+								"_newOwner": "<creditCommons - 0>"
 							},
 							"saveStatus": true,
 							"sender": "cb73d9408c4720e230387d956eb0f829d8a4dd2c1055f96257167e14e7169074",
@@ -235,6 +246,8 @@
 				"address": "38f388fadf4a6a35c61c3f88194ec5ae162c8944",
 				"balance": {
 					"objectName": "",
+					"value": "1",
+					"unit": 10,
 					"value": "1",
 					"unit": 10
 				},

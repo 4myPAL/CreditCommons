@@ -1,132 +1,228 @@
 <html lang="en">
 <head>
-  <title>Home</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="web3.js"></script>
-  <script type="text/javascript" src="bignumber.js"></script>
-  <script type="text/javascript" src="cc.js"></script>
-  <script type="text/javascript" >
-	</script>
-    <style>
-    .navbar {
-      margin-bottom: 0;
-      border-radius: 0;
-     }
-   </style>
+<title>Home</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="web3.js"></script>
+<script type="text/javascript" src="bignumber.js"></script>
+<script type="text/javascript" src="cc.js"></script>
+<script type="text/javascript">
+	window.onload = function() {
+		document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase
+				+ "<br></b> Credit Commons Member: <b>" + isMember
+				+ "</b> Alias: <b>" + myAlias + "<br></b>Group ID: <b>"
+				+ myGroupID + "</b>";
+		document.getElementById('balance').innerText = myBalance + " "
+				+ currencyName;
+		document.getElementById('debitLimit').innerText = myDebitLimit + " "
+				+ currencyName;
+		document.getElementById('ceditLimit').innerText = myCreditLimit + " "
+				+ currencyName;
+		document.getElementById('groupOwner').innerText = owner;
+		document.getElementById('groupID').innerText = myGroupID;
+		document.getElementById('groupName').innerText = groupName;
+		document.getElementById('currency').innerText = currencyName;
+		document.getElementById('rate').innerText = rate + " " + currencyName;
+		document.getElementById('debitLimitG').innerText = debitLimit + " "
+				+ currencyName;
+		document.getElementById('creditLimitG').innerText = creditLimit + " "
+				+ currencyName;
+
+	}
+
+	function register() {
+		if (isMember = false) {
+			var alias = document.getElementById('alias').value;
+			creditCommons.registerSystem(alias);
+		}
+	}
+
+	function resign() {
+		if (myGroupID > 0) {
+			creditCommons.resignGroup();
+		}
+	}
+
+	function joinGroup() {
+		if (myGroupID = 0) {
+			var group = document.getElementById('group').value;
+			creditCommons.joinGroup(group);
+		}
+	}
+</script>
+<style>
+.navbar {
+	margin-bottom: 0;
+	border-radius: 0;
+}
+</style>
 </head>
 <body>
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="http://creditcommons.net/">Credit Commons</a>
-    </div>
-    <ul class="nav navbar-nav">
-      <li class="active"><><a href="index.html">Home</a></li>
-      <li><a href="transactions.html">Transactions</a></li>
-      <li><a href="groups.html">Groups</a></li>
-      <li><a href="members.html">Members</a></li>	
-      <li><a href="posts.html">Posts</a></li> 
-      <li><a href="polls.html">Polls</a></li> 
-	  <li><a href="monetary.html">Monetary</a></li> 
-    </ul>
-  </div>
-</nav>
-	<div class="container bg-3 text-center">  
-		<small><p class="bg-info" id="me"></p></small>  
-	<div class="row">     
-    <div class="col-sm-12">
-	 <form class="form-horizontal" role="form">
-				<div class="form-group">
-				  <div class="col-sm-6">
-					<select class="form-control" id="myAccount" onchange="login()">
-     				<script type="text/javascript">
-						var options = "";
-						for (i = 0; i < nrAcc; i++) { 
-    					options += "<option>" + accounts[i] + "</option>";
-						}
-						document.write(options);
-					  </script>
-					  </select>
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="http://creditcommons.net/">Credit
+					Commons</a>
+			</div>
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="index.html">Home</a></li>
+				<li><a href="transactions.html">Transactions</a></li>
+				<li><a href="groups.html">Groups</a></li>
+				<li><a href="members.html">Members</a></li>
+				<li><a href="posts.html">Posts</a></li>
+				<li><a href="polls.html">Polls</a></li>
+				<li><a href="monetary.html">Monetary</a></li>
+			</ul>
+		</div>
+	</nav>
+	<div class="container bg-3 text-center">
+		<small><p class="bg-info" id="me"></p></small>
+		<div class="row">
+			<div class="col-sm-12">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<div class="col-sm-6">
+							<select class="form-control" id="myAccount" onchange="login()">
+								<script type="text/javascript">
+									var options = "";
+									for (i = 0; i < nrAcc; i++) {
+										options += "<option>" + accounts[i]
+												+ "</option>";
+									}
+									document.write(options);
+								</script>
+							</select>
+						</div>
 					</div>
-				</div>
-	</form>
-	<h3>Register at Credit Commons</h3>
-		<form class="form-horizontal" role="form">
-  	 	<div class="form-group">
-		    <label class="control-label col-sm-4" for="alias">Chose alias:</label>
-		    <div class="col-sm-4"><input type="text" class="form-control" id="alias" placeholder="Enter your alias"></div>
-		 </div>
-	</form>
-	<button type="submit" class="btn btn-default" onClick="register();">Register</button> 
-	<h3>Your account</h3>
-	<form class="form-horizontal" role="form">
-  	 	 <div class="form-group">
-		    <label class="control-label col-sm-4" for="balance">Balance:</label>
-		    <div class="col-sm-4"><output class="form-control" id="balance"></output></div>
-		 </div>
-		<div class="form-group">
-		    <label class="control-label col-sm-4" for="debitLimit">Debit Limit:</label>
-		    <div class="col-sm-4"><output class="form-control" id="debitLimit"></output></div>
-		 </div>
-		 <div class="form-group">
-		    <label class="control-label col-sm-4" for="ceditLimit">Credit Limit:</label>
-		    <div class="col-sm-4"><output class="form-control" id="ceditLimit"></output></div>
-		 </div>
-	</form>
-	<h3>Your Group</h3>
-	<form class="form-horizontal" role="form">
-		  <div class="form-group">
-		    <label class="control-label col-sm-4" for="groupOwner">Group Owner:</label>
-		    <div class="col-sm-8"><output class="form-control" id="groupOwner"></output></div>
-		 </div>
-  	 	 <div class="form-group">
-		    <label class="control-label col-sm-4" for="groupID">Group ID:</label>
-		    <div class="col-sm-4"><output class="form-control" id="groupID"></output></div>
-		 </div>
-		 <div class="form-group">
-		    <label class="control-label col-sm-4" for="groupName">Group Name:</label>
-		    <div class="col-sm-4"><output class="form-control" id="groupName"></output></div>
-		 </div>
-  	 	 <div class="form-group">
-		    <label class="control-label col-sm-4" for="currency">Group Currency:</label>
-		    <div class="col-sm-4"><output class="form-control" id="currency"></output></div>
-		 </div>
-		 <div class="form-group">
-		    <label class="control-label col-sm-4" for="rate">Currency Rate:</label>
-		    <div class="col-sm-4"><output class="form-control" id="rate"></output></div>
-		 </div>
-		 <div class="form-group">
-		    <label class="control-label col-sm-4" for="debitLimit">Default Debit Limit:</label>
-		    <div class="col-sm-4"><output class="form-control" id="debitLimitG"></output></div>
-		 </div>
-		<div class="form-group">
-		    <label class="control-label col-sm-4" for="creditLimit">Default Credit Limit:</label>
-		 <div class="col-sm-4"><output class="form-control" id="creditLimitG"></output></div>
-		 </div>
-	</form>				
+				</form>
+				<h3>Register at Credit Commons</h3>
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="alias">Chose
+							alias:</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" id="alias"
+								placeholder="Enter your alias">
+						</div>
+					</div>
+				</form>
+				<button type="submit" class="btn btn-default" onClick="register();">Register</button>
+				<h3>Your account</h3>
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="balance">Balance:</label>
+						<div class="col-sm-4">
+							<output class="form-control" id="balance"></output>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="debitLimit">Debit
+							Limit:</label>
+						<div class="col-sm-4">
+							<output class="form-control" id="debitLimit"></output>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="ceditLimit">Credit
+							Limit:</label>
+						<div class="col-sm-4">
+							<output class="form-control" id="ceditLimit"></output>
+						</div>
+					</div>
+				</form>
+				<h3>Your Group</h3>
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="groupOwner">Group
+							Owner:</label>
+						<div class="col-sm-8">
+							<output class="form-control" id="groupOwner"></output>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="groupID">Group
+							ID:</label>
+						<div class="col-sm-4">
+							<output class="form-control" id="groupID"></output>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="groupName">Group
+							Name:</label>
+						<div class="col-sm-4">
+							<output class="form-control" id="groupName"></output>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="currency">Group
+							Currency:</label>
+						<div class="col-sm-4">
+							<output class="form-control" id="currency"></output>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="rate">Currency
+							Rate:</label>
+						<div class="col-sm-4">
+							<output class="form-control" id="rate"></output>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="debitLimit">Default
+							Debit Limit:</label>
+						<div class="col-sm-4">
+							<output class="form-control" id="debitLimitG"></output>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="creditLimit">Default
+							Credit Limit:</label>
+						<div class="col-sm-4">
+							<output class="form-control" id="creditLimitG"></output>
+						</div>
+					</div>
+				</form>
 
-		<button type="submit" class="btn btn-default" onClick="resign();">Resign from your Group</button>
-		<hr>
-		<form class="form-horizontal" role="form">
-  	 	<div class="form-group">
-		    <label class="control-label col-sm-4" for="group">Join Group:</label>
-		    <div class="col-sm-4"><input type="text" class="form-control" id="group" placeholder="Enter the group ID"></div>
-		 </div>
-	</form>
-	<button type="submit" class="btn btn-default" onClick="join();">Join</button> 
+				<button type="submit" class="btn btn-default" onClick="resign();">Resign
+					from your Group</button>
+				<hr>
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="group">Join
+							Group:</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" id="group"
+								placeholder="Enter the group ID">
+						</div>
+					</div>
+				</form>
+				<button type="submit" class="btn btn-default" onClick="join();">Join</button>
 
-	<h3></h3>
-				</div>
+				<h3></h3>
+			</div>
 		</div>
 	</div>
 
-<div class="panel-footer">
-<p><img src="https://trancsitu.files.wordpress.com/2014/05/ethereum-logo.png" width="20" align="top"/> <i>Powered by ethereum</i></p>
-	<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
-</div>
+	<div class="panel-footer">
+		<p>
+			<img
+				src="https://trancsitu.files.wordpress.com/2014/05/ethereum-logo.png"
+				width="20" align="top" /> <i>Powered by ethereum</i>
+		</p>
+		<a rel="license"
+			href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img
+			alt="Creative Commons License" style="border-width: 0"
+			src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a><br />This
+		work is licensed under a <a rel="license"
+			href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative
+			Commons Attribution-NonCommercial-ShareAlike 4.0 International
+			License</a>.
+	</div>
 </body>
 </html>
