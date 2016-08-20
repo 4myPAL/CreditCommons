@@ -13,47 +13,51 @@
 <script type="text/javascript" src="bignumber.js"></script>
 <script type="text/javascript" src="creditCommons.js"></script>
 <script type="text/javascript">
-
-window.onload = function() {
-    document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase
-    + "<br></b> Credit Commons Member: <b>" + isMember
-    + "</b> Alias: <b>" + myAlias + "<br></b>Group ID: <b>" + myGroupID
-    + "</b> Group Name: <b>" + groupName
-    + "</b>";
-    document.getElementById('balance').innerText = myBalance + " "
-            + currencyName;
-    document.getElementById('debitLimit').innerText = myDebitLimit + " "
-            + currencyName;
-}
-            
-
-function transfer () {
-		  var payee = document.getElementById('payee').value;
-		  var amount= document.getElementById('amount').value * baseUnits;
-		  creditCommons.transfer(payee, amount);
-		  location.reload();
+	window.onload = function() {
+		document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase
+				+ "<br></b> Credit Commons Member: <b>" + isMember
+				+ "</b> Alias: <b>" + myAlias + "<br></b>Group ID: <b>"
+				+ myGroupID + "</b> Group Name: <b>" + groupName + "</b>";
+		document.getElementById('balance').innerText = myBalance + " "
+				+ currencyName;
+		document.getElementById('debitLimit').innerText = myDebitLimit + " "
+				+ currencyName;
 	}
-	
-var transfersIncome = creditCommons.Transaction({'_to' : coinbase}, {fromBlock: 1500000, toBlock: 'latest'}, function(error, result) {
-    var row= "";
-    transfersRec.watch(function(error, result){
-    row += "<hr>" + Date(result.args._tTimeStamp) + "<br/>" 
-    "<b>From</b>" + result.args._sender + "&emsp;" + result.args._senderAmount + "<br/>" 
-    "<b>Income</b>" + result.args._recieverAmount + "<br/>";
-    document.getElementById('listIncomes').innerHTML = row;
-    });
-});
 
-var transfersSpendings = creditCommons.Transaction({'_from' : coinbase}, {fromBlock: 1500000, toBlock: 'latest'}, function(error, result) {
-    var row= "";
-    transfersRec.watch(function(error, result){
-    row += "<hr>" + Date(result.args._tTimeStamp) + "<br/>" 
-    "<b>To</b>" + result.args._sender + "&emsp;" + result.args._recieverAmount + "<br/>" 
-    "<b>Spenditure</b>" + result.args._senderAmount + "&emsp;" + currencyName + "<br/>";
-    document.getElementById('listSpendings').innerHTML = row;
-    });
-});
+	function transfer() {
+		var payee = document.getElementById('payee').value;
+		var amount = document.getElementById('amount').value;
+		creditCommons.transfer(payee, amount);
 
+	}
+
+	var transfersIncome = creditCommons.Transaction({}, {
+		fromBlock : 0,
+		toBlock : 'latest'
+	}, function(error, result) {
+		var row = "";
+		transfersRec.watch(function(error, result) {
+			row += "<hr/>" + Date(result.args._tTimeStamp) + "<br/>"
+			"<b>From</b>" + result.args._sender + "&emsp;"
+					+ result.args._senderAmount + "<br/>"
+			"<b>Income</b>" + result.args._receiverAmount + "<br/>";
+			document.getElementById('listIncomes').innerHTML = row;
+		});
+	});
+
+	var transfersSpendings = creditCommons.Transaction({}, {
+		fromBlock : 0,
+		toBlock : 'latest'
+	}, function(error, result) {
+		var row = "";
+		transfersRec.watch(function(error, result) {
+			row += "<hr/>" + Date(result.args._tTimeStamp) + "<br/>"
+			"<b>To</b>" + result.args._receiver + "&emsp;"
+					+ result.args._receiverAmount + "<br/>"
+			"<b>Spenditure</b>" + result.args._senderAmount + "<br/>";
+			document.getElementById('listSpendings').innerHTML = row;
+		});
+	});
 </script>
 <style>
 .navbar {
@@ -89,13 +93,13 @@ var transfersSpendings = creditCommons.Transaction({'_from' : coinbase}, {fromBl
 						<div class="col-sm-6">
 							<select class="form-control" id="myAccount" onchange="login()">
 								<script type="text/javascript">
-                                    var options = "";
-                                    for (i = 0; i < nrAcc; i++) {
-                                        options += "<option>" + accounts[i]
-                                                + "</option>";
-                                    }
-                                    document.write(options);
-                                </script>
+									var options = "";
+									for (i = 0; i < nrAcc; i++) {
+										options += "<option>" + accounts[i]
+												+ "</option>";
+									}
+									document.write(options);
+								</script>
 							</select>
 						</div>
 					</div>
