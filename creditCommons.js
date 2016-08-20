@@ -1,7 +1,4 @@
-if (typeof web3 !== 'undefined')
-	web3 = new Web3(web3.currentProvider);
-else
-	web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+
 
 var creditcommonsContract = web3.eth.contract([ {
 	"constant" : false,
@@ -464,6 +461,12 @@ var nrAcc = accounts.length;
 
 web3.eth.defaultAccount = accounts[0];
 var coinbase = web3.eth.defaultAccount;
+
+var nrGroups = creditCommons.getNumberGroups();
+var numberG = nrGroups[0];
+
+var nrMembers = creditCommons.getNumberMembers();
+var numberM = nrMembers[0];
 
 var member = creditCommons.getMember(coinbase);
 var isMember = member[0];

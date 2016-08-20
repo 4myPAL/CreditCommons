@@ -236,6 +236,42 @@
 				},
 				{
 					"hash": "",
+					"number": 4,
+					"status": "mined",
+					"transactions": [
+						{
+							"contractId": "<creditCommons - 0>",
+							"functionId": "createGroup",
+							"gas": {
+								"value": "275806"
+							},
+							"gasAuto": true,
+							"gasPrice": {
+								"unit": 18,
+								"value": "100000"
+							},
+							"isContractCreation": false,
+							"isFunctionCall": true,
+							"label": "<creditCommons - 0>.createGroup()",
+							"parameters": {
+								"_creditLimit": "25000",
+								"_currencyName": "HENAR",
+								"_debitLimit": "5000",
+								"_groupName": "HENARES",
+								"_open": "true",
+								"_rate": "130"
+							},
+							"saveStatus": true,
+							"sender": "db95780d2f30ca8211eec37cc110cc58a2d4f9308dea00ede6717a585efa2eb7",
+							"value": {
+								"unit": 18,
+								"value": "0"
+							}
+						}
+					]
+				},
+				{
+					"hash": "",
 					"number": -1,
 					"status": "pending",
 					"transactions": []

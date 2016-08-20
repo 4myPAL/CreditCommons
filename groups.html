@@ -13,6 +13,19 @@
 <script type="text/javascript" src="bignumber.js"></script>
 <script type="text/javascript" src="creditCommons.js"></script>
 <script type="text/javascript">
+	var groupsList = "";
+	
+	function getGroupData (i) {
+			var groupData = creditCommons.getGroupbyIndex(i);
+			var ownerI = groupList[0];
+			var groupNameI = groupList[1];
+			var currencyNameI = groupList[2];
+			var rateI = groupList[3];
+			var debitLimitI = groupList[4];
+			var creditLimitI = groupList[5];
+			var openI = groupList[6];
+	}
+	
 	window.onload = function() {
 		document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase
 				+ "<br></b> Credit Commons Member: <b>" + isMember
@@ -28,29 +41,35 @@
 				+ currencyName;
 		document.getElementById('creditLimitG').innerText = creditLimit + " "
 				+ currencyName;
+		document.getElementById('numberG').innerHTML = "Number of groups in the system: <b>" + nrGroups + "</b>";
+		
+		for (i = 0; i < nrGroups; i++) { 
+			getGroupData (i);
+    		groupsList += ownerI + groupNameI + currencyNameI + rateI + debitLimitI + creditLimitI + openI + "<br>";
+		}
 	}
 
-	var newGroup = creditCommons.newGroup({}, {
-		fromBlock : 1500000,
+	var newGroup = creditCommons.NewGroup({}, {
+		fromBlock : 0,
 		toBlock : 'latest'
 	}, function(error, result) {
 		var row = "";
 		newGroup.watch(function(error, result) {
-			row += Date(result.args._NGTimeStamp) + "&emsp;"
-					+ result.args._groupIDN + "&emsp;"
-					+ result.args._groupNameN + "&emsp;" + _creator + "<br/>";
+			row += "<hr/>Created: " + Date(result.args._NGTimeStamp) + "<br/>"
+					+ "Group ID: <b>" + result.args._groupIDN + "</b> Group Name: <b>"
+					+ result.args._groupNameN + "</b><br/>Owner: " + result.args._creator + "<br/>";
 			document.getElementById('listNewGroups').innerHTML = row;
 		});
 	});
 	var modifiedGroup = creditCommons.ModifyGroup({}, {
-		fromBlock : 1500000,
+		fromBlock : 0,
 		toBlock : 'latest'
 	}, function(error, result) {
 		var row = "";
 		newGroup.watch(function(error, result) {
-			row += Date(result.args._MGTimeStamp) + "&emsp;"
-					+ result.args._groupIDM + "&emsp;"
-					+ result.args._groupNameM + "&emsp;" + _modifier + "<br/>";
+			row += "<hr/>Modified: " + Date(result.args._NGTimeStamp) + "<br/>"
+					+ "Group ID: <b>" + result.args._groupIDM + "</b> Group Name: <b>"
+					+ result.args._groupNameM + "</b><br/>Owner: " + result.args._modifier + "<br/>";
 			document.getElementById('listModGroups').innerHTML = row;
 		});
 	});
@@ -168,6 +187,7 @@
 				</form>
 				<button type="submit" class="btn btn-default" onClick="join();">Join</button>
 				<h3>Groups</h3>
+				<p id="numberG"></p>
 
 				<h3>Events</h3>
 				<h4>New Groups</h4>
