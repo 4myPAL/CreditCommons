@@ -1,3 +1,8 @@
+if (typeof web3 !== 'undefined')
+	web3 = new Web3(web3.currentProvider);
+else
+	web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+
 var creditcommonsContract = web3.eth.contract([ {
 	"constant" : false,
 	"inputs" : [ {
@@ -78,6 +83,15 @@ var creditcommonsContract = web3.eth.contract([ {
 	} ],
 	"name" : "getMPbyIndex",
 	"outputs" : [],
+	"type" : "function"
+}, {
+	"constant" : true,
+	"inputs" : [],
+	"name" : "getNumberGroups",
+	"outputs" : [ {
+		"name" : "",
+		"type" : "uint256"
+	} ],
 	"type" : "function"
 }, {
 	"constant" : false,
@@ -165,26 +179,35 @@ var creditcommonsContract = web3.eth.contract([ {
 	} ],
 	"name" : "getGroup",
 	"outputs" : [ {
-		"name" : "_ownerG",
+		"name" : "",
 		"type" : "address"
 	}, {
-		"name" : "_groupNameG",
+		"name" : "",
 		"type" : "string"
 	}, {
-		"name" : "_currencyNameG",
+		"name" : "",
 		"type" : "string"
 	}, {
-		"name" : "_rateG",
+		"name" : "",
 		"type" : "uint256"
 	}, {
-		"name" : "_debitLimitG",
+		"name" : "",
 		"type" : "uint256"
 	}, {
-		"name" : "_creditLimitG",
+		"name" : "",
 		"type" : "uint256"
 	}, {
-		"name" : "_openG",
+		"name" : "",
 		"type" : "bool"
+	} ],
+	"type" : "function"
+}, {
+	"constant" : true,
+	"inputs" : [],
+	"name" : "getNumberMembers",
+	"outputs" : [ {
+		"name" : "",
+		"type" : "uint256"
 	} ],
 	"type" : "function"
 }, {
@@ -372,7 +395,7 @@ var creditcommonsContract = web3.eth.contract([ {
 		"type" : "address"
 	}, {
 		"indexed" : false,
-		"name" : "_recieverAmount",
+		"name" : "_receiverAmount",
 		"type" : "int256"
 	}, {
 		"indexed" : false,
@@ -434,12 +457,14 @@ var creditcommonsContract = web3.eth.contract([ {
 } ]);
 
 var creditCommons = creditcommonsContract
-		.at("0xf025d81196b72fba60a1d4dddad12eeb8360d828");
+		.at("0xf9647d68E096126783d8CfbBED26af9035D5b5e3");
 
 var accounts = web3.eth.accounts;
 var nrAcc = accounts.length;
+
 web3.eth.defaultAccount = accounts[0];
 var coinbase = web3.eth.defaultAccount;
+
 var member = creditCommons.getMember(coinbase);
 var isMember = member[0];
 var myAlias = member[1];
@@ -447,6 +472,7 @@ var myGroupID = member[2];
 var myBalance = member[3];
 var myDebitLimit = member[4];
 var myCreditLimit = member[5];
+
 var group = creditCommons.getGroup(myGroupID);
 var owner = group[0];
 var groupName = group[1];
@@ -477,7 +503,7 @@ function login() {
 	document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase
 			+ "<br></b> Credit Commons Member: <b>" + isMember
 			+ "</b> Alias: <b>" + myAlias + "<br></b>Group ID: <b>" + myGroupID
-			+ "</b>";
+			+ "</b> Group Name: <b>" + groupName + "</b>";
 	document.getElementById('balance').innerText = myBalance + " "
 			+ currencyName;
 	document.getElementById('debitLimit').innerText = myDebitLimit + " "

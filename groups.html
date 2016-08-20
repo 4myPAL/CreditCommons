@@ -13,16 +13,25 @@
 <script type="text/javascript" src="bignumber.js"></script>
 <script type="text/javascript" src="creditCommons.js"></script>
 <script type="text/javascript">
-
 	window.onload = function() {
 		document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase
 				+ "<br></b> Credit Commons Member: <b>" + isMember
 				+ "</b> Alias: <b>" + myAlias + "<br></b>Group ID: <b>"
-				+ myGroupID + "</b>";
+				+ myGroupID + "</b> Group Name: <b>" + groupName + "</b>";
+
+		document.getElementById('groupOwner').innerText = owner;
+		document.getElementById('groupID').innerText = myGroupID;
+		document.getElementById('groupName').innerText = groupName;
+		document.getElementById('currency').innerText = currencyName;
+		document.getElementById('rate').innerText = rate + " " + currencyName;
+		document.getElementById('debitLimitG').innerText = debitLimit + " "
+				+ currencyName;
+		document.getElementById('creditLimitG').innerText = creditLimit + " "
+				+ currencyName;
 	}
 
 	var newGroup = creditCommons.newGroup({}, {
-		fromBlock : 0,
+		fromBlock : 1500000,
 		toBlock : 'latest'
 	}, function(error, result) {
 		var row = "";
@@ -34,7 +43,7 @@
 		});
 	});
 	var modifiedGroup = creditCommons.ModifyGroup({}, {
-		fromBlock : 0,
+		fromBlock : 1500000,
 		toBlock : 'latest'
 	}, function(error, result) {
 		var row = "";
@@ -91,7 +100,75 @@
 						</div>
 					</div>
 				</form>
+				<h3>My Group</h3>
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="groupOwner">Group
+							Owner:</label>
+						<div class="col-sm-8">
+							<output class="form-control" id="groupOwner"></output>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="groupID">Group
+							ID:</label>
+						<div class="col-sm-4">
+							<output class="form-control" id="groupID"></output>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="groupName">Group
+							Name:</label>
+						<div class="col-sm-4">
+							<output class="form-control" id="groupName"></output>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="currency">Group
+							Currency:</label>
+						<div class="col-sm-4">
+							<output class="form-control" id="currency"></output>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="rate">Currency
+							Rate:</label>
+						<div class="col-sm-4">
+							<output class="form-control" id="rate"></output>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="debitLimit">Default
+							Debit Limit:</label>
+						<div class="col-sm-4">
+							<output class="form-control" id="debitLimitG"></output>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="creditLimit">Default
+							Credit Limit:</label>
+						<div class="col-sm-4">
+							<output class="form-control" id="creditLimitG"></output>
+						</div>
+					</div>
+				</form>
+
+				<button type="submit" class="btn btn-default" onClick="resign();">Resign
+					from your Group</button>
+				<hr>
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="group">Join
+							Group:</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" id="group"
+								placeholder="Enter the group ID">
+						</div>
+					</div>
+				</form>
+				<button type="submit" class="btn btn-default" onClick="join();">Join</button>
 				<h3>Groups</h3>
+
 				<h3>Events</h3>
 				<h4>New Groups</h4>
 				<div id="listNewGroups"></div>

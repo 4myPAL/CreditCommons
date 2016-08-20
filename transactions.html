@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
-    href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <script
-    src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script
-    src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="web3.js"></script>
 <script type="text/javascript" src="bignumber.js"></script>
 <script type="text/javascript" src="creditCommons.js"></script>
@@ -16,9 +16,10 @@
 
 window.onload = function() {
     document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase
-            + "<br></b> Credit Commons Member: <b>" + isMember
-            + "</b> Alias: <b>" + myAlias + "<br></b>Group ID: <b>"
-            + myGroupID + "</b>";
+    + "<br></b> Credit Commons Member: <b>" + isMember
+    + "</b> Alias: <b>" + myAlias + "<br></b>Group ID: <b>" + myGroupID
+    + "</b> Group Name: <b>" + groupName
+    + "</b>";
     document.getElementById('balance').innerText = myBalance + " "
             + currencyName;
     document.getElementById('debitLimit').innerText = myDebitLimit + " "
@@ -33,7 +34,7 @@ function transfer () {
 		  location.reload();
 	}
 	
-var transfersIncome = creditCommons.Transaction({'_to' : coinbase}, {fromBlock: 0, toBlock: 'latest'}, function(error, result) {
+var transfersIncome = creditCommons.Transaction({'_to' : coinbase}, {fromBlock: 1500000, toBlock: 'latest'}, function(error, result) {
     var row= "";
     transfersRec.watch(function(error, result){
     row += "<hr>" + Date(result.args._tTimeStamp) + "<br/>" 
@@ -43,7 +44,7 @@ var transfersIncome = creditCommons.Transaction({'_to' : coinbase}, {fromBlock: 
     });
 });
 
-var transfersSpendings = creditCommons.Transaction({'_from' : coinbase}, {fromBlock: 0, toBlock: 'latest'}, function(error, result) {
+var transfersSpendings = creditCommons.Transaction({'_from' : coinbase}, {fromBlock: 1500000, toBlock: 'latest'}, function(error, result) {
     var row= "";
     transfersRec.watch(function(error, result){
     row += "<hr>" + Date(result.args._tTimeStamp) + "<br/>" 
@@ -79,15 +80,15 @@ var transfersSpendings = creditCommons.Transaction({'_from' : coinbase}, {fromBl
 			</ul>
 		</div>
 	</nav>
-    <div class="container bg-3 text-center">
-        <small><p class="bg-info" id="me"></p></small>
-        <div class="row">
-            <div class="col-sm-12">
-                <form class="form-horizontal" role="form">
-                    <div class="form-group">
-                        <div class="col-sm-6">
-                            <select class="form-control" id="myAccount" onchange="login()">
-                                <script type="text/javascript">
+	<div class="container bg-3 text-center">
+		<small><p class="bg-info" id="me"></p></small>
+		<div class="row">
+			<div class="col-sm-12">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<div class="col-sm-6">
+							<select class="form-control" id="myAccount" onchange="login()">
+								<script type="text/javascript">
                                     var options = "";
                                     for (i = 0; i < nrAcc; i++) {
                                         options += "<option>" + accounts[i]
@@ -95,10 +96,10 @@ var transfersSpendings = creditCommons.Transaction({'_from' : coinbase}, {fromBl
                                     }
                                     document.write(options);
                                 </script>
-                            </select>
-                        </div>
-                    </div>
-                </form>
+							</select>
+						</div>
+					</div>
+				</form>
 				<h3>Payment</h3>
 				<form class="form-horizontal" role="form" id="payData">
 					<div class="form-group">
@@ -109,7 +110,8 @@ var transfersSpendings = creditCommons.Transaction({'_from' : coinbase}, {fromBl
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="debitLimit">My Debit Limit:</label>
+						<label class="control-label col-sm-4" for="debitLimit">My
+							Debit Limit:</label>
 						<div class="col-sm-4">
 							<output class="form-control" id="debitLimit"></output>
 						</div>
