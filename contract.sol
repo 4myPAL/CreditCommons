@@ -111,13 +111,13 @@ contract creditCommons {
     return (group[_groupG].owner, group[_groupG].groupName, group[_groupG].currencyName, group[_groupG].rate, group[_groupG].debitLimit, group[_groupG].creditLimit, group[_groupG].open);
 	}
 	
-	function getNumberGroups () constant returns (uint) {
-	    return (groupIndex.length);
+	function getNumberGroups () constant returns (uint _nrG) {
+	    _nrG = groupIndex.length;
 	}
 	
-	function getGroupbyIndex (uint _gIndex) {
+	function getGroupbyIndex (uint _gIndex) constant returns (uint _getGroupID) {
 		if (_gIndex < groupIndex.length ++) {
-		getGroup (groupIndex[_gIndex]);
+		_getGroupID = groupIndex[_gIndex];
 			}
 	}
 	
@@ -223,13 +223,13 @@ contract creditCommons {
 	    return (member[_memberG].isMember, member[_memberG].alias, member[_memberG].group, member[_memberG].balance, member[_memberG].mDebitLimit, member[_memberG].mCreditLimit);
 	}
 	
-	function getNumberMembers () constant returns (uint) {
-		return(memberIndex.length);
+	function getNumberMembers () constant returns (uint _nrM) {
+		_nrM = memberIndex.length;
 	}
 		
-	function getMPbyIndex (uint _mIndex) {
+	function getMPbyIndex (uint _mIndex) constant returns (address _getMemberID) {
 		if (_mIndex < memberIndex.length ++) {
-		getMember (memberIndex[_mIndex]);
+		_getMemberID = memberIndex[_mIndex];
 			}
 	}
 	

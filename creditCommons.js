@@ -1,7 +1,7 @@
-if(typeof web3 !== 'undefined')
-  web3 = new Web3(web3.currentProvider);
+if (typeof web3 !== 'undefined')
+	web3 = new Web3(web3.currentProvider);
 else
-  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+	web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8080"));
 
 var creditcommonsContract = web3.eth.contract([ {
 	"constant" : false,
@@ -76,20 +76,23 @@ var creditcommonsContract = web3.eth.contract([ {
 	"outputs" : [],
 	"type" : "function"
 }, {
-	"constant" : false,
+	"constant" : true,
 	"inputs" : [ {
 		"name" : "_mIndex",
 		"type" : "uint256"
 	} ],
 	"name" : "getMPbyIndex",
-	"outputs" : [],
+	"outputs" : [ {
+		"name" : "_getMemberID",
+		"type" : "address"
+	} ],
 	"type" : "function"
 }, {
 	"constant" : true,
 	"inputs" : [],
 	"name" : "getNumberGroups",
 	"outputs" : [ {
-		"name" : "",
+		"name" : "_nrG",
 		"type" : "uint256"
 	} ],
 	"type" : "function"
@@ -118,13 +121,16 @@ var creditcommonsContract = web3.eth.contract([ {
 	"outputs" : [],
 	"type" : "function"
 }, {
-	"constant" : false,
+	"constant" : true,
 	"inputs" : [ {
 		"name" : "_gIndex",
 		"type" : "uint256"
 	} ],
 	"name" : "getGroupbyIndex",
-	"outputs" : [],
+	"outputs" : [ {
+		"name" : "_getGroupID",
+		"type" : "uint256"
+	} ],
 	"type" : "function"
 }, {
 	"constant" : false,
@@ -206,7 +212,7 @@ var creditcommonsContract = web3.eth.contract([ {
 	"inputs" : [],
 	"name" : "getNumberMembers",
 	"outputs" : [ {
-		"name" : "",
+		"name" : "_nrM",
 		"type" : "uint256"
 	} ],
 	"type" : "function"
@@ -457,7 +463,7 @@ var creditcommonsContract = web3.eth.contract([ {
 } ]);
 
 var creditCommons = creditcommonsContract
-		.at("0xf9647d68E096126783d8CfbBED26af9035D5b5e3");
+		.at("0xf025d81196b72fba60a1d4dddad12eeb8360d828");
 
 var accounts = web3.eth.accounts;
 var nrAcc = accounts.length;

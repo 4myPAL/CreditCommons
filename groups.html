@@ -16,14 +16,15 @@
 	var groupsList = "";
 	
 	function getGroupData (i) {
-			var groupData = creditCommons.getGroupbyIndex(i);
-			var ownerI = groupList[0];
-			var groupNameI = groupList[1];
-			var currencyNameI = groupList[2];
-			var rateI = groupList[3];
-			var debitLimitI = groupList[4];
-			var creditLimitI = groupList[5];
-			var openI = groupList[6];
+			var groupID = creditCommons.getGroupbyIndex(i);
+			var groupData = creditCommons.getGroup(groupID);
+			var ownerI = groupData[0];
+			var groupNameI = groupData[1];
+			var currencyNameI = groupData[2];
+			var rateI = groupData[3];
+			var debitLimitI = groupData[4];
+			var creditLimitI = groupData[5];
+			var openI = groupData[6];
 	}
 	
 	window.onload = function() {
