@@ -31,12 +31,14 @@
 		if (isMember = false) {
 			var alias = document.getElementById('alias').value;
 			creditCommons.registerSystem(alias);
+			location.reload();
 		}
 	}
 
 	function resign() {
 		if (myGroupID > 0) {
 			creditCommons.resignGroup();
+			location.reload();
 		}
 	}
 
@@ -44,6 +46,7 @@
 		if (myGroupID = 0) {
 			var group = document.getElementById('group').value;
 			creditCommons.joinGroup(group);
+			location.reload();
 		}
 	}
 </script>

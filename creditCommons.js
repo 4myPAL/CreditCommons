@@ -1,8 +1,3 @@
-if (typeof web3 !== 'undefined')
-	web3 = new Web3(web3.currentProvider);
-else
-	web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8080"));
-
 var creditcommonsContract = web3.eth.contract([ {
 	"constant" : false,
 	"inputs" : [ {
@@ -463,16 +458,13 @@ var creditcommonsContract = web3.eth.contract([ {
 } ]);
 
 var creditCommons = creditcommonsContract
-		.at("0x8306e1b040DDa20F1f27a5D6d03AFC0B8dA215D1");
+		.at("0xf025d81196b72fba60a1d4dddad12eeb8360d828");
 
 var accounts = web3.eth.accounts;
 var nrAcc = accounts.length;
 
 web3.eth.defaultAccount = accounts[0];
 var coinbase = web3.eth.defaultAccount;
-
-var nrGroups = creditCommons.getNumberGroups();
-var numberG = nrGroups[0];
 
 var nrMembers = creditCommons.getNumberMembers();
 var numberM = nrMembers[0];
