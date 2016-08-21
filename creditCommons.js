@@ -21,7 +21,7 @@ var creditcommonsContract = web3.eth.contract([ {
 		"name" : "_to",
 		"type" : "uint256"
 	}, {
-		"name" : "_issue",
+		"name" : "_subject",
 		"type" : "string"
 	}, {
 		"name" : "_text",
@@ -168,7 +168,7 @@ var creditcommonsContract = web3.eth.contract([ {
 		"name" : "_to",
 		"type" : "address"
 	}, {
-		"name" : "_issue",
+		"name" : "_subject",
 		"type" : "string"
 	}, {
 		"name" : "_text",
@@ -422,7 +422,7 @@ var creditcommonsContract = web3.eth.contract([ {
 		"type" : "address"
 	}, {
 		"indexed" : true,
-		"name" : "_issuePost",
+		"name" : "_subjectPost",
 		"type" : "string"
 	}, {
 		"indexed" : false,
@@ -447,7 +447,7 @@ var creditcommonsContract = web3.eth.contract([ {
 		"type" : "uint256"
 	}, {
 		"indexed" : true,
-		"name" : "_issuePost",
+		"name" : "_subjectPost",
 		"type" : "string"
 	}, {
 		"indexed" : false,

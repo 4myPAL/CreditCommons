@@ -19,8 +19,8 @@ contract creditCommons {
 	event JoinGroup (address _memberJG, string _aliasJG, uint _groupJG, string _groupNameJG, uint _JGTimeStamp);
 	event ResignGroup (address _memberRG, string _aliasRG, uint _groupRG, string _groupNameRG, uint _RGTimeStamp);
 	event Transaction (address indexed _sender, uint _senderAmount, address indexed _receiver, int _receiverAmount, uint _tTimeStamp);
-	event PostMember (address indexed _senderPost, address indexed _receiverPost, string indexed _issuePost, string _contentPost, uint _PostTimeStamp);
-	event PostGroup (address indexed _senderPost, uint indexed _receiverPost, string indexed _issuePost, string _contentPost, uint _PostTimeStamp);
+	event PostMember (address indexed _senderPost, address indexed _receiverPost, string indexed _subjectPost, string _contentPost, uint _PostTimeStamp);
+	event PostGroup (address indexed _senderPost, uint indexed _receiverPost, string indexed _subjectPost, string _contentPost, uint _PostTimeStamp);
 
 	// @notice function to name a new sysAdmin
     function transferSysAdmin(address newSysAdmin) {
@@ -260,13 +260,13 @@ contract creditCommons {
 	}
 	
 	// @notice function to post messages to members
-	function postMember (address _to, string _issue, string _text) {
-		PostMember (msg.sender, _to, _issue, _text, now);
+	function postMember (address _to, string _subject, string _text) {
+		PostMember (msg.sender, _to, _subject, _text, now);
 	}
 	
 	// @notice function to post messages to a group
-	function postGroup (uint _to, string _issue, string _text) {
-		PostGroup (msg.sender, _to, _issue, _text, now);
+	function postGroup (uint _to, string _subject, string _text) {
+		PostGroup (msg.sender, _to, _subject, _text, now);
 	}
 		
 }
