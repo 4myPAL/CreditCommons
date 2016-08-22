@@ -512,7 +512,7 @@ function login() {
 			+ currencyName;
 	document.getElementById('debitLimit').innerText = myDebitLimit + " "
 			+ currencyName;
-	document.getElementById('ceditLimit').innerText = myCreditLimit + " "
+	document.getElementById('creditLimit').innerText = myCreditLimit + " "
 			+ currencyName;
 	document.getElementById('groupOwner').innerText = owner;
 	document.getElementById('groupID').innerText = myGroupID;
@@ -523,4 +523,5 @@ function login() {
 			+ currencyName;
 	document.getElementById('creditLimitG').innerText = creditLimit + " "
 			+ currencyName;
+	document.getElementById('open').innerText = open;
 }

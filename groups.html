@@ -19,7 +19,6 @@
 				+ "<br></b> Credit Commons Member: <b>" + isMember
 				+ "</b> Alias: <b>" + myAlias + "<br></b>Group ID: <b>"
 				+ myGroupID + "</b> Group Name: <b>" + groupName + "</b>";
-
 		document.getElementById('groupOwner').innerText = owner;
 		document.getElementById('groupID').innerText = myGroupID;
 		document.getElementById('groupName').innerText = groupName;
@@ -34,10 +33,11 @@
 				+ creditCommons.getNumberGroups() + "</b>";
 
 		var groupsList = "";
+		var date;
 		for (i = 0; i < creditCommons.getNumberGroups(); i++) {
-
+			date = new Date(creditCommons.getGroupbyIndex(i) * 1000);
 			groupsList += "<hr/>Created: "
-					+ Date(creditCommons.getGroupbyIndex(i))
+					+ date
 					+ "<br/>Group ID: <b>"
 					+ creditCommons.getGroupbyIndex(i)
 					+ "</b> Group name: <b>"
@@ -55,13 +55,15 @@
 					+ "</b> Credit Limit: <b>"
 					+ creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[5]
 					+ "</b><br/>";
+
+			document.getElementById('listGroups').innerHTML = groupsList;
+			document.getElementById('owner_ID').innerHTML = " Owner " + owner
+					+ " Group " + myGroupID;
 		}
-		document.getElementById('listGroups').innerHTML = groupsList;
-		document.getElementById('owner_ID').innerHTML = " Owner " + owner
-				+ " Group " + myGroupID;
+
 	}
 
-	function join() {
+	function joinGroup() {
 		var groupToJ = document.getElementById('groupToJoin').value;
 		creditCommons.joinGroup(groupToJ);
 		location.reload();
@@ -78,11 +80,13 @@
 		toBlock : 'latest'
 	}, function(error, result) {
 		var row = "";
+		var d;
 		newGroup.watch(function(error, result) {
-			row += "<hr/>Created: " + Date(result.args._NGTimeStamp) + "<br/>"
-					+ "Group ID: <b>" + result.args._groupIDN
-					+ "</b> Group Name: <b>" + result.args._groupNameN
-					+ "</b><br/>Owner: " + result.args._creator + "<br/>";
+			d = new Date(result.args._NGTimeStamp * 1000);
+			row += "<hr/>Created: " + d + "<br/>" + "Group ID: <b>"
+					+ result.args._groupIDN + "</b> Group Name: <b>"
+					+ result.args._groupNameN + "</b><br/>Owner: "
+					+ result.args._creator + "<br/>";
 			document.getElementById('listNewGroups').innerHTML = row;
 		});
 	});
@@ -92,7 +96,9 @@
 		toBlock : 'latest'
 	}, function(error, result) {
 		var row = "";
+		var d;
 		modifiedGroup.watch(function(error, result) {
+			d = new Date(result.args._MGTimeStamp * 1000);
 			row += "<hr/>Modified: " + Date(result.args._MGTimeStamp) + "<br/>"
 					+ "Group ID: <b>" + result.args._groupIDM
 					+ "</b> Group Name: <b>" + result.args._groupNameM
@@ -184,14 +190,14 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="debitLimit">Default
+						<label class="control-label col-sm-4" for="debitLimitG">Default
 							Debit Limit:</label>
 						<div class="col-sm-4">
 							<output class="form-control" id="debitLimitG"></output>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="creditLimit">Default
+						<label class="control-label col-sm-4" for="creditLimitG">Default
 							Credit Limit:</label>
 						<div class="col-sm-4">
 							<output class="form-control" id="creditLimitG"></output>
@@ -218,7 +224,7 @@
 						</div>
 					</div>
 				</form>
-				<button type="submit" class="btn btn-default" onClick="join();">Join</button>
+				<button type="submit" class="btn btn-default" onClick="joinGroup();">Join</button>
 				<hr />
 				<div id="owner_ID"></div>
 				<form class="form-horizontal" role="form">
@@ -325,8 +331,7 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="Mopen">
-							Open:</label>
+						<label class="control-label col-sm-4" for="Mopen"> Open:</label>
 						<div class="col-sm-4">
 							<input class="form-control" type="checkbox" id="Mopen">
 						</div>

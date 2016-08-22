@@ -36,8 +36,10 @@
 		toBlock : 'latest'
 	}, function(error, result) {
 		var row = "";
+		var d;
 		transfersIncome.watch(function(error, result) {
-			row += "<hr/>Date: " + Date(result.args._tTimeStamp) + 
+			d = new Date(result.args._tTimeStamp * 1000);
+			row += "<hr/>Date: " + d +
 			"<br/>From: <b>" + result.args._sender + 
 			"</b><br/>Quantity sent in his currency: <b>" + result.args._senderAmount + 
 			"</b><br/>To: <b>" + result.args._receiver + 
