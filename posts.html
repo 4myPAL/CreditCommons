@@ -17,6 +17,37 @@
 	  	    + "</b> Group Name: <b>" + groupName
 	  	    + "</b>";
             }
+	  	
+	    var postMember = creditCommons.PostMember({}, {
+	        fromBlock : 1400000,
+	        toBlock : 'latest'
+	    }, function(error, result) {
+	        var row = "";
+	        postMember.watch(function(error, result) {
+	            row += "<hr/>Sent: " + Date(result.args._PostTimeStamp) + "<br/>"
+	                    + "From : <b>" + result.args._senderPost + "</b><br/>"
+                        + "To : <b>" + result.args._receiverPost + "</b><br/>"
+                        + "Subject : <b>" + result.args.__subjectPost + "</b><br/>"
+                        + _contentPost;
+	            document.getElementById('listMemberPosts').innerHTML = row;
+	        });
+	    });
+
+	       var postGroup = creditCommons.PostGroup({}, {
+	            fromBlock : 1400000,
+	            toBlock : 'latest'
+	        }, function(error, result) {
+	            var row = "";
+	            postGroup.watch(function(error, result) {
+	                row += "<hr/>Sent: " + Date(result.args._PostTimeStamp) + "<br/>"
+	                        + "From : <b>" + result.args._senderPost + "</b><br/>"
+	                        + "To : <b>" + result.args._receiverPost + "</b><br/>"
+	                        + "Subject : <b>" + result.args.__subjectPost + "</b><br/>"
+	                        + _contentPost;
+	                document.getElementById('listGroupPosts').innerHTML = row;
+	            });
+	        });
+
 	
 	</script>
     <style>
@@ -63,8 +94,10 @@
 					</div>
 				</div>
 	</form>
-	<h3> Posts</h3>
-
+	<h3>Posts to Members</h3>
+	<div class="text-left" id="listMemberPosts"></div>
+	<h3>Posts to Groups</h3>
+<div class="text-left" id="listGroupPosts"></div>
 				</div>
 		</div>
 	</div>
