@@ -13,9 +13,8 @@
 <script type="text/javascript" src="bignumber.js"></script>
 <script type="text/javascript" src="creditCommons.js"></script>
 <script type="text/javascript">
-
 	window.onload = function() {
-				
+
 		document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase
 				+ "<br></b> Credit Commons Member: <b>" + isMember
 				+ "</b> Alias: <b>" + myAlias + "<br></b>Group ID: <b>"
@@ -30,23 +29,50 @@
 				+ currencyName;
 		document.getElementById('creditLimitG').innerText = creditLimit + " "
 				+ currencyName;
+		document.getElementById('open').innerText = open;
 		document.getElementById('numberG').innerHTML = "Number of groups in the system: <b>"
 				+ creditCommons.getNumberGroups() + "</b>";
-	
-	
-	var groupsList = "";	
-	for (i = 0; i < creditCommons.getNumberGroups(); i++) {
-	
-    groupsList += "<hr/>Created: " + Date(creditCommons.getGroupbyIndex(i)) + 
-	"<br/>Group ID: <b>" + creditCommons.getGroupbyIndex(i) + "</b> Group name: <b>" + creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[1] + "</b> Open: <b>" + creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[6] + 
-	"</b><br>Group Owner: <b>" + creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[1] +
-	"</b><br>Currency name: <b>" + creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[2] + "</b> Rate: <b>" + creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[3]
-	+ "</b> Debit Limit: <b>"  + creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[4] + "</b> Credit Limit: <b>"  + creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[5] +
-	"</b><br/>";
-	}	
-	document.getElementById('listGroups').innerHTML = groupsList;
+
+		var groupsList = "";
+		for (i = 0; i < creditCommons.getNumberGroups(); i++) {
+
+			groupsList += "<hr/>Created: "
+					+ Date(creditCommons.getGroupbyIndex(i))
+					+ "<br/>Group ID: <b>"
+					+ creditCommons.getGroupbyIndex(i)
+					+ "</b> Group name: <b>"
+					+ creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[1]
+					+ "</b> Open: <b>"
+					+ creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[6]
+					+ "</b><br>Group Owner: <b>"
+					+ creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[0]
+					+ "</b><br>Currency name: <b>"
+					+ creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[2]
+					+ "</b> Rate: <b>"
+					+ creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[3]
+					+ "</b> Debit Limit: <b>"
+					+ creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[4]
+					+ "</b> Credit Limit: <b>"
+					+ creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[5]
+					+ "</b><br/>";
+		}
+		document.getElementById('listGroups').innerHTML = groupsList;
+		document.getElementById('owner_ID').innerHTML = " Owner " + owner
+				+ " Group " + myGroupID;
 	}
-	
+
+	function join() {
+		var groupToJ = document.getElementById('groupToJoin').value;
+		creditCommons.joinGroup(groupToJ);
+		location.reload();
+	}
+
+	function transferOwner() {
+		var newO = document.getElementById('newOwner').value;
+		creditCommons.transferGroupOwner(myGroupID, newOwner);
+		location.reload();
+	}
+
 	var newGroup = creditCommons.NewGroup({}, {
 		fromBlock : 0,
 		toBlock : 'latest'
@@ -74,7 +100,6 @@
 			document.getElementById('listModGroups').innerHTML = row;
 		});
 	});
-	
 </script>
 <style>
 .navbar {
@@ -172,6 +197,12 @@
 							<output class="form-control" id="creditLimitG"></output>
 						</div>
 					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="open">Open:</label>
+						<div class="col-sm-4">
+							<output class="form-control" id="open"></output>
+						</div>
+					</div>
 				</form>
 
 				<button type="submit" class="btn btn-default" onClick="resign();">Resign
@@ -179,43 +210,162 @@
 				<hr>
 				<form class="form-horizontal" role="form">
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="group">Join
+						<label class="control-label col-sm-4" for="groupToJoin">Join
 							Group:</label>
 						<div class="col-sm-4">
-							<input type="text" class="form-control" id="group"
+							<input type="text" class="form-control" id="groupToJoin"
 								placeholder="Enter the group ID">
 						</div>
 					</div>
 				</form>
 				<button type="submit" class="btn btn-default" onClick="join();">Join</button>
-				<h3>Groups</h3>
-				<p id="numberG"></p>
-				<div class="text-left" id="listGroups"></div>
-
-				<h3>Events</h3>
-				<h4>New Groups</h4>
-				<div class="text-left" id="listNewGroups"></div>
-				<h4>Modified Groups</h4>
-				<div class="text-left" id="listModGroups"></div>
-
+				<hr />
+				<div id="owner_ID"></div>
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="newOwner">Transfer
+							Ownership:</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" id="newOwner"
+								placeholder="Enter the new owner address">
+						</div>
+					</div>
+				</form>
+				<button type="submit" class="btn btn-default" onClick="transfer();">Transfer</button>
+				<hr />
 			</div>
 		</div>
-	</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<h4>Create Group</h4>
+				<div>Only if you do not belong to one</div>
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="CgroupName">Group
+							Name:</label>
+						<div class="col-sm-4">
+							<input class="form-control" id="CgroupName">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="Ccurrency">Group
+							Currency:</label>
+						<div class="col-sm-4">
+							<input class="form-control" id="Ccurrency">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="Crate">Currency
+							Rate:</label>
+						<div class="col-sm-4">
+							<input class="form-control" id="Crate">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="CdebitLimit">Default
+							Debit Limit:</label>
+						<div class="col-sm-4">
+							<input class="form-control" id="CdebitLimitG">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="CcreditLimit">Default
+							Credit Limit:</label>
+						<div class="col-sm-4">
+							<input class="form-control" id="CcreditLimitG">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="Copen">Open:</label>
+						<div class="col-sm-4">
+							<input class="form-control" id="Copen">
+						</div>
+					</div>
+				</form>
+				<button type="submit" class="btn btn-default"
+					onClick="createGroup();">Create</button>
+			</div>
+			<div class="col-sm-6">
+				<h4>Modify my Group</h4>
+				<div>Only owner</div>
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="MgroupName">New
+							Group Name:</label>
+						<div class="col-sm-4">
+							<input class="form-control" id="MgroupName">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="Mcurrency">New
+							Group Currency:</label>
+						<div class="col-sm-4">
+							<input class="form-control" id="Mcurrency">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="Mrate">New
+							Currency Rate:</label>
+						<div class="col-sm-4">
+							<input class="form-control" id="Mrate">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="MdebitLimit">New
+							Default Debit Limit:</label>
+						<div class="col-sm-4">
+							<input class="form-control" id="MdebitLimitG">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="McreditLimit">New
+							Default Credit Limit:</label>
+						<div class="col-sm-4">
+							<input class="form-control" id="McreditLimitG">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="Mopen">New
+							Open:</label>
+						<div class="col-sm-4">
+							<input class="form-control" id="Mopen">
+						</div>
+					</div>
+				</form>
+				<button type="submit" class="btn btn-default"
+					onClick="modifyGroup();">Modify</button>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<hr />
+					<h3>Groups</h3>
+					<p id="numberG"></p>
+					<div class="text-left" id="listGroups"></div>
 
-	<div class="panel-footer">
-		<p>
-			<img
-				src="https://trancsitu.files.wordpress.com/2014/05/ethereum-logo.png"
-				width="20" align="top" /> <i>Powered by ethereum</i>
-		</p>
-		<a rel="license"
-			href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img
-			alt="Creative Commons License" style="border-width: 0"
-			src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a><br />This
-		work is licensed under a <a rel="license"
-			href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative
-			Commons Attribution-NonCommercial-ShareAlike 4.0 International
-			License</a>.
-	</div>
+					<h3>Events</h3>
+					<h4>New Groups</h4>
+					<div class="text-left" id="listNewGroups"></div>
+					<h4>Modified Groups</h4>
+					<div class="text-left" id="listModGroups"></div>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="panel-footer">
+			<p>
+				<img
+					src="https://trancsitu.files.wordpress.com/2014/05/ethereum-logo.png"
+					width="20" align="top" /> <i>Powered by ethereum</i>
+			</p>
+			<a rel="license"
+				href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img
+				alt="Creative Commons License" style="border-width: 0"
+				src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a><br />This
+			work is licensed under a <a rel="license"
+				href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative
+				Commons Attribution-NonCommercial-ShareAlike 4.0 International
+				License</a>.
+		</div>
 </body>
 </html>

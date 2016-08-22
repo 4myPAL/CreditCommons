@@ -31,7 +31,7 @@
 		location.reload();
 	}
 
-	var transfersIncome = creditCommons.Transaction({_receiver : coinbase}, {
+	var transfersIncome = creditCommons.Transaction({}, {
 		fromBlock : 0,
 		toBlock : 'latest'
 	}, function(error, result) {
@@ -40,26 +40,12 @@
 			row += "<hr/>Date: " + Date(result.args._tTimeStamp) + 
 			"<br/>From: <b>" + result.args._sender + 
 			"</b><br/>Quantity sent in his currency: <b>" + result.args._senderAmount + 
-			"</b><br/>Quantity received in my currency: <b>" + result.args._receiverAmount + "</b><br/>";
+			"</b><br/>To: <b>" + result.args._receiver + 
+			"</b><br/>Quantity received in his currency: <b>" + result.args._receiverAmount + "</b><br/>";
 			document.getElementById('listIncomes').innerHTML = row;
 		});
 	});
 
-	var transfersSpendings = creditCommons.Transaction({_sender : coinbase}, {
-		fromBlock : 0,
-		toBlock : 'latest'
-	}, function(error, result) {
-		var row = "";
-		transfersSpendings.watch(function(error, result) {
-			row += "<hr/>Date: " + Date(result.args._tTimeStamp) + 
-			"<br/>To: <b>" + result.args._receiver + 
-			"</b><br/>Quantity sent in my currency: <b>" + result.args._senderAmount + 
-			"</b><br/>Quantity received in his currency: <b>" + result.args._receiverAmount + "</b><br/>";
-			document.getElementById('listSpendings').innerHTML = row;
-		});
-	});
-	
-	
 </script>
 <style>
 .navbar {
@@ -142,13 +128,8 @@
 					Payment</button>
 
 				<h3>Transactions</h3>
-				<hr/>				
-				<h4>Incomes</h4>
 				<div class="text-left" id="listIncomes"></div>
 				<hr/>				
-				<h4>Spendings</h4>
-				<div class="text-left" id="listSpendings"></div>
-				<hr/>
 
 			</div>
 		</div>
