@@ -14,11 +14,10 @@
 <script type="text/javascript" src="creditCommons.js"></script>
 <script type="text/javascript">
 	window.onload = function() {
-	    document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase
-	    + "<br></b> Credit Commons Member: <b>" + isMember
-	    + "</b> Alias: <b>" + myAlias + "<br></b>Group ID: <b>" + myGroupID
-	    + "</b> Group Name: <b>" + groupName
-	    + "</b>";
+		document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase
+				+ "<br></b> Credit Commons Member: <b>" + isMember
+				+ "</b> Alias: <b>" + myAlias + "<br></b>Group ID: <b>"
+				+ myGroupID + "</b> Group Name: <b>" + groupName + "</b>";
 		document.getElementById('balance').innerText = myBalance + " "
 				+ currencyName;
 		document.getElementById('debitLimit').innerText = myDebitLimit + " "
@@ -71,7 +70,6 @@
 				<li><a href="members.html">Members</a></li>
 				<li><a href="posts.html">Posts</a></li>
 				<li><a href="polls.html">Polls</a></li>
-				<li><a href="monetary.html">Monetary</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -106,7 +104,7 @@
 						</div>
 					</div>
 				</form>
-                    <button type="submit" class="btn btn-default" onClick="register();">Register</button>
+				<button type="submit" class="btn btn-default" onClick="register();">Register</button>
 				<h3>My account</h3>
 				<form class="form-horizontal" role="form">
 					<div class="form-group">
@@ -130,7 +128,7 @@
 						</div>
 					</div>
 				</form>
-				
+
 				<h3></h3>
 			</div>
 		</div>

@@ -1,83 +1,96 @@
 <html lang="en">
 <head>
-  <title>Members</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="web3.js"></script>
-  <script type="text/javascript" src="bignumber.js"></script>
+<title>Members</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="web3.js"></script>
+<script type="text/javascript" src="bignumber.js"></script>
 <script type="text/javascript" src="creditCommons.js"></script>
-  <script type="text/javascript" >
-	  	window.onload = function () {   
-	  	    document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase
-	  	    + "<br></b> Credit Commons Member: <b>" + isMember
-	  	    + "</b> Alias: <b>" + myAlias + "<br></b>Group ID: <b>" + myGroupID
-	  	    + "</b> Group Name: <b>" + groupName
-	  	    + "</b>";
-            }
-	
-	</script>
-    <style>
-    .navbar {
-      margin-bottom: 0;
-      border-radius: 0;
-     }
-   </style>
+<script type="text/javascript">
+	window.onload = function() {
+		document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase
+				+ "<br></b> Credit Commons Member: <b>" + isMember
+				+ "</b> Alias: <b>" + myAlias + "<br></b>Group ID: <b>"
+				+ myGroupID + "</b> Group Name: <b>" + groupName + "</b>";
+	}
+</script>
+<style>
+.navbar {
+	margin-bottom: 0;
+	border-radius: 0;
+}
+</style>
 </head>
 <body>
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="http://creditcommons.net/">Credit Commons</a>
-    </div>
-    <ul class="nav navbar-nav">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="transactions.html">Transactions</a></li>
-      <li><a href="groups.html">Groups</a></li> 
-	  <li class="active"><a href="members.html">Members</a></li>
-      <li><a href="posts.html">Posts</a></li> 
-      <li><a href="polls.html">Polls</a></li> 
-	  <li><a href="monetary.html">Monetary</a></li> 
-    </ul>
-  </div>
-</nav>
-	<div class="container bg-3 text-center">  
-		<small><p class="bg-info" id="me"></p></small>  
-	<div class="row">     
-    <div class="col-sm-12">
-	 <form class="form-horizontal" role="form">
-				<div class="form-group">
-				  <div class="col-sm-6">
-					<select class="form-control" id="myAccount" onchange="login()">
-     				<script type="text/javascript">
-						var options = "";
-						for (i = 0; i < nrAcc; i++) { 
-    					options += "<option>" + accounts[i] + "</option>";
-						}
-						document.write(options);
-					  </script>
-					  </select>
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="http://creditcommons.net/">Credit
+					Commons</a>
+			</div>
+			<ul class="nav navbar-nav">
+				<li><a href="index.html">Home</a></li>
+				<li><a href="transactions.html">Transactions</a></li>
+				<li><a href="groups.html">Groups</a></li>
+				<li class="active"><a href="members.html">Members</a></li>
+				<li><a href="posts.html">Posts</a></li>
+				<li><a href="polls.html">Polls</a></li>
+			</ul>
+		</div>
+	</nav>
+	<div class="container bg-3 text-center">
+		<small><p class="bg-info" id="me"></p></small>
+		<div class="row">
+			<div class="col-sm-12">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<div class="col-sm-6">
+							<select class="form-control" id="myAccount" onchange="login()">
+								<script type="text/javascript">
+									var options = "";
+									for (i = 0; i < nrAcc; i++) {
+										options += "<option>" + accounts[i]
+												+ "</option>";
+									}
+									document.write(options);
+								</script>
+							</select>
+						</div>
 					</div>
-				</div>
-	</form>
-	
-	<h3>Members</h3>
-	<h4>Change my Alias</h4>
-	<h4>Change Member Limits</h4>
-	
-	
-	<h4>List of Members of Credit Commons</h4>
-	<h4>Events</h4>
+				</form>
 
-				</div>
+				<h3>Members</h3>
+				<h4>Change my Alias</h4>
+				<h4>Change Member Limits</h4>
+
+
+				<h4>List of Members of Credit Commons</h4>
+				<h4>Events</h4>
+
+			</div>
 		</div>
 	</div>
 
-<div class="panel-footer">
-<p><img src="https://trancsitu.files.wordpress.com/2014/05/ethereum-logo.png" width="20" align="top"/> <i>Powered by ethereum</i></p>
-	<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
-</div>
+	<div class="panel-footer">
+		<p>
+			<img
+				src="https://trancsitu.files.wordpress.com/2014/05/ethereum-logo.png"
+				width="20" align="top" /> <i>Powered by ethereum</i>
+		</p>
+		<a rel="license"
+			href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img
+			alt="Creative Commons License" style="border-width: 0"
+			src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a><br />This
+		work is licensed under a <a rel="license"
+			href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative
+			Commons Attribution-NonCommercial-ShareAlike 4.0 International
+			License</a>.
+	</div>
 </body>
 </html>

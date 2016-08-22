@@ -39,15 +39,15 @@
 		var d;
 		transfersIncome.watch(function(error, result) {
 			d = new Date(result.args._tTimeStamp * 1000);
-			row += "<hr/>Date: " + d +
-			"<br/>From: <b>" + result.args._sender + 
-			"</b><br/>Quantity sent in his currency: <b>" + result.args._senderAmount + 
-			"</b><br/>To: <b>" + result.args._receiver + 
-			"</b><br/>Quantity received in his currency: <b>" + result.args._receiverAmount + "</b><br/>";
+			row += "<hr/>Date: " + d + "<br/>From: <b>" + result.args._sender
+					+ "</b><br/>Quantity sent in his currency: <b>"
+					+ result.args._senderAmount + "</b><br/>To: <b>"
+					+ result.args._receiver
+					+ "</b><br/>Quantity received in his currency: <b>"
+					+ result.args._receiverAmount + "</b><br/>";
 			document.getElementById('listIncomes').innerHTML = row;
 		});
 	});
-
 </script>
 <style>
 .navbar {
@@ -70,7 +70,6 @@
 				<li><a href="members.html">Members</a></li>
 				<li><a href="posts.html">Posts</a></li>
 				<li><a href="polls.html">Polls</a></li>
-				<li><a href="monetary.html">Monetary</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -131,7 +130,7 @@
 
 				<h3>Transactions</h3>
 				<div class="text-left" id="listIncomes"></div>
-				<hr/>				
+				<hr />
 
 			</div>
 		</div>
