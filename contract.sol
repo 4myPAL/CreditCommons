@@ -6,6 +6,13 @@ contract creditCommons {
 		// @param sysAdmin is the system administrator address
         // @param baseUnits is the number of units before the comma 
 		address public sysAdmin;
+        address public addressPM;
+        string subjectPM;
+        string messagePM;
+        uint public groupIDPG;
+        string subjectPG;
+        string messagePG;
+        
 	
 	// @notice at creating the contract we declare the general variables
 	function creditCommons() {
@@ -13,7 +20,7 @@ contract creditCommons {
 				sysAdmin = msg.sender;
         }
 	
-	event NewGroup(address indexed _creator, uint indexed _groupIDN, string _groupNameN, uint _NGTimeStamp);
+	event NewGroup(address indexed _creator, address indexed _coordinator, uint indexed _groupIDN, string _groupNameN, uint _NGTimeStamp);
 	event ModifyGroup (address indexed _modifier, uint indexed _groupIDM, string _groupNameM, uint _MGTimeStamp);
 	event NewMember (address indexed memberAddressN, string memberAliasN, uint _NMTimeStamp);
 	event JoinGroup (address _memberJG, string _aliasJG, uint _groupJG, string _groupNameJG, uint _JGTimeStamp);
@@ -31,7 +38,8 @@ contract creditCommons {
 	
 	// @notice create a structure to file all groups and their parameters
 	struct groups {
-		address owner;
+		address groupAccount;
+		address coordinator;
 		string groupName;
 		string currencyName;
 		// @parameter the exchange rate against the base currency is given in percentage (100 = 1/1)
@@ -48,24 +56,40 @@ contract creditCommons {
 	uint[] groupIndex;
 	
 	// @notice A group can be created by any account in the system that is not in a group. A group is also an account and is identified by its account number. A new group therefore contains two accounts: its own, and its creators.
-	function createGroup (string _groupName, string _currencyName, uint _rate, uint _debitLimit, uint _creditLimit, bool _open) {
+	function createGroup (address _coordinator, string _groupName, string _currencyName, uint _rate, uint _debitLimit, uint _creditLimit, uint _intertradeDebitLimit, uint _intertradeCreditLimit, bool _open) {
 		// @notice the member exists in the system and the member is not in a group and the name is valid
 		if (member[msg.sender].isMember = true) {
 			if (member[msg.sender].group == 0) { 
-				if (bytes(_groupName).length != 0) {
-					uint groupID = now;	
-					group[groupID].owner = msg.sender;
-					group[groupID].groupName = _groupName;
-					group[groupID].currencyName = _currencyName;
-					group[groupID].rate = _rate;
-					group[groupID].debitLimit = _debitLimit;
-					group[groupID].creditLimit = _creditLimit;
-					group[groupID].open = _open;
-							NewGroup(msg.sender, groupID, _groupName, now);
-							joinGroup(groupID);
-							groupIndex [groupIndex.length ++] = groupID;
+				if ((_coordinator != msg.sender) && (member[_coordinator].isMember = true) && (member[_coordinator].group == 0)) {
+					if (bytes(_groupName).length != 0) {
+						uint groupID = now;	
+						group[groupID].groupAccount = msg.sender;
+						group[groupID].coordinator = _coordinator;
+						group[groupID].groupName = _groupName;
+						group[groupID].currencyName = _currencyName;
+						group[groupID].rate = _rate;
+						group[groupID].debitLimit = _debitLimit;
+						group[groupID].creditLimit = _creditLimit;
+						group[groupID].open = _open;
+							NewGroup(msg.sender, _coordinator, groupID, _groupName, now);
+							// @notice make the groupAccount member of the group and set the group intertrade limits
+							member[msg.sender].group = groupID;
+							member[msg.sender].isCoordinator = false;
+							member[msg.sender].balance = 0;
+							member[msg.sender].mDebitLimit = _intertradeDebitLimit;
+							member[msg.sender].mCreditLimit = _intertradeCreditLimit;				
+							// @notice make the coordinator member of the group and nominate him coordinator
+							member[_coordinator].group = groupID;
+							member[_coordinator].isCoordinator = true;
+							member[_coordinator].balance = 0;
+							member[_coordinator].mDebitLimit = _debitLimit;
+							member[_coordinator].mCreditLimit = _creditLimit;							
+						groupIndex [groupIndex.length ++] = groupID;
+					} else {
+						postMember (msg.sender, "New Group", "Conditions for group creation were not met: the name was empty");
+					}
 				} else {
-			postMember (msg.sender, "New Group", "Conditions for group creation were not met: the name was empty");
+					postMember (msg.sender, "New Group", "Conditions for group creation were not met: coordinator choice was not valid");
 				}
 		} else {
 			postMember (msg.sender, "New Group", "Conditions for group creation were not met: you belong already to a group");
@@ -75,40 +99,48 @@ contract creditCommons {
 		}
 		}
 	
-	// @notice transfer group ownership. Old owner or sysAdmin can transfer group ownership to another member of the group
-	function transferGroupOwner (uint _groupID, address _newOwner) {
-		if ((msg.sender == group[_groupID].owner) || (msg.sender == sysAdmin)) {
-			if (member[_newOwner].group == _groupID) {
-        		group[_groupID].owner = _newOwner;
+	// @notice transfer group coordinator. Old coordinator or sysAdmin can transfer group coordinator to another member of the group
+	// @notice the reason to include sysAdmin is for the case the old coordinator disappears
+	function transferGroupCoordinator (uint _groupID, address _newCoordinator) {
+		if ((msg.sender == group[_groupID].coordinator) || (msg.sender == sysAdmin)) {
+			if (member[_newCoordinator].group == _groupID) {
+        		group[_groupID].coordinator = _newCoordinator;
 				string _groupName = group[_groupID].groupName;
 				ModifyGroup (msg.sender, _groupID, _groupName, now);
 		} else {
-			postMember (msg.sender, "Transfer Group", "Conditions for group transfer were not met: the new owner dos not belong to your group");
+			postMember (msg.sender, "Transfer Group", "Conditions for group transfer were not met: the new coordinator dos not belong to your group");
 		}
 		} else {
-			postMember (msg.sender, "Transfer Group", "Conditions for group transfer were not met: you are nor the group owner neither the system administrator");
+			postMember (msg.sender, "Transfer Group", "Conditions for group transfer were not met: you are nor the group coordinator neither the system administrator");
 		}
 	}
 		
-	// @notice the owner can modify one, several or all parameters of a group. If one parameter is left empty, it remains the same. Only the exchange coordinator can change its parameters
-	function modifyGroup (uint _groupID, string _groupName, string _currencyName, uint _rate, uint _debitLimit, uint _creditLimit, bool _open) {
-		        if (msg.sender == group[_groupID].owner) {
+	// @notice the coordinator can modify one, several or all parameters of a group. If one parameter is left empty, it remains the same. Only the exchange coordinator can change its parameters
+	function modifyGroup (uint _groupID, string _groupName, string _currencyName, uint _rate, uint _debitLimit, uint _creditLimit, uint _intertradeDebitLimit, uint _intertradeCreditLimit, bool _open) {
+		        if (msg.sender == group[_groupID].coordinator) {
 				// @notice if a value for a parameter is given, change the parameter, if empty retain old value
   				if (bytes(_groupName).length != 0) {group[_groupID].groupName = _groupName;}
 				if (bytes(_currencyName).length != 0) {group[_groupID].currencyName = _currencyName;}
 				if (_rate != 0) {group[_groupID].rate = _rate;}	
 				if (_debitLimit != 0) {group[_groupID].debitLimit = _debitLimit;}
 				if (_creditLimit!= 0) {group[_groupID].creditLimit = _creditLimit;}
+				if (_intertradeDebitLimit != 0) {member[group[_groupID].groupAccount].mDebitLimit = _intertradeDebitLimit;}
+				if (_intertradeCreditLimit != 0) {member[group[_groupID].groupAccount].mCreditLimit = _intertradeCreditLimit;}
 				if (_open == true) {group[_groupID].open = true;}	
 				ModifyGroup (msg.sender, _groupID, _groupName, now);				
 					} else {
-						postMember (msg.sender, "Modify Group", "Conditions for group modification were not met: you are not the group owner");
+						postMember (msg.sender, "Modify Group", "Conditions for group modification were not met: you are not the group groupAccount");
 					}
 						
 	}
 
 	function getGroup (uint _groupG) constant returns (address, string, string, uint, uint, uint, bool) {
-    return (group[_groupG].owner, group[_groupG].groupName, group[_groupG].currencyName, group[_groupG].rate, group[_groupG].debitLimit, group[_groupG].creditLimit, group[_groupG].open);
+    return (group[_groupG].groupAccount, group[_groupG].groupName, group[_groupG].currencyName, group[_groupG].rate, group[_groupG].debitLimit, group[_groupG].creditLimit, group[_groupG].open);
+	}
+	
+	
+    function getGroupManagement (uint _groupG) constant returns (address, address, uint, uint, uint) {
+    return (group[_groupG].groupAccount, group[_groupG].coordinator, group[_groupG].rate, member[group[_groupG].groupAccount].mDebitLimit, member[group[_groupG].groupAccount].mCreditLimit);
 	}
 	
 	function getNumberGroups () constant returns (uint _nrG) {
@@ -127,6 +159,7 @@ contract creditCommons {
 		bool isMember;
 		string alias;
 		uint group;	
+		bool isCoordinator;
 		// @parameter balance is expressed in the member currency. Can only be modified by system operations
 		int balance;
 		uint mDebitLimit;
@@ -148,6 +181,7 @@ contract creditCommons {
 			member[msg.sender].isMember = true;
 			member[msg.sender].alias = _alias;
 			member[msg.sender].group = 0;
+			member[msg.sender].isCoordinator = false;
 			member[msg.sender].balance = 0;
 			member[msg.sender].mDebitLimit = 0;
 			member[msg.sender].mCreditLimit = 0;
@@ -161,10 +195,6 @@ contract creditCommons {
 			}
 		}
 
-	function modifyAlias(string _newAlias) {
-			member[msg.sender].alias = _newAlias;
-		}
-	
 	// @notice anybody in the system can join a group
 	function joinGroup (uint _groupJ) {
 			// @notice the member is in the system
@@ -190,10 +220,12 @@ contract creditCommons {
 	}
 	
 	function resignGroup () {
-				uint _groupR = member[msg.sender].group;
+				uint _groupR = member[msg.sender].group; 
 				string _groupRN = group[_groupR].groupName;
-				// @notice the member is not owner of the group
-				if (group[member[msg.sender].group].owner != msg.sender) {
+				// @notice the account is not a group account
+				if (group[_groupR].groupAccount != msg.sender) {
+				// @notice the member is not coordinator of the group
+				if (member[msg.sender].isCoordinator == false) {
 					// @notice the member balance is zero
 					if (member[msg.sender].balance == 0) {
 						member[msg.sender].group = 0;
@@ -204,23 +236,26 @@ contract creditCommons {
 						postMember (msg.sender, "Resign Group", "Resigning Group failed: you cannot resign because your balance is not zero. Transfer balance or pay debt first");
 					}				
 				} else {
-					postMember (msg.sender, "Resign Group", "Resigning Group failed: you cannot resign because you are the owner. Transfer ownership first");
+					postMember (msg.sender, "Resign Group", "Resigning Group failed: you cannot resign because you are the coordinator. Transfer coordinator first");
+				}
+				} else {
+					postMember (msg.sender, "Resign Group", "Resigning Group failed: you cannot resign because you are the groupAccount");
 				}
 			}
 
 	
 	function modifyMemberLimits (address _groupMember, uint _newDebitLimit, uint _newCreditLimit) {
-		// @notice only the group owner can do 
-		if (msg.sender == group[member[msg.sender].group].owner) {
+		// @notice only the group groupAccount can do 
+		if (msg.sender == group[member[msg.sender].group].coordinator) {
 					member[_groupMember].mDebitLimit = _newDebitLimit;
 					member[_groupMember].mCreditLimit = _newCreditLimit;
 		} else {
-			postMember (msg.sender, "Modify member limits", "Modification of member limits failed: only the group owner can do");
+			postMember (msg.sender, "Modify member limits", "Modification of member limits failed: only the group coordinator can do");
 		}
 	}
 	
-	function getMember (address _memberG) constant returns (bool, string, uint, int, uint, uint) {
-	    return (member[_memberG].isMember, member[_memberG].alias, member[_memberG].group, member[_memberG].balance, member[_memberG].mDebitLimit, member[_memberG].mCreditLimit);
+	function getMember (address _memberG) constant returns (bool, string, uint, bool, int, uint, uint) {
+	    return (member[_memberG].isMember, member[_memberG].alias, member[_memberG].group, member[_memberG].isCoordinator, member[_memberG].balance, member[_memberG].mDebitLimit, member[_memberG].mCreditLimit);
 	}
 	
 	function getNumberMembers () constant returns (uint _nrM) {
@@ -233,7 +268,7 @@ contract creditCommons {
 			}
 	}
 	
-	// @notice funtion transfer form the member of the same exchange or to the member of another exchange. The amount is expressed in the sender currency
+	// @notice function transfer form the member of the same exchange or to the member of another exchange. The amount is expressed in the sender currency
 	function transfer (address _to, uint _fromAmount) {		
 		// @notice the given amount is converted to cents in order to work with only integers
 		int _intFromAmount = int (_fromAmount);
@@ -260,14 +295,19 @@ contract creditCommons {
 	}
 	
 	// @notice function to post messages to members
-	function postMember (address _to, string _subject, string _text) {
-		PostMember (msg.sender, _to, _subject, _text, now);
+	function postMember (address _to, string _subject, string _message) {
+		addressPM = _to;
+		subjectPM = _subject;
+		messagePM = _message;
+		PostMember (msg.sender, addressPM, subjectPM, messagePM, now);
 	}
 	
 	// @notice function to post messages to a group
-	function postGroup (uint _to, string _subject, string _text) {
-		PostGroup (msg.sender, _to, _subject, _text, now);
+	function postGroup (uint _to, string _subject, string _message) {
+		groupIDPG = _to;
+		subjectPG = _subject;
+		messagePG = _message;
+		PostGroup (msg.sender, groupIDPG, subjectPG, messagePG, now);
 	}
 		
 }
-

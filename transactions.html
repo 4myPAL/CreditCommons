@@ -31,13 +31,13 @@
 		location.reload();
 	}
 
-	var transfersIncome = creditCommons.Transaction({}, {
+	var transfers = creditCommons.Transaction({}, {
 		fromBlock : 1400000,
 		toBlock : 'latest'
 	}, function(error, result) {
 		var row = "";
 		var d;
-		transfersIncome.watch(function(error, result) {
+		transfers.watch(function(error, result) {
 			d = new Date(result.args._tTimeStamp * 1000);
 			row += "<hr/>Date: " + d + "<br/>From: <b>" + result.args._sender
 					+ "</b><br/>Quantity sent in his currency: <b>"
@@ -77,22 +77,6 @@
 		<small><p class="bg-info" id="me"></p></small>
 		<div class="row">
 			<div class="col-sm-12">
-				<form class="form-horizontal" role="form">
-					<div class="form-group">
-						<div class="col-sm-6">
-							<select class="form-control" id="myAccount" onchange="login()">
-								<script type="text/javascript">
-									var options = "";
-									for (i = 0; i < nrAcc; i++) {
-										options += "<option>" + accounts[i]
-												+ "</option>";
-									}
-									document.write(options);
-								</script>
-							</select>
-						</div>
-					</div>
-				</form>
 				<h3>Payment</h3>
 				<form class="form-horizontal" role="form" id="payData">
 					<div class="form-group">
