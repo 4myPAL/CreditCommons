@@ -272,6 +272,8 @@ contract creditCommons {
 	function transfer (address _to, uint _fromAmount) {		
 		// @notice the given amount is converted to cents in order to work with only integers
 		int _intFromAmount = int (_fromAmount);
+		address _fromGroupAccount = group[member[msg.sender].group].groupAccount;
+		address _toGroupAccount = group[member[_to].group].groupAccount;
 		// @the amount is converted to the receiver currency
 		uint _rateSenderU = group[member[msg.sender].group].rate;
 		uint _rateReceiverU = group[member[_to].group].rate;
@@ -280,11 +282,13 @@ contract creditCommons {
 		int _toAmount = _intFromAmount * _rateSender/ _rateReceiver;
 		int _intFromDLimit = - int(member[msg.sender].mDebitLimit);
 		int _intToCLimit = int(member[msg.sender].mCreditLimit);
-		// @notice if the limits ar not surpassed, we proceed with the transfer
+		// @notice if the limits are not surpassed, we proceed with the transfer
 		if ((member[msg.sender].balance - _intFromAmount) > _intFromDLimit) { 
 			if ((member[_to].balance + _toAmount) < _intToCLimit) {
 		member[msg.sender].balance -= _intFromAmount;
+		member[_fromGroupAccount].balance -= _intFromAmount;
 		member[_to].balance += _toAmount;
+		member[_toGroupAccount].balance += _toAmount;
 		} else {
 			postMember (msg.sender, "Transfer", "Transfer failed: receiver creditLimit was surpassed");
 		}

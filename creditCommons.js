@@ -1,14 +1,26 @@
 var creditcommonsContract = web3.eth.contract([ {
-	"constant" : false,
+	"constant" : true,
 	"inputs" : [ {
-		"name" : "_groupID",
+		"name" : "_groupG",
+		"type" : "uint256"
+	} ],
+	"name" : "getGroupManagement",
+	"outputs" : [ {
+		"name" : "",
+		"type" : "address"
+	}, {
+		"name" : "",
+		"type" : "address"
+	}, {
+		"name" : "",
 		"type" : "uint256"
 	}, {
-		"name" : "_newOwner",
-		"type" : "address"
+		"name" : "",
+		"type" : "uint256"
+	}, {
+		"name" : "",
+		"type" : "uint256"
 	} ],
-	"name" : "transferGroupOwner",
-	"outputs" : [],
 	"type" : "function"
 }, {
 	"constant" : false,
@@ -19,7 +31,7 @@ var creditcommonsContract = web3.eth.contract([ {
 		"name" : "_subject",
 		"type" : "string"
 	}, {
-		"name" : "_text",
+		"name" : "_message",
 		"type" : "string"
 	} ],
 	"name" : "postGroup",
@@ -52,6 +64,9 @@ var creditcommonsContract = web3.eth.contract([ {
 		"type" : "uint256"
 	}, {
 		"name" : "",
+		"type" : "bool"
+	}, {
+		"name" : "",
 		"type" : "int256"
 	}, {
 		"name" : "",
@@ -60,6 +75,27 @@ var creditcommonsContract = web3.eth.contract([ {
 		"name" : "",
 		"type" : "uint256"
 	} ],
+	"type" : "function"
+}, {
+	"constant" : true,
+	"inputs" : [],
+	"name" : "addressPM",
+	"outputs" : [ {
+		"name" : "",
+		"type" : "address"
+	} ],
+	"type" : "function"
+}, {
+	"constant" : false,
+	"inputs" : [ {
+		"name" : "_groupID",
+		"type" : "uint256"
+	}, {
+		"name" : "_newCoordinator",
+		"type" : "address"
+	} ],
+	"name" : "transferGroupCoordinator",
+	"outputs" : [],
 	"type" : "function"
 }, {
 	"constant" : false,
@@ -92,8 +128,32 @@ var creditcommonsContract = web3.eth.contract([ {
 	} ],
 	"type" : "function"
 }, {
+	"constant" : true,
+	"inputs" : [],
+	"name" : "groupIDPG",
+	"outputs" : [ {
+		"name" : "",
+		"type" : "uint256"
+	} ],
+	"type" : "function"
+}, {
+	"constant" : true,
+	"inputs" : [ {
+		"name" : "_gIndex",
+		"type" : "uint256"
+	} ],
+	"name" : "getGroupbyIndex",
+	"outputs" : [ {
+		"name" : "_getGroupID",
+		"type" : "uint256"
+	} ],
+	"type" : "function"
+}, {
 	"constant" : false,
 	"inputs" : [ {
+		"name" : "_groupID",
+		"type" : "uint256"
+	}, {
 		"name" : "_groupName",
 		"type" : "string"
 	}, {
@@ -109,23 +169,17 @@ var creditcommonsContract = web3.eth.contract([ {
 		"name" : "_creditLimit",
 		"type" : "uint256"
 	}, {
+		"name" : "_intertradeDebitLimit",
+		"type" : "uint256"
+	}, {
+		"name" : "_intertradeCreditLimit",
+		"type" : "uint256"
+	}, {
 		"name" : "_open",
 		"type" : "bool"
 	} ],
-	"name" : "createGroup",
+	"name" : "modifyGroup",
 	"outputs" : [],
-	"type" : "function"
-}, {
-	"constant" : true,
-	"inputs" : [ {
-		"name" : "_gIndex",
-		"type" : "uint256"
-	} ],
-	"name" : "getGroupbyIndex",
-	"outputs" : [ {
-		"name" : "_getGroupID",
-		"type" : "uint256"
-	} ],
 	"type" : "function"
 }, {
 	"constant" : false,
@@ -151,22 +205,13 @@ var creditcommonsContract = web3.eth.contract([ {
 }, {
 	"constant" : false,
 	"inputs" : [ {
-		"name" : "_newAlias",
-		"type" : "string"
-	} ],
-	"name" : "modifyAlias",
-	"outputs" : [],
-	"type" : "function"
-}, {
-	"constant" : false,
-	"inputs" : [ {
 		"name" : "_to",
 		"type" : "address"
 	}, {
 		"name" : "_subject",
 		"type" : "string"
 	}, {
-		"name" : "_text",
+		"name" : "_message",
 		"type" : "string"
 	} ],
 	"name" : "postMember",
@@ -201,6 +246,39 @@ var creditcommonsContract = web3.eth.contract([ {
 		"name" : "",
 		"type" : "bool"
 	} ],
+	"type" : "function"
+}, {
+	"constant" : false,
+	"inputs" : [ {
+		"name" : "_coordinator",
+		"type" : "address"
+	}, {
+		"name" : "_groupName",
+		"type" : "string"
+	}, {
+		"name" : "_currencyName",
+		"type" : "string"
+	}, {
+		"name" : "_rate",
+		"type" : "uint256"
+	}, {
+		"name" : "_debitLimit",
+		"type" : "uint256"
+	}, {
+		"name" : "_creditLimit",
+		"type" : "uint256"
+	}, {
+		"name" : "_intertradeDebitLimit",
+		"type" : "uint256"
+	}, {
+		"name" : "_intertradeCreditLimit",
+		"type" : "uint256"
+	}, {
+		"name" : "_open",
+		"type" : "bool"
+	} ],
+	"name" : "createGroup",
+	"outputs" : [],
 	"type" : "function"
 }, {
 	"constant" : true,
@@ -242,33 +320,6 @@ var creditcommonsContract = web3.eth.contract([ {
 	"outputs" : [],
 	"type" : "function"
 }, {
-	"constant" : false,
-	"inputs" : [ {
-		"name" : "_groupID",
-		"type" : "uint256"
-	}, {
-		"name" : "_groupName",
-		"type" : "string"
-	}, {
-		"name" : "_currencyName",
-		"type" : "string"
-	}, {
-		"name" : "_rate",
-		"type" : "uint256"
-	}, {
-		"name" : "_debitLimit",
-		"type" : "uint256"
-	}, {
-		"name" : "_creditLimit",
-		"type" : "uint256"
-	}, {
-		"name" : "_open",
-		"type" : "bool"
-	} ],
-	"name" : "modifyGroup",
-	"outputs" : [],
-	"type" : "function"
-}, {
 	"inputs" : [],
 	"type" : "constructor"
 }, {
@@ -276,6 +327,10 @@ var creditcommonsContract = web3.eth.contract([ {
 	"inputs" : [ {
 		"indexed" : true,
 		"name" : "_creator",
+		"type" : "address"
+	}, {
+		"indexed" : true,
+		"name" : "_coordinator",
 		"type" : "address"
 	}, {
 		"indexed" : true,
@@ -455,10 +510,11 @@ var creditcommonsContract = web3.eth.contract([ {
 	} ],
 	"name" : "PostGroup",
 	"type" : "event"
-} ]);
+} ]
+);
 
 var creditCommons = creditcommonsContract
-		.at("0x8306e1b040DDa20F1f27a5D6d03AFC0B8dA215D1");
+		.at("0x96DeC0c65C8e212c663dCc887ee894F59D69681a");
 
 var accounts = web3.eth.accounts;
 var nrAcc = accounts.length;
@@ -473,12 +529,13 @@ var member = creditCommons.getMember(coinbase);
 var isMember = member[0];
 var myAlias = member[1];
 var myGroupID = member[2];
-var myBalance = member[3];
-var myDebitLimit = member[4];
-var myCreditLimit = member[5];
+var isCoordinator = member[3];
+var myBalance = member[4];
+var myDebitLimit = member[5];
+var myCreditLimit = member[6];
 
 var group = creditCommons.getGroup(myGroupID);
-var owner = group[0];
+var groupAccount = group[0];
 var groupName = group[1];
 var currencyName = group[2];
 var rate = group[3];
@@ -486,3 +543,10 @@ var debitLimit = group[4];
 var creditLimit = group[5];
 var open = group[6];
 
+var groupManagement = creditCommons.getGroupManagement(myGroupID);
+var coordinator = groupManagement[1];
+
+var groupWallet = creditCommons.getMember(groupAccount);
+var groupBalance = groupWallet[4];
+var intertradeDebitLimit = groupWallet[5];
+var intertradeCreditLimit = groupWallet[6];
