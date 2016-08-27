@@ -514,7 +514,7 @@ var creditcommonsContract = web3.eth.contract([ {
 );
 
 var creditCommons = creditcommonsContract
-		.at("0x96DeC0c65C8e212c663dCc887ee894F59D69681a");
+		.at("0xaAD9F23d125980EbA5E1A566E7f211Be6Bff936B");
 
 var accounts = web3.eth.accounts;
 var nrAcc = accounts.length;
