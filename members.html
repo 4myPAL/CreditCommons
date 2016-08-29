@@ -18,7 +18,57 @@
 				+ "<br></b> Credit Commons Member: <b>" + isMember
 				+ "</b> Alias: <b>" + myAlias + "<br></b>Group ID: <b>"
 				+ myGroupID + "</b> Group Name: <b>" + groupName + "</b>";
+
+		document.getElementById('numberM').innerHTML = "Number of registered members in the system: <b>"
+				+ creditCommons.getNumberMembers() + "</b>";
+
+		var membersList = "";
+		for (i = 0; i < creditCommons.getNumberMembers(); i++) {
+			membersList += "<hr/>Address: <b>" + creditCommons.getMPbyIndex(i)
+					+ "</b> Alias: <b>"
+					+ creditCommons.getMember(creditCommons.getMPbyIndex(i))[1]
+					+ "</b><br> Group: <b>"
+					+ creditCommons.getMember(creditCommons.getMPbyIndex(i))[2]
+					+ "</b> Coordinator: <b>"
+					+ creditCommons.getMember(creditCommons.getMPbyIndex(i))[3]
+					+ "</b><br/> Balance: <b>"
+					+ creditCommons.getMember(creditCommons.getMPbyIndex(i))[4]
+					+ "</b> Debit Limit: <b>"
+					+ creditCommons.getMember(creditCommons.getMPbyIndex(i))[5]
+					+ "</b> Credit Limit: <b>"
+					+ creditCommons.getMember(creditCommons.getMPbyIndex(i))[6]
+					+ "</b><br/>";
+			document.getElementById('listGroups').innerHTML = membersList;
+		}
+
 	}
+
+	function newAlias() {
+		var newAlias = document.getElementById('newAlias').value;
+		creditCommons.newAlias(newAlias);
+	}
+
+	function modifyMemberLimits() {
+		var mAddress = document.getElementById('mAddress').value;
+		var nDebitLimit = document.getElementById('nDebitLimit').value;
+		var nCreditLimit = document.getElementById('nCreditLimit').value;
+		credit.Commons.modifyMemberLimits(mAddress, nDebitLimit, nCreditLimit);
+	}
+
+	var newMember = creditCommons.NewMember({}, {
+		fromBlock : 1400000,
+		toBlock : 'latest'
+	}, function(error, result) {
+		var row = "";
+		var d;
+		NewMember.watch(function(error, result) {
+			d = new Date(result.args.__NMTimeStamp * 1000);
+			row += "<hr/>Created: " + d + "<br/>" + "Address: <b>"
+					+ result.args.memberAddressN + "</b> Alias : <b>"
+					+ result.args.memberAliasN + "</b><br/>";
+			document.getElementById('listNewMembers').innerHTML = row;
+		});
+	});
 </script>
 <style>
 .navbar {
@@ -48,16 +98,59 @@
 		<small><p class="bg-info" id="me"></p></small>
 		<div class="row">
 			<div class="col-sm-12">
-				<h3>Members</h3>
-				<h4>Change my Alias</h4>
-				<h4>Change Member Limits</h4>
-
-
-				<h4>List of Members of Credit Commons</h4>
-				<h4>Events</h4>
+				<h3>Change my alias</h3>
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="newAlias">New
+							alias:</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" id="newAlias"
+								placeholder="Enter your new alias">
+						</div>
+					</div>
+				</form>
+				<button type="submit" class="btn btn-default" onClick="newAlias();">Register</button>
+				<h3>Change Member Limits</h3>
+				<div>Only the group coordinator can change member limits</div>
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="mAddress">Member
+							address:</label>
+						<div class="col-sm-6">
+							<output class="form-control" id="mAddress"></output>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="nDebitLimit">New
+							Debit Limit:</label>
+						<div class="col-sm-4">
+							<output class="form-control" id="nDebitLimit"></output>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="nCreditLimit">New
+							Credit Limit:</label>
+						<div class="col-sm-4">
+							<output class="form-control" id="nCreditLimit"></output>
+						</div>
+					</div>
+				</form>
+				<button type="submit" class="btn btn-default"
+					onClick="modifyMemberLimits();">Change</button>
+				<hr />
+				<h3>List of Members of Credit Commons</h3>
+				<p id="numberM"></p>
+				<div class="text-left" id="listGroups"></div>
+				<h3>Events</h3>
+				<h4>New Members</h4>
+				<div class="text-left" id="listNewMembers"></div>
+				<h4>Modified Members</h4>
+				<div class="text-left" id="listModMembers"></div>
 
 			</div>
 		</div>
+	</div>
+	</div>
 	</div>
 
 	<div class="panel-footer">
