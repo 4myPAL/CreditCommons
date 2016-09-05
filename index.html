@@ -25,11 +25,13 @@
 		document.getElementById('creditLimit').innerText = myCreditLimit + " "
 				+ currencyName;
 	}
-
+	
 	function register() {
 		if (isMember = false) {
 			var alias = document.getElementById('alias').value;
-			creditCommons.registerSystem(alias);
+	        var whisperIdentity = web3.shh.newIdentity();
+			document.getElementById('whisperID').innerText = whisperIdentity;
+	        creditCommons.registerSystem(newAlias, whisperIdentity);
 			location.reload();
 		}
 	}
@@ -75,6 +77,7 @@
 	</nav>
 	<div class="container bg-3 text-center">
 		<small><p class="bg-info" id="me"></p></small>
+		<small><p class="bg-info" id="whisperID"></p></small>
 		<div class="row">
 			<div class="col-sm-12">
 				<h3>Register at Credit Commons</h3>

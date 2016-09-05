@@ -78,7 +78,6 @@
 	}
 
 	function createGroup() {
-		var Ccoordinator = document.getElementById('Ccoordinator').value;
 		var CgoupName = document.getElementById('CgoupName').value;
 		var Ccurrency = document.getElementById('Ccurrency').value;
 		var Crate = document.getElementById('Crate').value;
@@ -89,6 +88,7 @@
 		var Copen = document.getElementById('Copen').value;
 		creditCommons.createGroup(Ccoordinator, CgoupName, Ccurrency, Crate,
 				CdebitLimit, CcreditLimit, CIdebitLimit, CIcreditLimit, Copen);
+		location.reload();
 	}
 
 	function modifyGroup() {
@@ -103,6 +103,7 @@
 		var Mopen = doMument.getElementById('Mopen').value;
 		creditCommons.modifyGroup(groupID, MgoupName, MMurrenMy, Mrate,
 				MdebitLimit, MMreditLimit, MIdebitLimit, MIMreditLimit, Mopen);
+		location.reload();
 	}
 
 	function transferGroupCoordinator() {
@@ -283,12 +284,6 @@
 					<div>Only if you do not belong to one group</div>
 					<form class="form-horizontal" role="form">
 						<div class="form-group">
-							<label class="control-label col-sm-4" for="Ccoordinator">Coordinator:</label>
-							<div class="col-sm-8">
-								<input class="form-control" id="Ccoordinator">
-							</div>
-						</div>
-						<div class="form-group">
 							<label class="control-label col-sm-4" for="CgroupName">Group
 								Name:</label>
 							<div class="col-sm-4">
@@ -349,7 +344,7 @@
 				</div>
 				<div class="col-sm-6">
 					<h4>Modify my Group</h4>
-					<div>Only coordinator</div>
+					<div>Only coordinator or System Administrator</div>
 					<h5>Transfer coordination</h5>
 					<form class="form-horizontal" role="form">
 						<div class="form-group">

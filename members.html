@@ -46,13 +46,15 @@
 	function newAlias() {
 		var newAlias = document.getElementById('newAlias').value;
 		creditCommons.newAlias(newAlias);
+		location.reload();
 	}
 
 	function modifyMemberLimits() {
 		var mAddress = document.getElementById('mAddress').value;
 		var nDebitLimit = document.getElementById('nDebitLimit').value;
 		var nCreditLimit = document.getElementById('nCreditLimit').value;
-		credit.Commons.modifyMemberLimits(mAddress, nDebitLimit, nCreditLimit);
+		creditCommons.modifyMemberLimits(mAddress, nDebitLimit, nCreditLimit);
+		location.reload();
 	}
 
 	var newMember = creditCommons.NewMember({}, {
@@ -61,8 +63,8 @@
 	}, function(error, result) {
 		var row = "";
 		var d;
-		NewMember.watch(function(error, result) {
-			d = new Date(result.args.__NMTimeStamp * 1000);
+		newMember.watch(function(error, result) {
+			d = new Date(result.args._NMTimeStamp * 1000);
 			row += "<hr/>Created: " + d + "<br/>" + "Address: <b>"
 					+ result.args.memberAddressN + "</b> Alias : <b>"
 					+ result.args.memberAliasN + "</b><br/>";
@@ -109,29 +111,29 @@
 						</div>
 					</div>
 				</form>
-				<button type="submit" class="btn btn-default" onClick="newAlias();">Register</button>
+				<button type="submit" class="btn btn-default" onClick="newAlias();">Register new alias</button>
 				<h3>Change Member Limits</h3>
-				<div>Only the group coordinator can change member limits</div>
+				<div>Only the group coordinator can change a member limits</div>
 				<form class="form-horizontal" role="form">
 					<div class="form-group">
 						<label class="control-label col-sm-4" for="mAddress">Member
 							address:</label>
 						<div class="col-sm-6">
-							<output class="form-control" id="mAddress"></output>
+							<input class="form-control" id="mAddress">
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="control-label col-sm-4" for="nDebitLimit">New
 							Debit Limit:</label>
 						<div class="col-sm-4">
-							<output class="form-control" id="nDebitLimit"></output>
+							<input class="form-control" id="nDebitLimit">
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="control-label col-sm-4" for="nCreditLimit">New
 							Credit Limit:</label>
 						<div class="col-sm-4">
-							<output class="form-control" id="nCreditLimit"></output>
+							<input class="form-control" id="nCreditLimit">
 						</div>
 					</div>
 				</form>

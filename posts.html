@@ -17,48 +17,20 @@
 		document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase
 				+ "<br></b> Credit Commons Member: <b>" + isMember
 				+ "</b> Alias: <b>" + myAlias + "<br></b>Group ID: <b>"
-				+ myGroupID + "</b> Group Name: <b>" + groupName + "</b>";
+				+ myGroupID + "</b> Group Name: <b>" + groupName + "</b>"
+				+ "<br/></b>Post ID: <b>" + myPostID + "</b><br/>";
+				
+		var shh = web3.shh;
+		var identity = shh.newIdentity();
+		document.getElementById('postID').innerText = identity;
+
 	}
 
-	function postMember() {
-		var payee = document.getElementById('toPM').value;
-		var subject = document.getElementById('subjectPM').value;
-		var message = document.getElementById('messagePM').value;
-		creditCommons.postMember(toPM, subjectPM, messagePM);
+	function getPostID() {
+		identity = shh.newIdentity();
+		document.getElementById('postID').innerText = identity;
 		location.reload();
 	}
-
-	var postMember = creditCommons.PostMember({}, {
-		fromBlock : 1400000,
-		toBlock : 'latest'
-	}, function(error, result) {
-		var row = "";
-		var d;
-		postMember.watch(function(error, result) {
-			d = new Date(result.args._PostTimeStamp * 1000);
-			row += "<hr/>Sent: " + d + "<br/>" + "From : <b>"
-					+ result.args._senderPost + "</b><br/>" + "To : <b>"
-					+ result.args._receiverPost + "</b><br/>" + "Subject : <b>"
-					+ result.args._subjectPost + "</b><br/>" + _contentPost;
-			document.getElementById('listMemberPosts').innerHTML = row;
-		});
-	});
-
-	var postGroup = creditCommons.PostGroup({}, {
-		fromBlock : 1400000,
-		toBlock : 'latest'
-	}, function(error, result) {
-		var row = "";
-		var d;
-		postGroup.watch(function(error, result) {
-			d = new Date(result.args._PostTimeStamp * 1000);
-			row += "<hr/>Sent: " + d + "<br/>" + "From : <b>"
-					+ result.args._senderPost + "</b><br/>" + "To : <b>"
-					+ result.args._receiverPost + "</b><br/>" + "Subject : <b>"
-					+ result.args._subjectPost + "</b><br/>" + _contentPost;
-			document.getElementById('listGroupPosts').innerHTML = row;
-		});
-	});
 </script>
 <style>
 .navbar {
@@ -89,57 +61,18 @@
 		<small><p class="bg-info" id="me"></p></small>
 		<div class="row">
 			<div class="col-sm-12">
-				<h3>Post Message to Member</h3>
+				<h3>Post ID</h3>
 				<form class="form-horizontal" role="form">
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="toPM">To:</label>
-						<div class="col-sm-6">
-							<input type="text" class="form-control" id="toPM"
-								placeholder="Enter destination account">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="subjectPM">Subject:</label>
-						<div class="col-sm-6">
-							<input type="text" class="form-control" id="subjectPM"
-								placeholder="Enter message subject">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="messagePM">Message:</label>
-						<div class="col-sm-6">
-							<textarea class="form-control" rows="5" id="messagePM"></textarea>
+						<label class="control-label col-sm-4" for="postID">Post
+							ID:</label>
+						<div class="col-sm-12">
+							<output class="form-control" id="postID"></output>
 						</div>
 					</div>
 				</form>
-				<button type="submit" class="btn btn-default"
-					onClick="postMember();">Post</button>
-				<h3>Post Message to Group</h3>
-				<form class="form-horizontal" role="form">
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="toPG">To:</label>
-						<div class="col-sm-4">
-							<input type="text" class="form-control" id="toPG"
-								placeholder="Enter Group ID">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="subjectPG">Subject:</label>
-						<div class="col-sm-6">
-							<input type="text" class="form-control" id="subjectPG"
-								placeholder="Enter message subject">
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="messagePG">Message:</label>
-						<div class="col-sm-6">
-							<textarea class="form-control" rows="5" id="messagePG"></textarea>
-						</div>
-					</div>
-				</form>
-				<button type="submit" class="btn btn-default"
-					onClick="postMember();">Post</button>
-					
+				<button type="submit" class="btn btn-default" onClick="getPostID();">Get
+					Post ID</button>
 				<h3>Posts to Members</h3>
 				<div class="text-left" id="listMemberPosts"></div>
 				<h3>Posts to Groups</h3>
