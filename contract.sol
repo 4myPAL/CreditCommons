@@ -7,7 +7,7 @@ contract creditCommons {
 		// @param sysAdmin is the system administrator address, the creator of the contract
         // @param baseUnits is the number of units before the comma 
 		address public sysAdmin;   
-		uint totalNrMembers;
+		uint nrMembers;
 		uint nrGroups;
 		uint nrProposals;
 	
@@ -15,13 +15,13 @@ contract creditCommons {
 	function creditCommons() {
 				// @param the initial sysAdmin is the address from which the contract is created
 				sysAdmin = msg.sender;
-			    totalNrMembers = 0;
+			    nrMembers = 0;
 			    nrGroups = 0;
 			    nrProposals = 0;
         }
 	
     function getTotals () constant returns (uint, uint, uint) {
-    	return (totalNrMembers, nrGroups, nrProposals);
+    	return (nrMembers, nrGroups, nrProposals);
     }
 	
 	event NewGroup(address indexed _creator, uint indexed _groupIDN, string _groupNameN, uint _NGTimeStamp);
@@ -82,7 +82,7 @@ contract creditCommons {
 			member[msg.sender].mCreditLimit = 0;
 		NewMember (msg.sender, _alias, _description, now);
 		memberIndex[memberIndex.length ++] = msg.sender;
-		totalNrMembers = totalNrMembers + 1;
+		nrMembers = nrMembers + 1;
 				} 
 			} 
 		}
@@ -115,7 +115,7 @@ contract creditCommons {
 					} 
 					// @notice if the group is not open 
 					else {
-                        newProposal (_groupJ, "new Member", member[msg.sender].memberDescription, 30, group[_groupJ].quorum);
+                        newProposal (_groupJ, "Accept Member", member[msg.sender].memberDescription, 10, group[_groupJ].quorum);
 					}
 			} 
 		} 
@@ -156,8 +156,16 @@ contract creditCommons {
 				} 
 			}	
 	
-	function kickOffGroup (address _newMember) {
-		
+	function kickOutGroup (address _koMember, uint _groupR) {
+		// @notice the commune can accept a new member in the group
+		if (group[_groupR].commune == msg.sender) {
+				member[msg.sender].balance += member[_koMember].balance;
+				member[_koMember].balance = 0;
+				member[_koMember].memberGroup = 0;
+				member[_koMember].mDebitLimit = 0;
+				member[_koMember].mCreditLimit = 0;
+				group[_groupR].nrMembers = group[_groupR].nrMembers - 1;
+		}
 	}
 
 	function getMember (address _memberG) constant returns (bool, string, string, uint, int, uint, uint) {
@@ -173,7 +181,7 @@ contract creditCommons {
 	}
 	
 	function getNumberMembers () constant returns (uint _nrM) {
-		_nrM = totalNrMembers;
+		_nrM = nrMembers;
 	}
 		
 	function getMPbyIndex (uint _mIndex) constant returns (address _getMemberID) {
