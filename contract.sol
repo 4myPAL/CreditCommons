@@ -81,7 +81,7 @@ contract creditCommons {
 			member[msg.sender].mDebitLimit = 0;
 			member[msg.sender].mCreditLimit = 0;
 		NewMember (msg.sender, _alias, _description, now);
-		memberIndex [memberIndex.length ++] = msg.sender;
+		memberIndex[memberIndex.length ++] = msg.sender;
 		totalNrMembers = totalNrMembers + 1;
 				} 
 			} 
@@ -229,7 +229,7 @@ contract creditCommons {
     						member[msg.sender].balance = 0;
     						member[msg.sender].mDebitLimit = _intertradeDebitLimit;
     						member[msg.sender].mCreditLimit = _intertradeCreditLimit;
-    					groupIndex [groupIndex.length ++] = groupID;
+    					groupIndex[groupIndex.length ++] = groupID;
     					nrGroups = nrGroups +1;
     				} 
     			}
@@ -305,10 +305,38 @@ contract creditCommons {
     		}
     }
     
+    struct bills {
+    	address payee;
+    	address payer;
+    	string description;
+    	uint billAmount;
+    	bool paid;
+    }
     
+    mapping(uint => bills) bill;    
+   
+    function createBill (address _payer, string _description, uint _billAmount) {
+    	uint billNumber = bill.length ++
+    	bill[billNumber].payee = msg.sender;
+    	bill[billNumber].payer = _payer;
+    	bill[billNumber].description = _description;
+    	bill[billNumber].billAmount = _billAmount;
+    	bill[billNumber].paid = false;
+    }
+    
+    function payBill (uint _billNumber) {
+    	if (bill[billNumber].payer = msg.sender) {
+    		transfer (bill[billNumber].payee, bill[billNumber].billAmount);
+    		bill[billNumber].paid = true;
+    	}    	
+    }
+    
+    function getBill (uint _billNumber) constant returns (address, address, string, uint, bool) {
+    	return (bill[billNumber].payee, bill[billNumber].payer, bill[billNumber].description, bill[billNumber].billAmount, bill[billNumber].paid);
+    }
 
 	// @notice function transfer form the member of the same exchange or to the member of another exchange. The amount is expressed in the sender currency
-	function transfer (address _to, uint _fromAmount) {		
+	function transfer (address _to, uint _fromAmount) constant returns (bool) {		
 		// @notice the given amount is converted to integer in order to work with only integers
 		int _intFromAmount = int (_fromAmount);
 		int _intFromDLimit = - int(member[msg.sender].mDebitLimit);
@@ -330,7 +358,7 @@ contract creditCommons {
 			// @notice if the group limits are not surpassed, we proceed with the transfer
 			if (((member[_fromGroupAccount].balance - _intFromAmount) > - int(member[_fromGroupAccount].mDebitLimit)) 
 				&& ((member[_toGroupAccount].balance + _toAmount) < int(member[_toGroupAccount].mCreditLimit))) {
-				} 
+				} else {return (false);}
 		} 
 		// @notice if the member limits are not surpassed, we proceed with the transfer
 			if (((member[msg.sender].balance - _intFromAmount) > _intFromDLimit) 
@@ -341,9 +369,10 @@ contract creditCommons {
 				if (member[msg.sender].memberGroup != member[_to].memberGroup) {			
 					member[_fromGroupAccount].balance -= _intFromAmount;
 					member[_toGroupAccount].balance += _toAmount;
-					}
-			} 
+					} else {return (false);}
+			} else {return (false);}
  			Transaction (msg.sender, _fromAmount, _to, _toAmount, now);
+ 			return (true);
 		}
 
 	
