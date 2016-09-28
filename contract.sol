@@ -10,6 +10,7 @@ contract creditCommons {
 		uint nrMembers;
 		uint nrGroups;
 		uint nrProposals;
+		uint nrBills;
 	
 	// @notice at creating the contract we declare the general variables
 	function creditCommons() {
@@ -18,6 +19,7 @@ contract creditCommons {
 			    nrMembers = 0;
 			    nrGroups = 0;
 			    nrProposals = 0;
+			    nrBills = 0;
         }
 	
     function getTotals () constant returns (uint, uint, uint) {
@@ -29,11 +31,7 @@ contract creditCommons {
 	event NewMember (address indexed _memberAddressN, string _memberAliasN, string _descriptionN, uint _NMTimeStamp);
 	event JoinGroup (address _memberJG, string _aliasJG, uint _groupJG, string _groupNameJG, uint _JGTimeStamp);
 	event ResignGroup (address _memberRG, string _aliasRG, uint _groupRG, string _groupNameRG, uint _RGTimeStamp);
-	event Transaction (address indexed _sender, uint _senderAmount, address indexed _receiver, int _receiverAmount, uint _tTimeStamp);
-    event ProposalAdded(uint proposalNumber, uint group, string description, address creator);
-    event Voted(address voter, uint proposalNumber, int8 vote, int result);
-    event ProposalResult(uint proposalNumber, int result, uint quorum, bool active);
-	
+
 	// @notice function to name a new sysAdmin
     function transferSysAdmin(address newSysAdmin) {
 		if (msg.sender == sysAdmin) {
@@ -100,25 +98,13 @@ contract creditCommons {
 		}
 	}
 
-	// @notice anybody in the system can join a group
+	// @notice anybody in the system can join a group if the group is open
 	function joinGroup (uint _groupJ) {
-			// @notice the member is in the system
-			if (member[msg.sender].isMember = true) {
-				// @notice the group exists
-				if (bytes(group[_groupJ].groupName).length != 0){
 					// @notice if the group is open 
 					if (group[_groupJ].open = true) {
-					// @notice the member is not in a group
-					if (member[msg.sender].memberGroup == 0){
 						makeMemberOfGroup (msg.sender, _groupJ);
 					} 
-					} 
-					// @notice if the group is not open 
-					else {
-                        newProposal (_groupJ, "Accept Member", member[msg.sender].memberDescription, 10, group[_groupJ].quorum);
-					}
-			} 
-		} 
+					// @notice if the group is not open "proposeNewMember"
 	}
 	
 	function acceptAtGroup ( address _newMember, uint _groupJ) {
@@ -128,43 +114,44 @@ contract creditCommons {
 		}
 	}
 	
-	function makeMemberOfGroup (address _memberOfGroup, uint _group) internal {
-		member[_memberOfGroup].memberGroup = _group;
-		member[_memberOfGroup].balance = 0;
-		member[_memberOfGroup].mDebitLimit = group[_group].gDebitLimit;
-		member[_memberOfGroup].mCreditLimit = group[_group].gCreditLimit;
-		group[_group].nrMembers = group[_group].nrMembers + 1;
-		JoinGroup (_memberOfGroup, member[_memberOfGroup].alias, _group, group[_group].groupName, now);
+	function makeMemberOfGroup (address _newMember, uint _groupJ) internal {
+		// @notice the member is in the system
+		// @notice the member is not in a group
+		if ((member[_newMember].isMember = true) && (member[_newMember].memberGroup == 0)) {
+		member[_newMember].memberGroup = _groupJ;
+		member[_newMember].balance = 0;
+		member[_newMember].mDebitLimit = group[_groupJ].defaultMemberDebitLimit;
+		member[_newMember].mCreditLimit = group[_groupJ].defaultMemberCreditLimit;
+		group[_groupJ].nrMembers = group[_groupJ].nrMembers + 1;
+		JoinGroup (_newMember, member[_newMember].alias, _groupJ, group[_groupJ].groupName, now);
+		}
 	}
 	
-	function resignGroup () {
-				uint _groupR = member[msg.sender].memberGroup; 
-				string _groupRN = group[_groupR].groupName;
-				// @notice the account is not a group account
-				if (group[_groupR].intertradeAccount != msg.sender) {
-				// @notice the member is not commune of the group
-				if (member[msg.sender].isCommune == false) {
-					// @notice the member balance is zero
-					if (member[msg.sender].balance == 0) {
-						member[msg.sender].memberGroup = 0;
-						member[msg.sender].mDebitLimit = 0;
-						member[msg.sender].mCreditLimit = 0;
-						group[_groupR].nrMembers = group[_groupR].nrMembers - 1;
-						ResignGroup (msg.sender, member[msg.sender].alias, _groupR, _groupRN, now);						
-					} 				
-				} 
-				} 
+	function resignFromGroup () {
+				uint _groupD = member[msg.sender].memberGroup; 
+				// @notice balance cannot be negative
+				if (member[msg.sender].balance >= 0) {
+					deleteMemberOfGroup (msg.sender, _groupD);
+				}
 			}	
 	
-	function kickOutGroup (address _koMember, uint _groupR) {
-		// @notice the commune can accept a new member in the group
-		if (group[_groupR].commune == msg.sender) {
-				member[msg.sender].balance += member[_koMember].balance;
-				member[_koMember].balance = 0;
-				member[_koMember].memberGroup = 0;
-				member[_koMember].mDebitLimit = 0;
-				member[_koMember].mCreditLimit = 0;
-				group[_groupR].nrMembers = group[_groupR].nrMembers - 1;
+	function kickOutGroup (address _memberOfGroup, uint _groupD) {
+		// @notice the commune can delete a new member in the group
+		if (group[_groupD].commune == msg.sender) {
+			deleteMemberOfGroup (_memberOfGroup, _groupD);
+		}
+	}
+	
+	function deleteMemberOfGroup (address _memberOfGroup, uint _groupD) internal {
+		// @notice the account is not a group account and the member is not commune of the group
+		if ((member[_memberOfGroup].isCommune == false) && (member[msg.sender].isCommune == false)) {
+		member[group[_groupD].commune].balance += member[_memberOfGroup].balance;
+		member[_memberOfGroup].balance = 0;
+		member[_memberOfGroup].memberGroup = 0;
+		member[_memberOfGroup].mDebitLimit = 0;
+		member[_memberOfGroup].mCreditLimit = 0;
+		group[_groupD].nrMembers = group[_groupD].nrMembers - 1;
+		ResignGroup (_memberOfGroup, member[_memberOfGroup].alias, _groupD, group[_groupD].groupName, now);		
 		}
 	}
 
@@ -199,8 +186,8 @@ contract creditCommons {
     	address commune;
     	// @parameter the exchange rate against the base currency is given in percentage (100 = 1/1)
     	uint rate;
-    	uint gDebitLimit;
-    	uint gCreditLimit;	
+    	uint defaultMemberDebitLimit;
+    	uint defaultMemberCreditLimit;	
     	bool open;
     	uint nrMembers;
     	uint quorum;
@@ -224,8 +211,8 @@ contract creditCommons {
     					group[groupID].intertradeAccount = msg.sender;
     					group[groupID].commune = msg.sender;
     					group[groupID].rate = _rate;
-    					group[groupID].gDebitLimit = _debitLimit;
-    					group[groupID].gCreditLimit = _creditLimit;
+    					group[groupID].defaultMemberDebitLimit = _debitLimit;
+    					group[groupID].defaultMemberCreditLimit = _creditLimit;
     					group[groupID].open = _open;
     					group[groupID].nrMembers = 1;
     					group[groupID].quorum = 3;
@@ -280,8 +267,8 @@ contract creditCommons {
     			if (bytes(_description).length != 0) {group[_groupID].groupDescription = _description;}
     			if (bytes(_currencyName).length != 0) {group[_groupID].currencyName = _currencyName;}
     			if (_rate != 0) {group[_groupID].rate = _rate;}	
-    			if (_debitLimit != 0) {group[_groupID].gDebitLimit = _debitLimit;}
-    			if (_creditLimit != 0) {group[_groupID].gCreditLimit = _creditLimit;}
+    			if (_debitLimit != 0) {group[_groupID].defaultMemberDebitLimit = _debitLimit;}
+    			if (_creditLimit != 0) {group[_groupID].defaultMemberCreditLimit = _creditLimit;}
     			if (_intertradeDebitLimit != 0) {member[group[_groupID].intertradeAccount].mDebitLimit = _intertradeDebitLimit;}
     			if (_intertradeCreditLimit != 0) {member[group[_groupID].intertradeAccount].mCreditLimit = _intertradeCreditLimit;}
     			if (_open == true) {group[_groupID].open = true;}	
@@ -296,7 +283,7 @@ contract creditCommons {
     }
     
     function getGroupRates (uint _groupG) constant returns (uint, uint, uint) {
-    return (group[_groupG].rate, group[_groupG].gDebitLimit, group[_groupG].gCreditLimit);
+    return (group[_groupG].rate, group[_groupG].defaultMemberDebitLimit, group[_groupG].defaultMemberCreditLimit);
     }
     
     function getGroupManagement (uint _groupG) constant returns (address, address, uint, uint) {
@@ -313,38 +300,10 @@ contract creditCommons {
     		}
     }
     
-    struct bills {
-    	address payee;
-    	address payer;
-    	string description;
-    	uint billAmount;
-    	bool paid;
-    }
-    
-    mapping(uint => bills) bill;    
-   
-    function createBill (address _payer, string _description, uint _billAmount) {
-    	uint billNumber = bill.length ++
-    	bill[billNumber].payee = msg.sender;
-    	bill[billNumber].payer = _payer;
-    	bill[billNumber].description = _description;
-    	bill[billNumber].billAmount = _billAmount;
-    	bill[billNumber].paid = false;
-    }
-    
-    function payBill (uint _billNumber) {
-    	if (bill[billNumber].payer = msg.sender) {
-    		transfer (bill[billNumber].payee, bill[billNumber].billAmount);
-    		bill[billNumber].paid = true;
-    	}    	
-    }
-    
-    function getBill (uint _billNumber) constant returns (address, address, string, uint, bool) {
-    	return (bill[billNumber].payee, bill[billNumber].payer, bill[billNumber].description, bill[billNumber].billAmount, bill[billNumber].paid);
-    }
+    event Transaction (address indexed _sender, uint _senderAmount, address indexed _receiver, int _receiverAmount, uint _tTimeStamp);
 
 	// @notice function transfer form the member of the same exchange or to the member of another exchange. The amount is expressed in the sender currency
-	function transfer (address _to, uint _fromAmount) constant returns (bool) {		
+	function transfer (address _to, uint _fromAmount) {		
 		// @notice the given amount is converted to integer in order to work with only integers
 		int _intFromAmount = int (_fromAmount);
 		int _intFromDLimit = - int(member[msg.sender].mDebitLimit);
@@ -354,7 +313,7 @@ contract creditCommons {
 		if (member[msg.sender].memberGroup == member[_to].memberGroup) {
 			_toAmount = _intFromAmount;
 		} else {
-			// @notice conversions if the transaction is within groups
+			// @notice conversions if the transaction is accross groups
 			address _fromGroupAccount = group[member[msg.sender].memberGroup].intertradeAccount;
 			address _toGroupAccount = group[member[_to].memberGroup].intertradeAccount;
 			// @the amount is converted to the receiver currency
@@ -366,7 +325,7 @@ contract creditCommons {
 			// @notice if the group limits are not surpassed, we proceed with the transfer
 			if (((member[_fromGroupAccount].balance - _intFromAmount) > - int(member[_fromGroupAccount].mDebitLimit)) 
 				&& ((member[_toGroupAccount].balance + _toAmount) < int(member[_toGroupAccount].mCreditLimit))) {
-				} else {return (false);}
+				} 
 		} 
 		// @notice if the member limits are not surpassed, we proceed with the transfer
 			if (((member[msg.sender].balance - _intFromAmount) > _intFromDLimit) 
@@ -377,12 +336,49 @@ contract creditCommons {
 				if (member[msg.sender].memberGroup != member[_to].memberGroup) {			
 					member[_fromGroupAccount].balance -= _intFromAmount;
 					member[_toGroupAccount].balance += _toAmount;
-					} else {return (false);}
-			} else {return (false);}
+					} 
+			} 
  			Transaction (msg.sender, _fromAmount, _to, _toAmount, now);
- 			return (true);
 		}
+		
+				struct bills {
+		address payee;
+		address payer;
+		string description;
+		uint billAmount;
+		bool paid;
+	    }
 
+	mapping(uint => bills) bill;    
+
+	function createBill (address _payer, string _description, uint _billAmount) {
+	    nrBills ++;
+		uint billNumber = nrBills;
+		bill[billNumber].payee = msg.sender;
+		bill[billNumber].payer = _payer;
+		bill[billNumber].description = _description;
+		bill[billNumber].billAmount = _billAmount;
+		bill[billNumber].paid = false;
+	}
+
+	function payBill (uint _billNumber) {
+		if (bill[_billNumber].payer == msg.sender) {
+			transfer (bill[_billNumber].payee, bill[_billNumber].billAmount);
+			bill[_billNumber].paid = true;
+			}    	
+	}
+	
+	
+	function getBill (uint _billNumber) constant returns (address, address, string, uint, bool) {
+		return (bill[_billNumber].payee, bill[_billNumber].payer, bill[_billNumber].description, bill[_billNumber].billAmount, bill[_billNumber].paid);
+	}
+
+    
+
+    
+    event ProposalAdded(uint proposalNumber, uint group, string description, address creator);
+    event Voted(address voter, uint proposalNumber, int8 vote, int result);
+    event ProposalResult(uint proposalNumber, int result, uint quorum, bool active);
 	
     struct Proposals {
 		address creator;
@@ -422,6 +418,12 @@ contract creditCommons {
 		proposal[proposalNumber].voters[msg.sender].alreadyVoted = false; 		
         ProposalAdded(proposalNumber, _proposalGroup, _description, msg.sender);
     }
+	
+	function proposeAcceptanceAsMember (uint _candidateGroup) {
+		if (member[msg.sender].isMember = true) {
+		newProposal (_candidateGroup, "Accept Member", member[msg.sender].memberDescription, 10, group[_candidateGroup].quorum);
+		}
+	}
 	
     function vote(uint _proposalNumber, int8 _choice) {
 		if (now > proposal[_proposalNumber].votingDeadline) {closeProposal(_proposalNumber);}	

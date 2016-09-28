@@ -114,16 +114,6 @@ var creditcommonsContract = web3.eth.contract([ {
 }, {
 	"constant" : false,
 	"inputs" : [ {
-		"name" : "_newMember",
-		"type" : "address"
-	} ],
-	"name" : "kickOffGroup",
-	"outputs" : [],
-	"payable" : false,
-	"type" : "function"
-}, {
-	"constant" : false,
-	"inputs" : [ {
 		"name" : "_groupName",
 		"type" : "string"
 	}, {
@@ -308,6 +298,22 @@ var creditcommonsContract = web3.eth.contract([ {
 }, {
 	"constant" : false,
 	"inputs" : [ {
+		"name" : "_payer",
+		"type" : "address"
+	}, {
+		"name" : "_description",
+		"type" : "string"
+	}, {
+		"name" : "_billAmount",
+		"type" : "uint256"
+	} ],
+	"name" : "createBill",
+	"outputs" : [],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : false,
+	"inputs" : [ {
 		"name" : "_groupID",
 		"type" : "uint256"
 	}, {
@@ -329,6 +335,31 @@ var creditcommonsContract = web3.eth.contract([ {
 	} ],
 	"name" : "transfer",
 	"outputs" : [],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : true,
+	"inputs" : [ {
+		"name" : "_billNumber",
+		"type" : "uint256"
+	} ],
+	"name" : "getBill",
+	"outputs" : [ {
+		"name" : "",
+		"type" : "address"
+	}, {
+		"name" : "",
+		"type" : "address"
+	}, {
+		"name" : "",
+		"type" : "string"
+	}, {
+		"name" : "",
+		"type" : "uint256"
+	}, {
+		"name" : "",
+		"type" : "bool"
+	} ],
 	"payable" : false,
 	"type" : "function"
 }, {
@@ -369,6 +400,29 @@ var creditcommonsContract = web3.eth.contract([ {
 		"type" : "string"
 	} ],
 	"name" : "registerSystem",
+	"outputs" : [],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : false,
+	"inputs" : [ {
+		"name" : "_candidateGroup",
+		"type" : "uint256"
+	} ],
+	"name" : "proposeAcceptanceAsMember",
+	"outputs" : [],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : false,
+	"inputs" : [ {
+		"name" : "_memberOfGroup",
+		"type" : "address"
+	}, {
+		"name" : "_groupD",
+		"type" : "uint256"
+	} ],
+	"name" : "kickOutGroup",
 	"outputs" : [],
 	"payable" : false,
 	"type" : "function"
@@ -460,13 +514,6 @@ var creditcommonsContract = web3.eth.contract([ {
 	"type" : "function"
 }, {
 	"constant" : false,
-	"inputs" : [],
-	"name" : "resignGroup",
-	"outputs" : [],
-	"payable" : false,
-	"type" : "function"
-}, {
-	"constant" : false,
 	"inputs" : [ {
 		"name" : "_proposalNumber",
 		"type" : "uint256"
@@ -485,6 +532,23 @@ var creditcommonsContract = web3.eth.contract([ {
 		"type" : "uint256"
 	} ],
 	"name" : "joinGroup",
+	"outputs" : [],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : false,
+	"inputs" : [ {
+		"name" : "_billNumber",
+		"type" : "uint256"
+	} ],
+	"name" : "payBill",
+	"outputs" : [],
+	"payable" : false,
+	"type" : "function"
+}, {
+	"constant" : false,
+	"inputs" : [],
+	"name" : "resignFromGroup",
 	"outputs" : [],
 	"payable" : false,
 	"type" : "function"
