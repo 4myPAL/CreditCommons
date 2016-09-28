@@ -1,3 +1,5 @@
+pragma solidity ^0.4.1;
+
 contract creditCommons {
 
         // @title creditCommons
@@ -302,35 +304,48 @@ contract creditCommons {
     	_getGroupID = groupIndex[_gIndex];
     		}
     }
+    
+    
 
 	// @notice function transfer form the member of the same exchange or to the member of another exchange. The amount is expressed in the sender currency
 	function transfer (address _to, uint _fromAmount) {		
 		// @notice the given amount is converted to integer in order to work with only integers
 		int _intFromAmount = int (_fromAmount);
-		address _fromGroupAccount = group[member[msg.sender].memberGroup].intertradeAccount;
-		address _toGroupAccount = group[member[_to].memberGroup].intertradeAccount;
 		int _intFromDLimit = - int(member[msg.sender].mDebitLimit);
 		int _intToCLimit = int(member[msg.sender].mCreditLimit);
-		// @notice conversions if the transaction is within groups
-		if (_fromGroupAccount != _toGroupAccount) {
+		int _toAmount = 0;
+		// @notice check if both accounts are in the same group 
+		if (member[msg.sender].memberGroup == member[_to].memberGroup) {
+			_toAmount = _intFromAmount;
+		} else {
+			// @notice conversions if the transaction is within groups
+			address _fromGroupAccount = group[member[msg.sender].memberGroup].intertradeAccount;
+			address _toGroupAccount = group[member[_to].memberGroup].intertradeAccount;
 			// @the amount is converted to the receiver currency
 			uint _rateSenderU = group[member[msg.sender].memberGroup].rate;
 			uint _rateReceiverU = group[member[_to].memberGroup].rate;
 			int _rateSender = int(_rateSenderU);
 			int _rateReceiver = int(_rateReceiverU);
-			int _toAmount = _intFromAmount * _rateSender/ _rateReceiver;
+			_toAmount = _intFromAmount * _rateSender/ _rateReceiver;
+			// @notice if the group limits are not surpassed, we proceed with the transfer
+			if (((member[_fromGroupAccount].balance - _intFromAmount) > - int(member[_fromGroupAccount].mDebitLimit)) 
+				&& ((member[_toGroupAccount].balance + _toAmount) < int(member[_toGroupAccount].mCreditLimit))) {
+				} 
 		} 
-		// @notice if the limits are not surpassed, we proceed with the transfer
-		if ((member[msg.sender].balance - _intFromAmount) > _intFromDLimit) { 
-			if ((member[_to].balance + _toAmount) < _intToCLimit) {
+		// @notice if the member limits are not surpassed, we proceed with the transfer
+			if (((member[msg.sender].balance - _intFromAmount) > _intFromDLimit) 
+				&& ((member[_to].balance + _toAmount) < _intToCLimit)) { 
 				member[msg.sender].balance -= _intFromAmount;
-				member[_fromGroupAccount].balance -= _intFromAmount;
 				member[_to].balance += _toAmount;
-				member[_toGroupAccount].balance += _toAmount;
+				// @notice adjust intertrade accounts
+				if (member[msg.sender].memberGroup != member[_to].memberGroup) {			
+					member[_fromGroupAccount].balance -= _intFromAmount;
+					member[_toGroupAccount].balance += _toAmount;
+					}
 			} 
-		} 
-			Transaction (msg.sender, _fromAmount, _to, _toAmount, now);
-	}
+ 			Transaction (msg.sender, _fromAmount, _to, _toAmount, now);
+		}
+
 	
     struct Proposals {
 		address creator;
