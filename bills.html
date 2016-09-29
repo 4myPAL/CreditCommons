@@ -1,6 +1,6 @@
 <html lang="en">
 <head>
-<title>Transactions</title>
+<title>Transfers</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
@@ -14,10 +14,11 @@
 <script type="text/javascript" src="creditCommons.js"></script>
 <script type="text/javascript">
 	window.onload = function() {
-		document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase
-				+ "<br></b> Credit Commons Member: <b>" + isMember
-				+ "</b> Alias: <b>" + myAlias + "<br></b>Group ID: <b>"
-				+ myGroupID + "</b> Group Name: <b>" + groupName + "</b>";
+        document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase
+        + "<br></b> Credit Commons Member: <b>" + isMember + "</b> Alias: <b>" + myAlias
+        + "<br></b> Whisper Account: <b>" + whisperID
+        + "<br></b>Group ID: <b>" + myGroupID + "</b> Group Name: <b>" + groupName 
+        + "</b> Is Intertrade: <b>" + isIntertrade + "</b>" + "</b> Is Commune: <b>" + isCommune + "</b>";
 		document.getElementById('balance').innerText = myBalance + " "
 				+ currencyName;
 		document.getElementById('debitLimit').innerText = myDebitLimit + " "
@@ -57,23 +58,11 @@
 </style>
 </head>
 <body>
-	<nav class="navbar navbar-inverse">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="http://creditcommons.net/">Credit
-					Commons</a>
-			</div>
-			<ul class="nav navbar-nav">
-				<li><a href="index.html">Home</a></li>
-				<li class="active"><a href="transactions.html">Transactions</a></li>
-				<li><a href="groups.html">Groups</a></li>
-				<li><a href="members.html">Members</a></li>
-				<li><a href="posts.html">Posts</a></li>
-				<li><a href="polls.html">Polls</a></li>
-			</ul>
-		</div>
-	</nav>
+
 	<div class="container bg-3 text-center">
+		<div class=container">
+			<script type="text/javascript" src="navbar.js"></script>
+		</div>
 		<small><p class="bg-info" id="me"></p></small>
 		<div class="row">
 			<div class="col-sm-12">

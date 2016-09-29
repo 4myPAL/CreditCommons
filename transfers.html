@@ -1,6 +1,6 @@
 <html lang="en">
 <head>
-<title>Home Credit Commons</title>
+<title>Transfers</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
@@ -23,34 +23,32 @@
 				+ currencyName;
 		document.getElementById('debitLimit').innerText = myDebitLimit + " "
 				+ currencyName;
-		document.getElementById('creditLimit').innerText = myCreditLimit + " "
-				+ currencyName;
 	}
 
-	function register() {
-		if (isMember = false) {
-			var alias = document.getElementById('alias').value;
-			var whisperIdentity = web3.shh.newIdentity();
-			document.getElementById('whisperID').innerText = whisperIdentity;
-			creditCommons.registerSystem(newAlias, whisperIdentity);
-			location.reload();
-		}
+	function transfer() {
+		var payee = document.getElementById('payee').value;
+		var amount = document.getElementById('amount').value;
+		creditCommons.transfer(payee, amount);
+		location.reload();
 	}
 
-	function resign() {
-		if (myGroupID > 0) {
-			creditCommons.resignGroup();
-			location.reload();
-		}
-	}
-
-	function joinGroup() {
-		if (myGroupID = 0) {
-			var group = document.getElementById('group').value;
-			creditCommons.joinGroup(group);
-			location.reload();
-		}
-	}
+	var transfers = creditCommons.Transaction({}, {
+		fromBlock : 1400000,
+		toBlock : 'latest'
+	}, function(error, result) {
+		var row = "";
+		var d;
+		transfers.watch(function(error, result) {
+			d = new Date(result.args._tTimeStamp * 1000);
+			row += "<hr/>Date: " + d + "<br/>From: <b>" + result.args._sender
+					+ "</b><br/>Quantity sent in his currency: <b>"
+					+ result.args._senderAmount + "</b><br/>To: <b>"
+					+ result.args._receiver
+					+ "</b><br/>Quantity received in his currency: <b>"
+					+ result.args._receiverAmount + "</b><br/>";
+			document.getElementById('listIncomes').innerHTML = row;
+		});
+	});
 </script>
 <style>
 .navbar {
@@ -65,47 +63,48 @@
 		<div class=container">
 			<script type="text/javascript" src="navbar.js"></script>
 		</div>
-		<small><p class="bg-info" id="me"></p></small> <small><p
-				class="bg-info" id="whisperID"></p></small>
+		<small><p class="bg-info" id="me"></p></small>
 		<div class="row">
 			<div class="col-sm-12">
-				<h3>Register at Credit Commons</h3>
-				<form class="form-horizontal" role="form">
+				<h3>Payment</h3>
+				<form class="form-horizontal" role="form" id="payData">
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="alias">Chose
-							alias:</label>
-						<div class="col-sm-4">
-							<input type="text" class="form-control" id="alias"
-								placeholder="Enter your alias">
-						</div>
-					</div>
-				</form>
-				<button type="submit" class="btn btn-default" onClick="register();">Register</button>
-				<h3>My account</h3>
-				<form class="form-horizontal" role="form">
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="balance">Balance:</label>
+						<label class="control-label col-sm-4" for="balance">My
+							Balance:</label>
 						<div class="col-sm-4">
 							<output class="form-control" id="balance"></output>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="debitLimit">Debit
-							Limit:</label>
+						<label class="control-label col-sm-4" for="debitLimit">My
+							Debit Limit:</label>
 						<div class="col-sm-4">
 							<output class="form-control" id="debitLimit"></output>
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="creditLimit">Credit
-							Limit:</label>
+						<label class="control-label col-sm-4" for="payee">Payee
+							account:</label>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" id="payee"
+								placeholder="Enter payee account">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-4" for="amount">Amount:</label>
 						<div class="col-sm-4">
-							<output class="form-control" id="creditLimit"></output>
+							<input type="text" class="form-control" id="amount"
+								placeholder="Enter amount">
 						</div>
 					</div>
 				</form>
+				<button type="submit" class="btn btn-default" onClick="transfer();">Make
+					Payment</button>
 
-				<h3></h3>
+				<h3>Transactions</h3>
+				<div class="text-left" id="listIncomes"></div>
+				<hr />
+
 			</div>
 		</div>
 	</div>

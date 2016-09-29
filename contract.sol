@@ -1,11 +1,9 @@
-pragma solidity ^0.4.1;
-
 contract creditCommons {
 
         // @title creditCommons
         // @author Rogelio SEGOVIA; Matthew Slatter	
 		// @param sysAdmin is the system administrator address, the creator of the contract
-        // @param baseUnits is the number of units before the comma 
+
 		address public sysAdmin;   
 		uint nrMembers;
 		uint nrGroups;
@@ -70,7 +68,7 @@ contract creditCommons {
 			if (member[msg.sender].isMember != true) {
 			member[msg.sender].isMember = true;
 			member[msg.sender].alias = _alias;
-			member[msg.sender].alias = _whisperID;
+			member[msg.sender].whisperID = _whisperID;
 			member[msg.sender].memberDescription = _description;
 			member[msg.sender].memberGroup = 0;
 			member[msg.sender].isIntertrade = false;
@@ -85,8 +83,9 @@ contract creditCommons {
 			} 
 		}
 	
-	function modifyMember (string _alias, string _description) {
+	function modifyMember (string _alias, string _whisperID, string _description) {
 		if (bytes(_alias).length != 0) {member[msg.sender].alias = _alias;}
+		if (bytes(_whisperID).length != 0) {member[msg.sender].whisperID = _whisperID;}
 		if (bytes(_description).length != 0) {member[msg.sender].memberDescription = _description;}
 		}
 	
@@ -199,7 +198,11 @@ contract creditCommons {
     // @notice create an index of exchanges for listing purposes
     uint[] groupIndex;
     
-    // @notice A group can be created by any account in the system that is not in a group. A group is also an account and is identified by its account number. A new group therefore contains two accounts: its own, and its creators.
+    // @notice A group can be created by any account in the system that is not in a group. 
+    // @notice A group is also an account and is identified by its account number. 
+    // @notice A group has two special members:
+    // @notice the intertrade account holding the external balance against other groups
+    // @notice the commune account holding the group common moneys, such as taxes
     function createGroup (string _groupName, string _description, string _currencyName, uint _rate, uint _debitLimit, uint _creditLimit, uint _intertradeDebitLimit, uint _intertradeCreditLimit, bool _open) {
     	// @notice the member exists in the system and the member is not in a group and the name is valid
     	if (member[msg.sender].isMember = true) {
@@ -366,15 +369,11 @@ contract creditCommons {
 			transfer (bill[_billNumber].payee, bill[_billNumber].billAmount);
 			bill[_billNumber].paid = true;
 			}    	
-	}
-	
+	}	
 	
 	function getBill (uint _billNumber) constant returns (address, address, string, uint, bool) {
 		return (bill[_billNumber].payee, bill[_billNumber].payer, bill[_billNumber].description, bill[_billNumber].billAmount, bill[_billNumber].paid);
 	}
-
-    
-
     
     event ProposalAdded(uint proposalNumber, uint group, string description, address creator);
     event Voted(address voter, uint proposalNumber, int8 vote, int result);
@@ -395,8 +394,7 @@ contract creditCommons {
     }	
 	
 	struct Voters {
-		bool alreadyVoted;
-		
+		bool alreadyVoted;		
 	}
  
 	mapping (uint => Proposals) proposal;
