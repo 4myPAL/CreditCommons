@@ -821,7 +821,8 @@ var myBalance = member[5];
 var myDebitLimit = member[6];
 var myCreditLimit = member[7];
 
-var whisperID = creditCommons.getMemberWhisper(coinbase)[0];
+var whisper = creditCommons.getMemberWhisper(coinbase);
+var whisperID = whisper[0];
 
 var memberStatus = creditCommons.getMemberStatus(coinbase);
 var isIntertrade = memberStatus[0];
