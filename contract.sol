@@ -20,8 +20,8 @@ contract creditCommons {
 			    nrBills = 0;
         }
 	
-    function getTotals () constant returns (uint, uint, uint) {
-    	return (nrMembers, nrGroups, nrProposals);
+    function getTotals () constant returns (uint, uint, uint, uint) {
+    	return (nrMembers, nrGroups, nrProposals, nrBills);
     }
 	
 	event NewGroup(address indexed _creator, uint indexed _groupIDN, string _groupNameN, uint _NGTimeStamp);
@@ -36,7 +36,6 @@ contract creditCommons {
         sysAdmin = newSysAdmin;
 		}
     }
-
 	
 	// @notice create a structure to file all members
 	struct members {
@@ -165,11 +164,7 @@ contract creditCommons {
 	function getMemberWhisper (address _memberG) constant returns (string) {
 	   return (member[_memberG].whisperID);
 	}
-	
-	function getNumberMembers () constant returns (uint _nrM) {
-		_nrM = nrMembers;
-	}
-		
+			
 	function getMPbyIndex (uint _mIndex) constant returns (address _getMemberID) {
 		if (_mIndex < memberIndex.length ++) {
 		_getMemberID = memberIndex[_mIndex];
@@ -277,8 +272,7 @@ contract creditCommons {
     			if (_open == true) {group[_groupID].open = true;}	
     			if (_newQuorum != 0) {group[_groupID].quorum = _newQuorum;}	
     			ModifyGroup (msg.sender, _groupID, _groupName, now);				
-    				} 
-    					
+    				}     					
     }
     
     function getGroupDescription (uint _groupG) constant returns (string, string, string, bool, uint) {
@@ -289,14 +283,10 @@ contract creditCommons {
     return (group[_groupG].rate, group[_groupG].defaultMemberDebitLimit, group[_groupG].defaultMemberCreditLimit);
     }
     
-    function getGroupManagement (uint _groupG) constant returns (address, address, uint, uint) {
-    return (group[_groupG].intertradeAccount, group[_groupG].commune, member[group[_groupG].intertradeAccount].mDebitLimit, member[group[_groupG].intertradeAccount].mCreditLimit);
-    }
-    
-    function getNumberGroups () constant returns (uint _nrG) {
-        _nrG = nrGroups;
-    }
-    
+    function getGroupManagement (uint _groupG) constant returns (address, address) {
+    return (group[_groupG].intertradeAccount, group[_groupG].commune);
+    }    
+   
     function getGroupbyIndex (uint _gIndex) constant returns (uint _getGroupID) {
     	if (_gIndex < groupIndex.length ++) {
     	_getGroupID = groupIndex[_gIndex];
@@ -344,7 +334,7 @@ contract creditCommons {
  			Transaction (msg.sender, _fromAmount, _to, _toAmount, now);
 		}
 		
-				struct bills {
+		struct bills {
 		address payee;
 		address payer;
 		string description;

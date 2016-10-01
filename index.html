@@ -16,19 +16,42 @@
 <script type="text/javascript" src="creditCommons.js"></script>
 <script type="text/javascript">
 	window.onload = function() {
-		document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase
-				+ "<br></b> Credit Commons Member: <b>" + isMember
-				+ "</b> Alias: <b>" + myAlias + "<br></b> Whisper Account: <b>"
-				+ whisperID + "<br></b>Group ID: <b>" + myGroupID
-				+ "</b> Group Name: <b>" + groupName
-				+ "</b> Is Intertrade: <b>" + isIntertrade + "</b>"
+		document.getElementById('me').innerHTML = "ETH Account: <b>"
+				+ myCoinbase + "<br></b> Credit Commons Member: <b>"
+				+ myIsMember + "</b> Alias: <b>" + myAlias
+				+ "<br></b> Whisper Account: <b>" + myWhisper
+				+ "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
+				+ myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
 				+ "</b> Is Commune: <b>" + isCommune + "</b>";
-		document.getElementById('balance').innerText = myBalance + " "
-				+ currencyName;
-		document.getElementById('debitLimit').innerText = myDebitLimit + " "
-				+ currencyName;
-		document.getElementById('creditLimit').innerText = myCreditLimit + " "
-				+ currencyName;
+				
+		document.getElementById('alias').innerHTML = "<b>" + myAlias + "</b>";
+		document.getElementById('description').innerHTML = "<i>"
+				+ myDescription + "</i>";
+		document.getElementById('balance').innerHTML = myBalance + " "
+				+ myCurrencyName;
+		document.getElementById('debitLimit').innerHTML = myDebitLimit + " "
+				+ myCurrencyName;
+		document.getElementById('creditLimit').innerHTML = myCreditLimit + " "
+				+ myCurrencyName;
+		document.getElementById('isIntertrade').innerHTML = isIntertrade;
+		document.getElementById('isCommune').innerHTML = isCommune;
+		document.getElementById('myGroupName').innerHTML = "<b>" + myGroupName
+				+ "</b>";
+		document.getElementById('myGroupDescription').innerHTML = "<i>"
+				+ myGroupDescription + "</i>";
+		document.getElementById('myGroupNr').innerHTML = "<b>" + myGroupNr
+				+ "</b>";
+		document.getElementById('myGroupNrM').innerHTML = myGroupNrM;				
+		document.getElementById('myCurrencyName').innerHTML = myCurrencyName;
+		document.getElementById('myRate').innerHTML = myRate;
+		document.getElementById('myGoupDebitLimit').innerHTML = myGoupDebitLimit + " " + myCurrencyName;
+		document.getElementById('myGoupCreditLimit').innerHTML = myGoupCreditLimit + " " + myCurrencyName;
+		document.getElementById('myGroupOpen').innerHTML = myGroupOpen;
+		document.getElementById('communeAccount').innerHTML = communeAccount;
+		document.getElementById('intertradeAccount').innerHTML = intertradeAccount;
+		document.getElementById('intertradeBalance').innerHTML = intertradeBalance + " " + myCurrencyName;
+		document.getElementById('intertradeDebitLimit').innerHTML = intertradeDebitLimit + " " + myCurrencyName;
+		document.getElementById('intertradeCreditLimit').innerHTML = intertradeCreditLimit + " " + myCurrencyName;
 	}
 
 	function register() {
@@ -66,81 +89,61 @@
 <body>
 
 	<div class="container bg-3 text-center">
-		<div class="container"">
-			<script type="text/javascript" src="navbar.js"></script>
-		</div>
-		<small><p class="bg-info" id="me"></p></small> <small><p
-				class="bg-info" id="whisperID"></p></small>
+		<script type="text/javascript" src="navbar.js"></script>
+		<small><p class="bg-info" id="me"></p></small>
 		<div class="row">
-			<div class="col-sm-12">
-
-				<h3>My account</h3>
-				<form class="form-horizontal well" role="form" action="">
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="alias">Alias:</label>
-						<div class="col-sm-4">
-							<output id="alias"></output>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="description">Description:</label>
-						<div class="col-sm-4">
-							<output id="description"></output>
-						</div>
-					</div>
-					<small>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="account">ETHEREUM
-								account:</label>
-							<div class="col-sm-4">
-								<output id="account"></output>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="whisperID">WHISPER
-								account:</label>
-							<div class="col-sm-4">
-								<output id="whisperID"></output>
-							</div>
-						</div>
-					</small>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="balance">Balance:</label>
-						<div class="col-sm-4">
-							<output id="balance"></output>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="debitLimit">Debit
-							Limit:</label>
-						<div class="col-sm-4">
-							<output id="debitLimit"></output>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="creditLimit">Credit
-							Limit:</label>
-						<div class="col-sm-4">
-							<output id="creditLimit"></output>
-						</div>
-					</div>
-					<label><output id="isCommune"> Is commune account:</label>
-					<label><output id="isIntertrade"> Is intertrade
-							account:</label>
-				</form>
-				<h3>Register at Credit Commons</h3>
+			<h3>My account</h3>
+			<div class="col-sm-6">
+				<div class="well">
+					<h4>My Wallet</h4>
+					<table class="table small">
+						<thead>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="text-right col-sm-1">Alias:</td>
+								<td class="text-left" id="alias"></td>
+							</tr>
+							<tr>
+								<td class="text-right col-sm-1">Description:</td>
+								<td class="text-left col-sm-5" id="description"></td>
+							</tr>
+							<tr>
+								<td class="text-right col-sm-1">Balance:</td>
+								<td class="text-right" id="balance"></td>
+							</tr>
+							<tr>
+								<td class="text-right col-sm-1">Debit Limit:</td>
+								<td class="text-right" id="debitLimit"></td>
+							</tr>
+							<tr>
+								<td class="text-right col-sm-1">Credit Limit:</td>
+								<td class="text-right" id="creditLimit"></td>
+							</tr>
+							<tr>
+								<td class="text-right col-sm-1">Intertrade:</td>
+								<td class="text-center" id="isIntertrade"></td>
+							</tr>
+							<tr>
+								<td class="text-right col-sm-1">Commune:</td>
+								<td class="text-center" id="isCommune"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<hr />
+				<h4>Register at Credit Commons system</h4>
 				<form class="form-horizontal" role="form" action="">
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="alias">Chose
-							alias:</label>
-						<div class="col-sm-4">
+						<label class="control-label" for="alias">Chose alias:</label>
+						<div>
 							<input type="text" class="form-control" id="alias"
 								placeholder="Enter your alias">
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="alias">Description</label>
-						<div class="col-sm-4">
+						<label class="control-label" for="alias">Description</label>
+						<div>
 							<textarea class="form-control" rows="5" id="description"
 								placeholder="Introduce yourself. Geolocation. Country code. Phones, email, etc."
 								cols=""></textarea>
@@ -148,116 +151,92 @@
 					</div>
 				</form>
 				<button type="submit" class="btn btn-default" onClick="register();">Register</button>
-				<h3>My Group</h3>
-				<form class="form-horizontal well" role="form" action="">
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="groupID">Group
-							ID:</label>
-						<div class="col-sm-4">
-							<output id="groupID"></output>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="groupName">Group
-							Name:</label>
-						<div class="col-sm-4">
-							<output id="groupName"></output>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="groupDescription">Group
-							Description:</label>
-						<div class="col-sm-4">
-							<output id="groupDescription"></output>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="currency">Group
-							Currency:</label>
-						<div class="col-sm-4">
-							<output id="currency"></output>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="rate">Currency
-							Rate:</label>
-						<div class="col-sm-4">
-							<output id="rate"></output>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="debitLimitG">Default
-							Members Debit Limit:</label>
-						<div class="col-sm-4">
-							<output id="debitLimitG"></output>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="creditLimitG">Default
-							Members Credit Limit:</label>
-						<div class="col-sm-4">
-							<output id="creditLimitG"></output>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="open">Open:</label>
-						<div class="col-sm-4">
-							<output id="open"></output>
-						</div>
-					</div>
-					<small>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="commune">Commune
-								account:</label>
-							<div class="col-sm-8">
-								<output id="commune"></output>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="intertrade">Intertrade
-								Account:</label>
-							<div class="col-sm-8">
-								<output id="intertrade"></output>
-							</div>
-						</div>
-					</small>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="groupBalance">Intertrade
-							Balance:</label>
-						<div class="col-sm-4">
-							<output id="groupBalance"></output>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="intertradeDebitLimit">Intertrade
-							Credit Limit:</label>
-						<div class="col-sm-4">
-							<output id="intertradeDebitLimit"></output>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="intertradeCreditLimit">Intertrade
-							Credit Limit:</label>
-						<div class="col-sm-4">
-							<output id="intertradeCreditLimit"></output>
-						</div>
-					</div>
-				</form>
+			</div>
+			<div class="col-sm-6">
+				<div class="well">
+					<h4>My Group</h4>
+					<table class="table small">
+						<thead>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="text-right col-sm-2">Name:</td>
+								<td class="text-left" id="myGroupName"></td>
+							</tr>
+							<tr>
+								<td class="text-right col-sm-2">Description:</td>
+								<td class="text-left col-sm-4" id="myGroupDescription"></td>
+							</tr>
+							<tr>
+								<td class="text-right col-sm-2">Group ID:</td>
+								<td class="text-left" id="myGroupNr"></td>
+							</tr>
+							<tr>
+								<td class="text-right col-sm-2">Number of Members:</td>
+								<td class="text-center" id="myGroupNrM"></td>
+							</tr>
+							<tr>
+								<td class="text-right col-sm-2">Currency:</td>
+								<td class="text-left" id="myCurrencyName"></td>
+							</tr>
+							<tr>
+								<td class="text-right col-sm-2">Rate:</td>
+								<td class="text-right" id="myRate"></td>
+							</tr>
+							<tr>
+								<td class="text-right col-sm-2">Default Debit:</td>
+								<td class="text-right" id="myGoupDebitLimit"></td>
+							</tr>
+							<tr>
+								<td class="text-right col-sm-2">Default Credit:</td>
+								<td class="text-right" id="myGoupDebitLimit"></td>
+							</tr>
+							<tr>
+								<td class="text-right col-sm-2">Open:</td>
+								<td class="text-center" id="myGroupOpen"></td>
+							</tr>
+
+							<tr>
+								<td class="text-right col-sm-2">Commune account:</td>
+								<td class="text-left" id="communeAccount"></td>
+							</tr>
+							<tr>
+								<td class="text-right col-sm-2">Intertrade Account::</td>
+								<td class="text-left" id="intertradeAccount"></td>
+							</tr>
+							<tr>
+								<td class="text-right col-sm-2">Intertrade Balance:</td>
+								<td class="text-right" id="intertradeBalance"></td>
+							</tr>
+							<tr>
+								<td class="text-right col-sm-2">Intertrade Debit Limit:</td>
+								<td class="text-right" id="intertradeDebitLimit"></td>
+							</tr>
+							<tr>
+								<td class="text-right col-sm-2">Intertrade Credit Limit:</td>
+								<td class="text-right" id="intertradeCreditLimit"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 				<hr />
-				<button type="submit" class="btn btn-default" onClick="resign();">Resign
-					from your Group</button>
-				<hr>
-				<form class="form-horizontal" role="form" action="">
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="groupToJoin">Join
-							Group:</label>
-						<div class="col-sm-4">
-							<input type="text" class="form-control" id="groupToJoin"
-								placeholder="Enter the group ID">
-						</div>
-					</div>
-				</form>
-				<button type="submit" class="btn btn-default" onClick="joinGroup();">Join</button>
+				<h4>
+					Resign
+					<h4>
+						<button type="submit" class="btn btn-default" onClick="resign();">Resign
+							from your Group</button>
+						<h4>
+							Join Group
+							<h4>
+								<form class="form-horizontal" role="form" action="">
+									<div class="form-group">
+										<input type="text" class="form-control" id="groupToJoin"
+											placeholder="Enter the group ID">
+									</div>
+								</form>
+								<button type="submit" class="btn btn-default"
+									onClick="joinGroup();">Join</button>
+								<hr />
 			</div>
 		</div>
 	</div>

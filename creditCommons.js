@@ -807,48 +807,65 @@ var accounts = web3.eth.accounts;
 var nrAcc = accounts.length;
 
 web3.eth.defaultAccount = accounts[0];
-var coinbase = web3.eth.defaultAccount;
+var myCoinbase = web3.eth.defaultAccount;
 
-var nrMembers = creditCommons.getNumberMembers();
-var numberM = nrMembers[0];
+var totals = creditCommons.getTotals();
+var nrMembers = totals[0];
+var nrGroups = totals[1];
+var nrProposals = totals[2];
 
-var member = creditCommons.getMember(coinbase);
-var isMember = member[0];
-var myAlias = member[1];
-var myDescription = member[2];
-var myGroupID = member[3];
-var myBalance = member[5];
-var myDebitLimit = member[6];
-var myCreditLimit = member[7];
+var myMembership = creditCommons.getMember(myCoinbase);
+var myIsMember = myMembership[0];
+var myAlias = myMembership[1];
+var myDescription = myMembership[2];
+var myGroupNr = myMembership[3];
+var myBalance = myMembership[4];
+var myDebitLimit = myMembership[5];
+var myCreditLimit = myMembership[6];
 
-var whisper = creditCommons.getMemberWhisper(coinbase);
-var whisperID = whisper[0];
+var myStatus = creditCommons.getMemberStatus(myCoinbase);
+var isIntertrade = myStatus[0];
+var isCommune = myStatus[1];
 
-var memberStatus = creditCommons.getMemberStatus(coinbase);
-var isIntertrade = memberStatus[0];
-var isCommune = memberStatus[1];
+var myWhisper = creditCommons.getMemberWhisper(myCoinbase);
 
-var group = creditCommons.getGroup(myGroupID);
-var groupIntertradeAccount = group[0];
-var groupName = group[1];
-var currencyName = group[2];
-var rate = group[3];
-var debitLimit = group[4];
-var creditLimit = group[5];
-var open = group[6];
+var myGroup = creditCommons.getGroupDescription(myGroupNr);
+var myGroupName = myGroup[0];
+var myGroupDescription = myGroup[1];
+var myCurrencyName = myGroup[2];
+var myGroupOpen = myGroup[3];
+var myGroupNrM = myGroup[4];
 
-var groupManagement = creditCommons.getGroupManagement(myGroupID);
+var myGroupRates = creditCommons.getGroupRates(myGroupNr);
+var myRate = myGroupRates[0];
+var myGoupDebitLimit = myGroupRates[1];
+var myGroupCreditLimit = myGroupRates[2];
+
+var groupManagement = creditCommons.getGroupManagement(myGroupNr);
 var intertradeAccount = groupManagement[0];
 var communeAccount = groupManagement[1];
-var intertradeDebitLimit = groupManagement[2];
-var intertradeCreditLimit = groupManagement[3];
 
 var intertradeWallet = creditCommons.getMember(intertradeAccount);
-var intertradeBalance = intertradeWallet[4];
-var intertradeDebitLimit = intertradeWallet[5];
-var intertradeCreditLimit = intertradeWallet[6];
+var intertradeIsMember = intertradeWallet[0];
+var intertradeAlias = intertradeWallet[1];
+var intertradeDescription = intertradeWallet[2];
+var intertradeGroup = intertradeWallet[3];
+var intertradeBalance = intertradeWallet[5];
+var intertradeDebitLimit = intertradeWallet[6];
+var intertradeCreditLimit = intertradeWallet[7];
 
-var communeWallet = creditCommons.getMember(communeAccount);
-var communeBalance = communeWallet[4];
-var communeDebitLimit = communeWallet[5];
-var communeCreditLimit = communeWallet[6];
+var intertradeWallet = creditCommons.getMember(intertradeAccount);
+var intertradeIsMember = intertradeWallet[0];
+var intertradeAlias = intertradeWallet[1];
+var intertradeDescription = intertradeWallet[2];
+var intertradeGroup = intertradeWallet[3];
+var intertradeBalance = intertradeWallet[5];
+var intertradeDebitLimit = intertradeWallet[6];
+var intertradeCreditLimit = intertradeWallet[7];
+
+
+var me = "ETH Account: <b>" + myCoinbase
++ "<br></b> Credit Commons Member: <b>" + myIsMember + "</b> Alias: <b>" + myAlias 
++ "<br></b> Whisper Account: <b>" + myWhisper 
++ "<br></b>Group ID: <b>" + myGroup + "</b> Group Name: <b>" + groupName
++ "<br></b> Is Intertrade: <b>" + isIntertrade + "</b> Is Commune: <b>" + isCommune + "</b>";
