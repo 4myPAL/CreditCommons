@@ -14,15 +14,18 @@
 <script type="text/javascript" src="creditCommons.js"></script>
 <script type="text/javascript">
 	window.onload = function() {
-        document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase
-        + "<br></b> Credit Commons Member: <b>" + isMember + "</b> Alias: <b>" + myAlias
-        + "<br></b> Whisper Account: <b>" + whisperID
-        + "<br></b>Group ID: <b>" + myGroupID + "</b> Group Name: <b>" + groupName 
-        + "</b> Is Intertrade: <b>" + isIntertrade + "</b>" + "</b> Is Commune: <b>" + isCommune + "</b>";
-		document.getElementById('balance').innerText = myBalance + " "
-				+ currencyName;
-		document.getElementById('debitLimit').innerText = myDebitLimit + " "
-				+ currencyName;
+		document.getElementById('me').innerHTML = "ETH Account: <b>"
+				+ myCoinbase + "<br></b> Credit Commons Member: <b>"
+				+ myIsMember + "</b> Alias: <b>" + myAlias
+				+ "<br></b> Whisper Account: <b>" + myWhisper
+				+ "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
+				+ myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
+				+ "</b> Is Commune: <b>" + isCommune + "</b>";
+
+		document.getElementById('myBalance').innerHTML = myBalance + " "
+				+ myCurrencyName;
+		document.getElementById('myDebitLimit').innerHTML = myDebitLimit + " "
+				+ myCurrencyName;
 	}
 
 	function transfer() {
@@ -32,21 +35,43 @@
 		location.reload();
 	}
 
-	var transfers = creditCommons.Transaction({}, {
+	var incomes = creditCommons.Transaction({
+		'_receiver' : myCoinbase
+	}, {
 		fromBlock : 1400000,
 		toBlock : 'latest'
 	}, function(error, result) {
 		var row = "";
 		var d;
-		transfers.watch(function(error, result) {
+		incomes.watch(function(error, result) {
 			d = new Date(result.args._tTimeStamp * 1000);
 			row += "<hr/>Date: " + d + "<br/>From: <b>" + result.args._sender
-					+ "</b><br/>Quantity sent in his currency: <b>"
+					+ "</b><br/>Quantity sent in senders currency: <b>"
 					+ result.args._senderAmount + "</b><br/>To: <b>"
 					+ result.args._receiver
-					+ "</b><br/>Quantity received in his currency: <b>"
+					+ "</b><br/>Quantity received in receivers currency: <b>"
 					+ result.args._receiverAmount + "</b><br/>";
 			document.getElementById('listIncomes').innerHTML = row;
+		});
+	});
+
+	var spenditures = creditCommons.Transaction({
+		'_sender' : myCoinbase
+	}, {
+		fromBlock : 1400000,
+		toBlock : 'latest'
+	}, function(error, result) {
+		var row = "";
+		var d;
+		spenditures.watch(function(error, result) {
+			d = new Date(result.args._tTimeStamp * 1000);
+			row += "<hr/>Date: " + d + "<br/>From: <b>" + result.args._sender
+					+ "</b><br/>Quantity sent in senders currency: <b>"
+					+ result.args._senderAmount + "</b><br/>To: <b>"
+					+ result.args._receiver
+					+ "</b><br/>Quantity received in receivers currency: <b>"
+					+ result.args._receiverAmount + "</b><br/>";
+			document.getElementById('listSpenditures').innerHTML = row;
 		});
 	});
 </script>
@@ -60,28 +85,32 @@
 <body>
 
 	<div class="container bg-3 text-center">
-		<div class=container">
-			<script type="text/javascript" src="navbar.js"></script>
-		</div>
+		<script type="text/javascript" src="navbar.js"></script>
 		<small><p class="bg-info" id="me"></p></small>
 		<div class="row">
+			<h3>Transfers</h3>
+			<div class="col-sm-6">
+				<div class="well">
+					<h4>My Wallet</h4>
+					<table class="table">
+						<thead>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="text-right col-sm-3">My Balance:</td>
+								<td class="text-right col-sm-3""><p id="myBalance"></p></td>
+							</tr>
+							<tr>
+								<td class="text-right col-sm-3">My Debit Limit:</td>
+								<td class="text-right col-sm-3"><p id="myDebitLimit"></p></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
 			<div class="col-sm-12">
-				<h3>Payment</h3>
-				<form class="form-horizontal" role="form" id="payData">
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="balance">My
-							Balance:</label>
-						<div class="col-sm-4">
-							<output class="form-control" id="balance"></output>
-						</div>
-					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="debitLimit">My
-							Debit Limit:</label>
-						<div class="col-sm-4">
-							<output class="form-control" id="debitLimit"></output>
-						</div>
-					</div>
+				<h4>Payment</h4>
+				<form class="form-horizontal" role="form">
 					<div class="form-group">
 						<label class="control-label col-sm-4" for="payee">Payee
 							account:</label>
@@ -100,9 +129,11 @@
 				</form>
 				<button type="submit" class="btn btn-default" onClick="transfer();">Make
 					Payment</button>
-
-				<h3>Transactions</h3>
+				<h4>Incomes</h4>
 				<div class="text-left" id="listIncomes"></div>
+				<hr />
+				<h4>Spenditures</h4>
+				<div class="text-left" id="listSpenditures"></div>
 				<hr />
 
 			</div>

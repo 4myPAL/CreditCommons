@@ -24,6 +24,7 @@
 				+ myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
 				+ "</b> Is Commune: <b>" + isCommune + "</b>";
 				
+			
 		document.getElementById('alias').innerHTML = "<b>" + myAlias + "</b>";
 		document.getElementById('description').innerHTML = "<i>"
 				+ myDescription + "</i>";
@@ -39,26 +40,25 @@
 				+ "</b>";
 		document.getElementById('myGroupDescription').innerHTML = "<i>"
 				+ myGroupDescription + "</i>";
-		document.getElementById('myGroupNr').innerHTML = "<b>" + myGroupNr
+		document.getElementById('myGroupNr').innerHTML= "<b>" + myGroupNr
 				+ "</b>";
-		document.getElementById('myGroupNrM').innerHTML = myGroupNrM;				
-		document.getElementById('myCurrencyName').innerHTML = myCurrencyName;
-		document.getElementById('myRate').innerHTML = myRate;
-		document.getElementById('myGoupDebitLimit').innerHTML = myGoupDebitLimit + " " + myCurrencyName;
-		document.getElementById('myGoupCreditLimit').innerHTML = myGoupCreditLimit + " " + myCurrencyName;
-		document.getElementById('myGroupOpen').innerHTML = myGroupOpen;
-		document.getElementById('communeAccount').innerHTML = communeAccount;
-		document.getElementById('intertradeAccount').innerHTML = intertradeAccount;
-		document.getElementById('intertradeBalance').innerHTML = intertradeBalance + " " + myCurrencyName;
-		document.getElementById('intertradeDebitLimit').innerHTML = intertradeDebitLimit + " " + myCurrencyName;
-		document.getElementById('intertradeCreditLimit').innerHTML = intertradeCreditLimit + " " + myCurrencyName;
+		document.getElementById('myGroupNrM').innerHTML= myGroupNrM;				
+		document.getElementById('myCurrencyName').innerHTML= myCurrencyName;
+		document.getElementById('myRate').innerHTML= myRate;
+		document.getElementById('myGroupDebitLimit').innerHTML= myGroupDebitLimit + " " + myCurrencyName;
+		document.getElementById('myGroupCreditLimit').innerHTML= myGroupCreditLimit + " " + myCurrencyName;
+        document.getElementById('myGroupOpen').innerHTML= myGroupOpen;
+        document.getElementById('communeAccount').innerHTML= communeAccount;
+        document.getElementById('intertradeAccount').innerHTML= intertradeAccount;
+        document.getElementById('intertradeBalance').innerHTML= intertradeBalance + " " + myCurrencyName;
+        document.getElementById('intertradeDebitLimit').innerHTML= intertradeDebitLimit + " " + myCurrencyName;
+        document.getElementById('intertradeCreditLimit').innerHTML= intertradeCreditLimit + " " + myCurrencyName;
 	}
 
 	function register() {
 		if (isMember = false) {
 			var alias = document.getElementById('alias').value;
 			var whisperIdentity = web3.shh.newIdentity();
-			document.getElementById('whisperID').innerText = whisperIdentity;
 			creditCommons.registerSystem(newAlias, whisperIdentity);
 			location.reload();
 		}
@@ -96,37 +96,37 @@
 			<div class="col-sm-6">
 				<div class="well">
 					<h4>My Wallet</h4>
-					<table class="table small">
+					<table class="table">
 						<thead>
 						</thead>
 						<tbody>
 							<tr>
 								<td class="text-right col-sm-1">Alias:</td>
-								<td class="text-left" id="alias"></td>
+								<td class="text-left"><p id="alias"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-1">Description:</td>
-								<td class="text-left col-sm-5" id="description"></td>
+								<td class="text-left col-sm-5"><p id="description"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-1">Balance:</td>
-								<td class="text-right" id="balance"></td>
+								<td class="text-right"><p id="balance"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-1">Debit Limit:</td>
-								<td class="text-right" id="debitLimit"></td>
+								<td class="text-right"><p id="debitLimit"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-1">Credit Limit:</td>
-								<td class="text-right" id="creditLimit"></td>
+								<td class="text-right"><p id="creditLimit"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-1">Intertrade:</td>
-								<td class="text-center" id="isIntertrade"></td>
+								<td class="text-center"><p id="isIntertrade"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-1">Commune:</td>
-								<td class="text-center" id="isCommune"></td>
+								<td class="text-center"><p id="isCommune"></p></td>
 							</tr>
 						</tbody>
 					</table>
@@ -161,60 +161,60 @@
 						<tbody>
 							<tr>
 								<td class="text-right col-sm-2">Name:</td>
-								<td class="text-left" id="myGroupName"></td>
+								<td class="text-left"><p id="myGroupName"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-2">Description:</td>
-								<td class="text-left col-sm-4" id="myGroupDescription"></td>
+								<td class="text-left col-sm-4"><p id="myGroupDescription"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-2">Group ID:</td>
-								<td class="text-left" id="myGroupNr"></td>
+								<td class="text-left"><p id="myGroupNr"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-2">Number of Members:</td>
-								<td class="text-center" id="myGroupNrM"></td>
+								<td class="text-center"><p id="myGroupNrM"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-2">Currency:</td>
-								<td class="text-left" id="myCurrencyName"></td>
+								<td class="text-left"><p id="myCurrencyName"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-2">Rate:</td>
-								<td class="text-right" id="myRate"></td>
+								<td class="text-right"><p id="myRate"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-2">Default Debit:</td>
-								<td class="text-right" id="myGoupDebitLimit"></td>
+								<td class="text-right"><p id="myGroupDebitLimit"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-2">Default Credit:</td>
-								<td class="text-right" id="myGoupDebitLimit"></td>
+								<td class="text-right"><p id="myGroupCreditLimit"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-2">Open:</td>
-								<td class="text-center" id="myGroupOpen"></td>
+								<td class="text-center"><p id="myGroupOpen"></p></td>
 							</tr>
 
 							<tr>
 								<td class="text-right col-sm-2">Commune account:</td>
-								<td class="text-left" id="communeAccount"></td>
+								<td class="text-left"><p id="communeAccount"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-2">Intertrade Account::</td>
-								<td class="text-left" id="intertradeAccount"></td>
+								<td class="text-left"><p id="intertradeAccount"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-2">Intertrade Balance:</td>
-								<td class="text-right" id="intertradeBalance"></td>
+								<td class="text-right" id="intertradeBalance"><p></p></td>
 							</tr>
 							<tr>
-								<td class="text-right col-sm-2">Intertrade Debit Limit:</td>
-								<td class="text-right" id="intertradeDebitLimit"></td>
+								<td class="text-right col-sm-2">Intertrade Debit:</td>
+								<td class="text-right"><p id="intertradeDebitLimit"></p></td>
 							</tr>
 							<tr>
-								<td class="text-right col-sm-2">Intertrade Credit Limit:</td>
-								<td class="text-right" id="intertradeCreditLimit"></td>
+								<td class="text-right col-sm-2">Intertrade Credit:</td>
+								<td class="text-right"><p id="intertradeCreditLimit"></p></td>
 							</tr>
 						</tbody>
 					</table>

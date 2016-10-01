@@ -838,7 +838,7 @@ var myGroupNrM = myGroup[4];
 
 var myGroupRates = creditCommons.getGroupRates(myGroupNr);
 var myRate = myGroupRates[0];
-var myGoupDebitLimit = myGroupRates[1];
+var myGroupDebitLimit = myGroupRates[1];
 var myGroupCreditLimit = myGroupRates[2];
 
 var groupManagement = creditCommons.getGroupManagement(myGroupNr);
@@ -850,19 +850,18 @@ var intertradeIsMember = intertradeWallet[0];
 var intertradeAlias = intertradeWallet[1];
 var intertradeDescription = intertradeWallet[2];
 var intertradeGroup = intertradeWallet[3];
-var intertradeBalance = intertradeWallet[5];
-var intertradeDebitLimit = intertradeWallet[6];
-var intertradeCreditLimit = intertradeWallet[7];
+var intertradeBalance = intertradeWallet[4];
+var intertradeDebitLimit = intertradeWallet[5];
+var intertradeCreditLimit = intertradeWallet[6];
 
 var intertradeWallet = creditCommons.getMember(intertradeAccount);
 var intertradeIsMember = intertradeWallet[0];
 var intertradeAlias = intertradeWallet[1];
 var intertradeDescription = intertradeWallet[2];
 var intertradeGroup = intertradeWallet[3];
-var intertradeBalance = intertradeWallet[5];
-var intertradeDebitLimit = intertradeWallet[6];
-var intertradeCreditLimit = intertradeWallet[7];
-
+var intertradeBalance = intertradeWallet[4];
+var intertradeDebitLimit = intertradeWallet[5];
+var intertradeCreditLimit = intertradeWallet[6];
 
 var me = "ETH Account: <b>" + myCoinbase
 + "<br></b> Credit Commons Member: <b>" + myIsMember + "</b> Alias: <b>" + myAlias 
