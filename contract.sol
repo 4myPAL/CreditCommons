@@ -51,6 +51,7 @@ contract creditCommons {
 		int balance;
 		uint mDebitLimit;
 		uint mCreditLimit;
+		string imagelink;
 	}
 	
 	// @notice map the members structure into an array indexed by the members ethereum address 
@@ -185,6 +186,7 @@ contract creditCommons {
     	bool open;
     	uint nrMembers;
     	uint quorum;
+    	string imageLink;
     }
 
     // @notice map the exchanges structure into an array indexed by a string (the string we use is the CES Exchange ID)
@@ -339,6 +341,7 @@ contract creditCommons {
 		address payer;
 		string description;
 		uint billAmount;
+		uint billDateTime;
 		bool paid;
 	    }
 
@@ -351,6 +354,7 @@ contract creditCommons {
 		bill[billNumber].payer = _payer;
 		bill[billNumber].description = _description;
 		bill[billNumber].billAmount = _billAmount;
+		bill[billNumber].billDateTime = now;
 		bill[billNumber].paid = false;
 	}
 
@@ -361,8 +365,8 @@ contract creditCommons {
 			}    	
 	}	
 	
-	function getBill (uint _billNumber) constant returns (address, address, string, uint, bool) {
-		return (bill[_billNumber].payee, bill[_billNumber].payer, bill[_billNumber].description, bill[_billNumber].billAmount, bill[_billNumber].paid);
+	function getBill (uint _billNumber) constant returns (address, address, string, uint, uint, bool) {
+		return (bill[_billNumber].payee, bill[_billNumber].payer, bill[_billNumber].description, bill[_billNumber].billAmount, bill[billNumber].billDateTime, bill[_billNumber].paid);
 	}
     
     event ProposalAdded(uint proposalNumber, uint group, string description, address creator);

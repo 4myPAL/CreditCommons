@@ -28,12 +28,12 @@
 		document.getElementById('alias').innerHTML = "<b>" + myAlias + "</b>";
 		document.getElementById('description').innerHTML = "<i>"
 				+ myDescription + "</i>";
-		document.getElementById('balance').innerHTML = myBalance + " "
-				+ myCurrencyName;
-		document.getElementById('debitLimit').innerHTML = myDebitLimit + " "
-				+ myCurrencyName;
-		document.getElementById('creditLimit').innerHTML = myCreditLimit + " "
-				+ myCurrencyName;
+		document.getElementById('balance').innerHTML = "<h2>" + myBalance + " <span class=\"badge\">"
+				+ myCurrencyName + "</span></h2>";
+		document.getElementById('debitLimit').innerHTML = myDebitLimit + " <span class=\"badge\">"
+				+ myCurrencyName + "</span>";
+		document.getElementById('creditLimit').innerHTML = myCreditLimit + " <span class=\"badge\">"
+        + myCurrencyName + "</span>";
 		document.getElementById('isIntertrade').innerHTML = isIntertrade;
 		document.getElementById('isCommune').innerHTML = isCommune;
 		document.getElementById('myGroupName').innerHTML = "<b>" + myGroupName
@@ -43,16 +43,22 @@
 		document.getElementById('myGroupNr').innerHTML= "<b>" + myGroupNr
 				+ "</b>";
 		document.getElementById('myGroupNrM').innerHTML= myGroupNrM;				
-		document.getElementById('myCurrencyName').innerHTML= myCurrencyName;
+		document.getElementById('myCurrencyName').innerHTML= "<span class=\"badge\">"
+	        + myCurrencyName + "</span>";
 		document.getElementById('myRate').innerHTML= myRate;
-		document.getElementById('myGroupDebitLimit').innerHTML= myGroupDebitLimit + " " + myCurrencyName;
-		document.getElementById('myGroupCreditLimit').innerHTML= myGroupCreditLimit + " " + myCurrencyName;
+		document.getElementById('myGroupDebitLimit').innerHTML= myGroupDebitLimit + " <span class=\"badge\">"
+        + myCurrencyName + "</span>";
+		document.getElementById('myGroupCreditLimit').innerHTML= myGroupCreditLimit + " <span class=\"badge\">"
+        + myCurrencyName + "</span>";
         document.getElementById('myGroupOpen').innerHTML= myGroupOpen;
         document.getElementById('communeAccount').innerHTML= communeAccount;
         document.getElementById('intertradeAccount').innerHTML= intertradeAccount;
-        document.getElementById('intertradeBalance').innerHTML= intertradeBalance + " " + myCurrencyName;
-        document.getElementById('intertradeDebitLimit').innerHTML= intertradeDebitLimit + " " + myCurrencyName;
-        document.getElementById('intertradeCreditLimit').innerHTML= intertradeCreditLimit + " " + myCurrencyName;
+        document.getElementById('intertradeBalance').innerHTML= intertradeBalance + " <span class=\"badge\">"
+        + myCurrencyName + "</span>";
+        document.getElementById('intertradeDebitLimit').innerHTML= intertradeDebitLimit + " <span class=\"badge\">"
+        + myCurrencyName + "</span>";
+        document.getElementById('intertradeCreditLimit').innerHTML= intertradeCreditLimit + " <span class=\"badge\">"
+        + myCurrencyName + "</span>";
 	}
 
 	function register() {
@@ -95,7 +101,7 @@
 			<h3>My account</h3>
 			<div class="col-sm-6">
 				<div class="well">
-					<h4>My Wallet</h4>
+					<h4><span class="glyphicon glyphicon-user"></span> My Wallet</h4>
 					<table class="table">
 						<thead>
 						</thead>
@@ -154,7 +160,7 @@
 			</div>
 			<div class="col-sm-6">
 				<div class="well">
-					<h4>My Group</h4>
+					<h4><img src="https://cdn1.iconfinder.com/data/icons/multimedia-marketing/512/50-512.png" class="img-circle" width="50" height="50"> My Group</h4>
 					<table class="table small">
 						<thead>
 						</thead>
@@ -177,7 +183,7 @@
 							</tr>
 							<tr>
 								<td class="text-right col-sm-2">Currency:</td>
-								<td class="text-left"><p id="myCurrencyName"></p></td>
+								<td class="text-center"><p id="myCurrencyName"></p></td>
 							</tr>
 							<tr>
 								<td class="text-right col-sm-2">Rate:</td>

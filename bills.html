@@ -21,52 +21,68 @@
 				+ "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
 				+ myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
 				+ "</b> Is Commune: <b>" + isCommune + "</b>";
-		document.getElementById('myBalance').innerHTML = myBalance + " "
-				+ myCurrencyName;
-		document.getElementById('myDebitLimit').innerHTML = myDebitLimit + " "
-				+ myCurrencyName;
-/*
-        var billsReceivedUnpaid;
-        var billsReceivedPaid;
-        var billsSentUnpaid;
-        var billsSentPaid;
-        
-        for (i = 0, 100, i++) {
-            var bill = creditCommons.getBill(i);
-            var payee = bill[0];
-            var payer = bill[1];
-            var bDescription = bill[2];
-            var bAmount = bill[3];
-            var paid= bill[4];
-            var listBill = "<hr/>Bill number: <b>" + i + "</b> Paid: <b>" + paid 
-             + "</b><br/>From: " + payee
-             + "<br/>To: " + payer
-             + "<br/>Description: " + bDescription
-             + "<br/>Description: <b>" + bAmount + " " + creditCommons.getGroupDescription(creditCommons.getMember(myCoinbase)[3])[2] + "</b><br/>";
-            if (bill[1] = myCoinbase) {
-                if (bill[4] = false) {billsReceivedUnpaid += listBill}
-                if (bill[4] = true) {billsReceivedPaid += listBill}
-                }
-            if (bill[0] = myCoinbase) {
-                if (bill[4] = false) {billsSentUnpaid += listBill}
-                if (bill[4] = true) {billsSentPaid += listBill}
-                }
-        }
- */       
+		document.getElementById('myBalance').innerHTML = "<h2>" + myBalance + " <span class=\"badge\">"
+        + myCurrencyName + "</span></h2>";
+		document.getElementById('myDebitLimit').innerHTML = myDebitLimit + " <span class=\"badge\">"
+        + myCurrencyName + "</span></h2>";
+        document.getElementById('payeeCurrency').innerHTML = " <span class=\"badge\">"
+        + myCurrencyName + "</span></h2>";
 
-        
+		
+		/*
+		 var billsReceivedUnpaid;
+		 var billsReceivedPaid;
+		 var billsSentUnpaid;
+		 var billsSentPaid;
+		
+		 for (i = 0, 100, i++) {
+		 var bill = creditCommons.getBill(i);
+		 var payee = bill[0];
+		 var payer = bill[1];
+		 var bDescription = bill[2];
+		 var bAmount = bill[3];
+		 var paid= bill[4];
+		 var listBill = "<hr/>Bill number: <b>" + i + "</b> Paid: <b>" + paid 
+		 + "</b><br/>From: " + payee
+		 + "<br/>To: " + payer
+		 + "<br/>Description: " + bDescription
+		 + "<br/>Description: <b>" + bAmount + " " + creditCommons.getGroupDescription(creditCommons.getMember(myCoinbase)[3])[2] + "</b><br/>";
+		 if (bill[1] = myCoinbase) {
+		 if (bill[4] = false) {billsReceivedUnpaid += listBill}
+		 if (bill[4] = true) {billsReceivedPaid += listBill}
+		 }
+		 if (bill[0] = myCoinbase) {
+		 if (bill[4] = false) {billsSentUnpaid += listBill}
+		 if (bill[4] = true) {billsSentPaid += listBill}
+		 }
+		 }
+		 */
+
 		document.getElementById('billsReceivedUnpaid').innerHTML = billsReceivedUnpaid;
 		document.getElementById('billsReceivedPaid').innerHTML = billsReceivedPaid;
 		document.getElementById('billsSentUnpaid').innerHTML = billsSentUnpaid;
 		document.getElementById('billsSentPaid').innerHTML = billsSentPaid;
-		
+
 	}
+	
+	 function conversion() {
+	        var billPayee = myCoinbase;
+	        var billPayer = document.getElementById('billPayer').value;
+	        var billDescription = document.getElementById('billDescription').value;
+	        var billPayeeAmount = document.getElementById('billPayeeAmount').value;
+	        var ratePayee = myRate;
+	        var payerGroup = creditCommons.getMember(billPayer)[3];
+	        var ratePayer = creditCommons.getGroupRates(payerGroup)[0];
+	        var currencyPayer = creditCommons.getGroupDescription(payerGroup)[2];
+	        document.getElementById('payerCurrency').innerHTML = currencyPayer;
+	    }
 
 	function createBill() {
+		var billPayee = myCoinbase;
 		var billPayer = document.getElementById('billPayer').value;
 		var billDescription = document.getElementById('billDescription').value;
-		var billAmount = document.getElementById('billAmount').value;
-		creditCommons.createBill(billPayer, billDescription, billAmount);
+		var billPayerAmount = document.getElementById('billPayerAmount').value;
+		creditCommons.createBill(billPayee, billPayer, billDescription, billAmount);
 		location.reload();
 	}
 
@@ -90,9 +106,9 @@
 		<small><p class="bg-info" id="me"></p></small>
 		<div class="row">
 			<h3>Bills</h3>
-			<div class="col-sm-8">
+			<div class="col-sm-6">
 				<div class="well">
-					<h4>My Wallet</h4>
+					<h4><span class="glyphicon glyphicon-user"></span> My Wallet</h4>
 					<table class="table">
 						<thead>
 						</thead>
@@ -109,7 +125,8 @@
 					</table>
 				</div>
 
-				<hr />
+			</div>
+			<div class="col-sm-12">
 				<h4>Send bill</h4>
 				<form class="form-horizontal" role="form">
 					<div class="form-group">
@@ -128,15 +145,23 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="billAmount">Amount:</label>
+						<label class="control-label col-sm-4" for="billPayeeAmount">Amount in <span class="badge"><p id="payeeCurrency"></p></span></label>
 						<div class="col-sm-6">
-							<input type="text" class="form-control" id="billAmount"
-								placeholder="Enter amount in payers currency">
+							<input type="text" class="form-control" id="billPayeeAmount"
+								placeholder="Enter amount in payee currency">
 						</div>
 					</div>
+					<div class="form-group">
+                        <label class="control-label col-sm-4" for="billPayerAmount">Amount in <span class="badge"><p id="payerCurrency"></p></span></label>
+                        <div class="col-sm-6">
+                            <output type="text" class="form-control" id="billPayerAmount">
+                        </div>
+                    </div>
 				</form>
 				<button type="submit" class="btn btn-default"
-					onClick="createBill();">Send Bill</button>
+                    onClick="conversion();">Calculate payer amount</button>
+				<button type="submit" class="btn btn-default"
+					onClick="sendBill();">Send Bill</button>
 				<hr />
 				<h4>Pay bill</h4>
 				<form class="form-horizontal" role="form">
@@ -156,13 +181,13 @@
 				<h5>Unpaid</h5>
 				<p id="billsReceivedUnpaid"></p>
 				<h5>Paid</h5>
-                <p id="billsReceivedPaid"></p>
+				<p id="billsReceivedPaid"></p>
 				<hr />
 				<h4>Bills sent</h4>
 				<p id="billsSentUnpaid"></p>
 				<h5>Unpaid</h5>
 				<h5>Paid</h5>
-                <p id="billsSentPaid"></p>
+				<p id="billsSentPaid"></p>
 				<hr />
 			</div>
 		</div>

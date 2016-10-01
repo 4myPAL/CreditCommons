@@ -22,10 +22,10 @@
 				+ myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
 				+ "</b> Is Commune: <b>" + isCommune + "</b>";
 
-		document.getElementById('myBalance').innerHTML = myBalance + " "
-				+ myCurrencyName;
-		document.getElementById('myDebitLimit').innerHTML = myDebitLimit + " "
-				+ myCurrencyName;
+		document.getElementById('myBalance').innerHTML = "<h2>" + myBalance + " <span class=\"badge\">"
+        + myCurrencyName + "</span></h2>";
+		document.getElementById('myDebitLimit').innerHTML = myDebitLimit + " <span class=\"badge\">"
+        + myCurrencyName + "</span></h2>";
 	}
 
 	function transfer() {
@@ -91,7 +91,7 @@
 			<h3>Transfers</h3>
 			<div class="col-sm-6">
 				<div class="well">
-					<h4>My Wallet</h4>
+					<h4><span class="glyphicon glyphicon-user"></span> My Wallet</h4>
 					<table class="table">
 						<thead>
 						</thead>
