@@ -21,41 +21,42 @@
 				+ "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
 				+ myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
 				+ "</b> Is Commune: <b>" + isCommune + "</b>";
-		document.getElementById('myBalance').innerHTML = "<h2>" + myBalance + " <span class=\"badge\">"
-        + myCurrencyName + "</span></h2>";
-		document.getElementById('myDebitLimit').innerHTML = myDebitLimit + " <span class=\"badge\">"
-        + myCurrencyName + "</span></h2>";
-        document.getElementById('payeeCurrency').innerHTML = " <span class=\"badge\">"
-        + myCurrencyName + "</span></h2>";
+		document.getElementById('myBalance').innerHTML = "<h2>" + myBalance
+				+ " <span class=\"badge\">" + myCurrencyName + "</span></h2>";
+		document.getElementById('myDebitLimit').innerHTML = myDebitLimit
+				+ " <span class=\"badge\">" + myCurrencyName + "</span></h2>";
+		document.getElementById('payeeCurrency').innerHTML = " <span class=\"badge\">"
+				+ myCurrencyName + "</span></h2>";
 
-		
+		var billsReceivedUnpaid;
+		var billsReceivedPaid;
+		var billsSentUnpaid;
+		var billsSentPaid;
+
 		/*
-		 var billsReceivedUnpaid;
-		 var billsReceivedPaid;
-		 var billsSentUnpaid;
-		 var billsSentPaid;
+		for (i = 1, 5, i++) {
+
+		var bill = creditCommons.getBill(i);              
+		var payee = bill[0];
+		var payer = bill[1];
+		var bDescription = bill[2];
+		var bAmount = bill[3];
+		var paid= bill[4];
+		var listBill = "<hr/>Bill number: <b>" + i + "</b> Paid: <b>" + paid 
+		+ "</b><br/>From: " + payee
+		+ "<br/>To: " + payer
+		+ "<br/>Description: " + bDescription
+		+ "<br/>Description: <b>" + bAmount + " " + creditCommons.getGroupDescription(creditCommons.getMember(myCoinbase)[3])[2] + "</b><br/>";
+		if (bill[1] = myCoinbase) {
+		if (bill[4] = false) {billsReceivedUnpaid += listBill}
+		if (bill[4] = true) {billsReceivedPaid += listBill}
+		}
+		if (bill[0] = myCoinbase) {
+		if (bill[4] = false) {billsSentUnpaid += listBill}
+		if (bill[4] = true) {billsSentPaid += listBill}
+		}
 		
-		 for (i = 0, 100, i++) {
-		 var bill = creditCommons.getBill(i);
-		 var payee = bill[0];
-		 var payer = bill[1];
-		 var bDescription = bill[2];
-		 var bAmount = bill[3];
-		 var paid= bill[4];
-		 var listBill = "<hr/>Bill number: <b>" + i + "</b> Paid: <b>" + paid 
-		 + "</b><br/>From: " + payee
-		 + "<br/>To: " + payer
-		 + "<br/>Description: " + bDescription
-		 + "<br/>Description: <b>" + bAmount + " " + creditCommons.getGroupDescription(creditCommons.getMember(myCoinbase)[3])[2] + "</b><br/>";
-		 if (bill[1] = myCoinbase) {
-		 if (bill[4] = false) {billsReceivedUnpaid += listBill}
-		 if (bill[4] = true) {billsReceivedPaid += listBill}
-		 }
-		 if (bill[0] = myCoinbase) {
-		 if (bill[4] = false) {billsSentUnpaid += listBill}
-		 if (bill[4] = true) {billsSentPaid += listBill}
-		 }
-		 }
+		}
 		 */
 
 		document.getElementById('billsReceivedUnpaid').innerHTML = billsReceivedUnpaid;
@@ -64,25 +65,28 @@
 		document.getElementById('billsSentPaid').innerHTML = billsSentPaid;
 
 	}
-	
-	 function conversion() {
-	        var billPayee = myCoinbase;
-	        var billPayer = document.getElementById('billPayer').value;
-	        var billDescription = document.getElementById('billDescription').value;
-	        var billPayeeAmount = document.getElementById('billPayeeAmount').value;
-	        var ratePayee = myRate;
-	        var payerGroup = creditCommons.getMember(billPayer)[3];
-	        var ratePayer = creditCommons.getGroupRates(payerGroup)[0];
-	        var currencyPayer = creditCommons.getGroupDescription(payerGroup)[2];
-	        document.getElementById('payerCurrency').innerHTML = currencyPayer;
-	    }
+
+	function conversion() {
+		var billPayee = myCoinbase;
+		var billPayer = document.getElementById('billPayer').value;
+		var billDescription = document.getElementById('billDescription').value;
+		var billPayeeAmount = document.getElementById('billPayeeAmount').value;
+		var ratePayee = myRate;
+		var payerGroup = creditCommons.getMember(billPayer)[3];
+		var ratePayer = creditCommons.getGroupRates(payerGroup)[0];
+		var currencyPayer = creditCommons.getGroupDescription(payerGroup)[2];
+		var billPayerAmount = billPayeeAmount * ratePayee / ratePayer;
+		document.getElementById('payerCurrency').innerHTML = currencyPayer;
+		document.getElementById('billPayerAmount').innerHTML = billPayerAmount;
+	}
 
 	function createBill() {
 		var billPayee = myCoinbase;
 		var billPayer = document.getElementById('billPayer').value;
 		var billDescription = document.getElementById('billDescription').value;
 		var billPayerAmount = document.getElementById('billPayerAmount').value;
-		creditCommons.createBill(billPayee, billPayer, billDescription, billAmount);
+		creditCommons.createBill(billPayee, billPayer, billDescription,
+				billAmount);
 		location.reload();
 	}
 
@@ -108,7 +112,9 @@
 			<h3>Bills</h3>
 			<div class="col-sm-6">
 				<div class="well">
-					<h4><span class="glyphicon glyphicon-user"></span> My Wallet</h4>
+					<h4>
+						<span class="glyphicon glyphicon-user"></span> My Wallet
+					</h4>
 					<table class="table">
 						<thead>
 						</thead>
@@ -126,43 +132,56 @@
 				</div>
 
 			</div>
-			<div class="col-sm-12">
-				<h4>Send bill</h4>
-				<form class="form-horizontal" role="form">
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="billPayer">Payer
-							account:</label>
-						<div class="col-sm-8">
-							<input type="text" class="form-control" id="billPayer"
-								placeholder="Enter payer account">
-						</div>
+			<div class="col-sm-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4>Send bill</h4>
 					</div>
-					<div class="form-group">
-						<label class="control-label" for="billDescription">Description</label>
-						<div>
-							<textarea class="form-control" rows="5" id="billDescription"
-								placeholder="List delivered products and services" cols=""></textarea>
-						</div>
+					<div class="panel-body">
+						<form class="form-horizontal" role="form">
+							<div class="form-group">
+								<label class="control-label col-sm-4" for="billPayer">Payer
+									account:</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" id="billPayer"
+										placeholder="Enter payer account">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label" for="billDescription">Description</label>
+								<div class="col-sm-8">
+									<textarea class="form-control" rows="5" id="billDescription"
+										placeholder="Describe delivered products and services"></textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-sm-4" for="billPayeeAmount">Amount
+									in <span class="badge"><p id="payeeCurrency"></p></span>
+								</label>
+								<div class="col-sm-6">
+									<input type="text" class="form-control" id="billPayeeAmount"
+										placeholder="Enter amount in payee currency">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-sm-4" for="billPayerAmount">Amount
+									in <span class="badge"><p id="payerCurrency"></p></span>
+								</label>
+								<div class="col-sm-6">
+									<output type="text" class="form-control" id="billPayerAmount">
+								</div>
+							</div>
+						</form>
 					</div>
-					<div class="form-group">
-						<label class="control-label col-sm-4" for="billPayeeAmount">Amount in <span class="badge"><p id="payeeCurrency"></p></span></label>
-						<div class="col-sm-6">
-							<input type="text" class="form-control" id="billPayeeAmount"
-								placeholder="Enter amount in payee currency">
-						</div>
+					<div class="panel-footer">
+						<button type="submit" class="btn btn-default"
+							onClick="conversion();">Calculate payer amount</button>
+						<button type="submit" class="btn btn-default"
+							onClick="sendBill();">Send Bill</button>
 					</div>
-					<div class="form-group">
-                        <label class="control-label col-sm-4" for="billPayerAmount">Amount in <span class="badge"><p id="payerCurrency"></p></span></label>
-                        <div class="col-sm-6">
-                            <output type="text" class="form-control" id="billPayerAmount">
-                        </div>
-                    </div>
-				</form>
-				<button type="submit" class="btn btn-default"
-                    onClick="conversion();">Calculate payer amount</button>
-				<button type="submit" class="btn btn-default"
-					onClick="sendBill();">Send Bill</button>
-				<hr />
+				</div>
+
+
 				<h4>Pay bill</h4>
 				<form class="form-horizontal" role="form">
 					<div class="form-group">
@@ -176,6 +195,10 @@
 				</form>
 				<button type="submit" class="btn btn-default" onClick="payBill();">Pay
 					Bill</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
 				<hr />
 				<h4>Bills received</h4>
 				<h5>Unpaid</h5>

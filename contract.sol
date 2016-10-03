@@ -61,7 +61,7 @@ contract creditCommons {
 	address[] memberIndex;
 	
 	// @notice anybody with an ethereum account can register in the system
-	function registerSystem (string _alias, string _whisperID, string _description) {
+	function registerSystem (string _alias, string _whisperID, string _description, string _imageLink) {
 		// @notice the caller provides a valid alias
 		if (bytes(_alias).length != 0) {
 		// @notice the caller is not already the system
@@ -76,6 +76,7 @@ contract creditCommons {
 			member[msg.sender].balance = 0;
 			member[msg.sender].mDebitLimit = 0;
 			member[msg.sender].mCreditLimit = 0;
+			member[msg.sender].imageLink = _imageLink;
 		NewMember (msg.sender, _alias, _description, now);
 		memberIndex[memberIndex.length ++] = msg.sender;
 		nrMembers = nrMembers + 1;
@@ -83,10 +84,11 @@ contract creditCommons {
 			} 
 		}
 	
-	function modifyMember (string _alias, string _whisperID, string _description) {
+	function modifyMember (string _alias, string _whisperID, string _description, string _imageLink) {
 		if (bytes(_alias).length != 0) {member[msg.sender].alias = _alias;}
 		if (bytes(_whisperID).length != 0) {member[msg.sender].whisperID = _whisperID;}
 		if (bytes(_description).length != 0) {member[msg.sender].memberDescription = _description;}
+		if (bytes(_imageLink).length != 0) {member[msg.sender].imageLink = _imageLink;}
 		}
 	
 	function modifyMemberLimits (address _groupMember, uint _newDebitLimit, uint _newCreditLimit) {
@@ -162,8 +164,8 @@ contract creditCommons {
 	   return (member[_memberG].isIntertrade, member[_memberG].isCommune);
 	}
 	
-	function getMemberWhisper (address _memberG) constant returns (string) {
-	   return (member[_memberG].whisperID);
+	function getMemberWhisper (address _memberG) constant returns (string, string) {
+	   return (member[_memberG].whisperID, member[_memberG].imageLink);
 	}
 			
 	function getMPbyIndex (uint _mIndex) constant returns (address _getMemberID) {
@@ -296,6 +298,7 @@ contract creditCommons {
     }
     
     event Transaction (address indexed _sender, uint _senderAmount, address indexed _receiver, int _receiverAmount, uint _tTimeStamp);
+    event Bill (uint _billNumber, address indexed _payee, address indexed _payer, string _description, uint _billAmount, uint _bTimeStamp);
 
 	// @notice function transfer form the member of the same exchange or to the member of another exchange. The amount is expressed in the sender currency
 	function transfer (address _to, uint _fromAmount) {		
@@ -355,7 +358,8 @@ contract creditCommons {
 		bill[billNumber].description = _description;
 		bill[billNumber].billAmount = _billAmount;
 		bill[billNumber].billDateTime = now;
-		bill[billNumber].paid = false;
+		bill[billNumber].paid = false;	
+		Bill (nrBills, msg.sender, _payer, _description, _billAmount, now)
 	}
 
 	function payBill (uint _billNumber) {
