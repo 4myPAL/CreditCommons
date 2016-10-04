@@ -169,9 +169,7 @@ contract creditCommons {
 	}
 			
 	function getMPbyIndex (uint _mIndex) constant returns (address _getMemberID) {
-		if (_mIndex < memberIndex.length ++) {
 		_getMemberID = memberIndex[_mIndex];
-			}
 	}
 
     // @notice create a structure to file all groups and their parameters
@@ -292,9 +290,7 @@ contract creditCommons {
     }    
    
     function getGroupbyIndex (uint _gIndex) constant returns (uint _getGroupID) {
-    	if (_gIndex < groupIndex.length ++) {
     	_getGroupID = groupIndex[_gIndex];
-    		}
     }
     
     event Transaction (address indexed _sender, uint _senderAmount, address indexed _receiver, int _receiverAmount, uint _tTimeStamp);

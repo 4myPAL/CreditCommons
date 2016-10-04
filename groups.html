@@ -14,135 +14,105 @@
 <script type="text/javascript" src="creditCommons.js"></script>
 <script type="text/javascript">
 	window.onload = function() {
-        document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase
-        + "<br></b> Credit Commons Member: <b>" + isMember + "</b> Alias: <b>" + myAlias
-        + "<br></b> Whisper Account: <b>" + whisperID
-        + "<br></b>Group ID: <b>" + myGroupID + "</b> Group Name: <b>" + groupName 
-        + "</b> Is Intertrade: <b>" + isIntertrade + "</b>" + "</b> Is Commune: <b>" + isCommune + "</b>";
-		document.getElementById('groupAccount').innerText = groupAccount;
-		document.getElementById('coordinator').innerText = coordinator;
-		document.getElementById('groupID').innerText = myGroupID;
-		document.getElementById('groupName').innerText = groupName;
-		document.getElementById('currency').innerText = currencyName;
-		document.getElementById('rate').innerText = rate + "% Base Currency";
-		document.getElementById('debitLimitG').innerText = debitLimit + " "
-				+ currencyName;
-		document.getElementById('creditLimitG').innerText = creditLimit + " "
-				+ currencyName;
-		document.getElementById('open').innerText = open;
-		document.getElementById('groupBalance').innerText = groupBalance + " "
-				+ currencyName;
-		document.getElementById('intertradeDebitLimit').innerText = intertradeDebitLimit
-				+ " " + currencyName;
-		document.getElementById('intertradeCreditLimit').innerText = intertradeCreditLimit
-				+ " " + currencyName;
-		document.getElementById('numberG').innerHTML = "Number of groups in the system: <b>"
-				+ creditCommons.getNumberGroups() + "</b>";
+
+		document.getElementById('me').innerHTML = "ETH Account: <b>"
+				+ myCoinbase + "<br></b> Credit Commons Member: <b>"
+				+ myIsMember + "</b> Alias: <b>" + myAlias
+				+ "<br></b> Whisper Account: <b>" + myWhisper
+				+ "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
+				+ myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
+				+ "</b> Is Commune: <b>" + isCommune + "</b>";
+
+		document.getElementById('numberG').innerHTML = "Number of groups: <b>"
+				+ nrGroups + "</b>";
 
 		var groupsList = "";
-		var date;
-		for (i = 0; i < creditCommons.getNumberGroups(); i++) {
-			date = new Date(creditCommons.getGroupbyIndex(i) * 1000);
-			groupsList += "<hr/>Created: "
-					+ date
-					+ "<br/>Group ID: <b>"
-					+ creditCommons.getGroupbyIndex(i)
-					+ "</b> Group name: <b>"
-					+ creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[1]
-					+ "</b> Open: <b>"
-					+ creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[6]
-					+ "</b><br>Group Account: <b>"
-					+ creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[0]
-					+ "</b><br>Currency name: <b>"
-					+ creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[2]
-					+ "</b> Rate: <b>"
-					+ creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[3]
-					+ "</b> Debit Limit: <b>"
-					+ creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[4]
-					+ "</b> Credit Limit: <b>"
-					+ creditCommons.getGroup(creditCommons.getGroupbyIndex(i))[5]
-					+ "</b><br/> Coordinator: <b>" + creditCommons.getGroupManagement(creditCommons.getGroupbyIndex(i))[1]
-					+ "</b><br/> Intertrade Debit Limit: <b>" + creditCommons.getGroupManagement(creditCommons.getGroupbyIndex(i))[3]
-					+ "</b> Intertrade Credit Limit: <b>" + creditCommons.getGroupManagement(creditCommons.getGroupbyIndex(i))[4] 
-					+ "</b><br/>";
+		for (i = 0; i < nrGroups; i++) {
+			infoGroupNumber = creditCommons.getGroupbyIndex(i);
 
-			document.getElementById('listGroups').innerHTML = groupsList;
+			var infoGroup = creditCommons.getGroupDescription(infoGroupNumber);
+			var infoGroupName = infoGroup[0];
+			var infoGroupDescription = infoGroup[1];
+			var infoCurrencyName = infoGroup[2];
+			var infoGroupOpen = infoGroup[3];
+			var infoGroupNrM = infoGroup[4];
+
+			var infoGroupRates = creditCommons.getGroupRates(infoGroupNumber);
+			var infoRate = infoGroupRates[0];
+			var infoGroupDebitLimit = infoGroupRates[1];
+			var infoGroupCreditLimit = infoGroupRates[2];
+
+			var InfoGroupManagement = creditCommons
+					.getGroupManagement(infoGroupNumber);
+			var intertradeAccount = InfoGroupManagement[0];
+			var communeAccount = InfoGroupManagement[1];
+
+			groupsList += "<hr/><img src=\"https://cdn1.iconfinder.com/data/icons/multimedia-marketing/512/50-512.png\" class=\"img-circle\" width=\"20\" height=\"20\"> Group ID: <b>" + infoGroupNumber
+					+ "</b> Group name: <b>" + infoGroupName + "</b> Open: <b>"
+					+ infoGroupOpen + "</b><br>Group Description: <i>"
+					+ infoGroupDescription
+					+ "</i><br/>Currency name: <span class=\"badge\">"
+					+ infoCurrencyName + "</span><br/> Rate: <b>" + infoRate
+					+ "</b><br/> Intertrade Account: <b>" + intertradeAccount
+					+ "</b><br/> Commune Account: <b>" + communeAccount
+					+ "</b>";
 		}
 
+		document.getElementById('listGroups').innerHTML = groupsList;
 	}
 
-	function joinGroup() {
-		var groupToJ = document.getElementById('groupToJoin').value;
-		creditCommons.joinGroup(groupToJ);
-		location.reload();
-	}
+	var newGroup = creditCommons
+			.NewGroup(
+					{},
+					{
+						fromBlock : 1400000,
+						toBlock : 'latest'
+					},
+					function(error, result) {
+						var groupsList = "";
+						var row = "";
+						var d;
+						newGroup
+								.watch(function(error, result) {
+									d = new Date(
+											result.args._NGTimeStamp * 1000);
+									row += "<hr/><span class=\"glyphicon glyphicon-time\"></span> Created: "
+											+ d
+											+ "<br/><img src=\"https://cdn1.iconfinder.com/data/icons/multimedia-marketing/512/50-512.png\" class=\"img-circle\" width=\"20\" height=\"20\"> Group ID: <b>"
+											+ result.args._groupIDN
+											+ "</b> Group Name: <b>"
+											+ result.args._groupNameN
+											+ "</b><br/>Group Creator: "
+											+ result.args._creator + "<br/>";
+									document.getElementById('listNewGroups').innerHTML = row;
+								});
+					});
 
-	function createGroup() {
-		var CgoupName = document.getElementById('CgoupName').value;
-		var Ccurrency = document.getElementById('Ccurrency').value;
-		var Crate = document.getElementById('Crate').value;
-		var CdebitLimit = document.getElementById('CdebitLimit').value;
-		var CcreditLimit = document.getElementById('CcreditLimit').value;
-		var CIdebitLimit = document.getElementById('CIdebitLimit').value;
-		var CIcreditLimit = document.getElementById('CIcreditLimit').value;
-		var Copen = document.getElementById('Copen').value;
-		creditCommons.createGroup(Ccoordinator, CgoupName, Ccurrency, Crate,
-				CdebitLimit, CcreditLimit, CIdebitLimit, CIcreditLimit, Copen);
-		location.reload();
-	}
-
-	function modifyGroup() {
-		var MgroupID = myGroupID;
-		var MgoupName = doMument.getElementById('MgoupName').value;
-		var MMurrenMy = doMument.getElementById('MMurrenMy').value;
-		var Mrate = doMument.getElementById('Mrate').value;
-		var MdebitLimit = doMument.getElementById('MdebitLimit').value;
-		var MMreditLimit = doMument.getElementById('MMreditLimit').value;
-		var MIdebitLimit = doMument.getElementById('MIdebitLimit').value;
-		var MIMreditLimit = doMument.getElementById('MIMreditLimit').value;
-		var Mopen = doMument.getElementById('Mopen').value;
-		creditCommons.modifyGroup(groupID, MgoupName, MMurrenMy, Mrate,
-				MdebitLimit, MMreditLimit, MIdebitLimit, MIMreditLimit, Mopen);
-		location.reload();
-	}
-
-	function transferGroupCoordinator() {
-		var newCoordinator = document.getElementById('newCoordinator').value;
-		creditCommons.transferGroupCoordinator(myGroupID, newCoordinator);
-		location.reload();
-	}
-
-	var newGroup = creditCommons.NewGroup({}, {
-		fromBlock : 1400000,
-		toBlock : 'latest'
-	}, function(error, result) {
-		var row = "";
-		var d;
-		newGroup.watch(function(error, result) {
-			d = new Date(result.args._NGTimeStamp * 1000);
-			row += "<hr/>Created: " + d + "<br/>" + "Group ID: <b>"
-					+ result.args._groupIDN + "</b> Group Name: <b>"
-					+ result.args._groupNameN + "</b><br/>Group Account: "
-					+ result.args._creator + "<br/>";
-			document.getElementById('listNewGroups').innerHTML = row;
-		});
-	});
-
-	var modifiedGroup = creditCommons.ModifyGroup({}, {
-		fromBlock : 1400000,
-		toBlock : 'latest'
-	}, function(error, result) {
-		var row = "";
-		var d;
-		modifiedGroup.watch(function(error, result) {
-			d = new Date(result.args._MGTimeStamp * 1000);
-			row += "<hr/>Modified: " + Date(result.args._MGTimeStamp) + "<br/>"
-					+ "Group ID: <b>" + result.args._groupIDM
-					+ "</b> Group Name: <b>" + result.args._groupNameM
-					+ "</b><br/>Coordinator: " + result.args._modifier + "<br/>";
-			document.getElementById('listModGroups').innerHTML = row;
-		});
-	});
+	var modifiedGroup = creditCommons
+			.ModifyGroup(
+					{},
+					{
+						fromBlock : 1400000,
+						toBlock : 'latest'
+					},
+					function(error, result) {
+						var row = "";
+						var d;
+						modifiedGroup
+								.watch(function(error, result) {
+									d = new Date(
+											result.args._MGTimeStamp * 1000);
+									row += "<hr/><span class=\"glyphicon glyphicon-time\"></span> Modified: "
+											+ d
+											+ "<br/><img src=\"https://cdn1.iconfinder.com/data/icons/multimedia-marketing/512/50-512.png\" class=\"img-circle\" width=\"20\" height=\"20\"> Group ID: <b>"
+											+ result.args._groupIDM
+											+ "</b> Group New Name: <b>"
+											+ result.args._groupNameM
+											+ "</b><br/>Commune: "
+											+ result.args._modifier + "<br/>";
+									document.getElementById('listModGroups').innerHTML = row;
+								});
+					});
 </script>
 <style>
 .navbar {
@@ -153,190 +123,35 @@
 </head>
 <body>
 	<div class="container bg-3 text-center">
-	    <div class=container">
-            <script type="text/javascript" src="navbar.js"></script>
-        </div>
+		<script type="text/javascript" src="navbar.js"></script>
 		<small><p class="bg-info" id="me"></p></small>
 		<div class="row">
 			<div class="col-sm-12">
-
-				<hr />
-			</div>
-		</div>
-		<div class="row">
-			<small>
-				<div class="col-sm-6">
-					<h4>Create Group</h4>
-					<div>Only if you do not belong to one group</div>
-					<form class="form-horizontal" role="form">
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="CgroupName">Group
-								Name:</label>
-							<div class="col-sm-4">
-								<input class="form-control" id="CgroupName">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="Ccurrency">Group
-								Currency:</label>
-							<div class="col-sm-4">
-								<input class="form-control" id="Ccurrency">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="Crate">Currency
-								Rate:</label>
-							<div class="col-sm-4">
-								<input class="form-control" id="Crate">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="CdebitLimit">Default
-								Debit Limit:</label>
-							<div class="col-sm-4">
-								<input class="form-control" id="CdebitLimitG">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="CcreditLimit">Default
-								Credit Limit:</label>
-							<div class="col-sm-4">
-								<input class="form-control" id="CcreditLimitG">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="CIdebitLimit">Intertrade
-								Debit Limit:</label>
-							<div class="col-sm-4">
-								<input class="form-control" id="CIdebitLimitG">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="CIcreditLimit">Intertrade
-								Credit Limit:</label>
-							<div class="col-sm-4">
-								<input class="form-control" id="CIcreditLimitG">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="Copen">Open:</label>
-							<div class="col-sm-4">
-								<input class="form-control" type="checkbox" id="Copen">
-							</div>
-						</div>
-					</form>
-					<button type="submit" class="btn btn-default"
-						onClick="createGroup();">Create</button>
-				</div>
-				<div class="col-sm-6">
-					<h4>Modify my Group</h4>
-					<div>Only coordinator or System Administrator</div>
-					<h5>Transfer coordination</h5>
-					<form class="form-horizontal" role="form">
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="newCoordinator">New
-								Coordinator:</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" id="newCoordinator"
-									placeholder="Enter the new coordinator address">
-							</div>
-						</div>
-					</form>
-					<button type="submit" class="btn btn-default" onClick="transfer();">Transfer</button>
-					<hr />
-					<h5>Change Parameters</h5>
-					<form class="form-horizontal" role="form">
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="MgroupName">Group
-								Name:</label>
-							<div class="col-sm-4">
-								<input class="form-control" id="MgroupName">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="Mcurrency">Group
-								Currency:</label>
-							<div class="col-sm-4">
-								<input class="form-control" id="Mcurrency">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="Mrate">Currency
-								Rate:</label>
-							<div class="col-sm-4">
-								<input class="form-control" id="Mrate">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="MdebitLimit">Default
-								Debit Limit:</label>
-							<div class="col-sm-4">
-								<input class="form-control" id="MdebitLimitG">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="McreditLimit">Default
-								Credit Limit:</label>
-							<div class="col-sm-4">
-								<input class="form-control" id="McreditLimitG">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="MIdebitLimit">Intertrade
-								Debit Limit:</label>
-							<div class="col-sm-4">
-								<input class="form-control" id="MIdebitLimitG">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="MIcreditLimit">Intertrade
-								Credit Limit:</label>
-							<div class="col-sm-4">
-								<input class="form-control" id="MIcreditLimitG">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="control-label col-sm-4" for="Mopen">Open:</label>
-							<div class="col-sm-4">
-								<input class="form-control" type="checkbox" id="Mopen">
-							</div>
-						</div>
-					</form>
-					<button type="submit" class="btn btn-default"
-						onClick="modifyGroup();">Modify</button>
-				</div>
-			</small>
-		</div>
-		<div class="row">
-			<div class="col-sm-12">
-				<hr />
 				<h3>Groups</h3>
 				<p id="numberG"></p>
 				<div class="text-left" id="listGroups"></div>
-
-				<h3>Events</h3>
 				<h4>New Groups</h4>
 				<div class="text-left" id="listNewGroups"></div>
 				<h4>Modified Groups</h4>
 				<div class="text-left" id="listModGroups"></div>
-
 			</div>
 		</div>
+	</div>
 
-		<div class="panel-footer">
-			<p>
-				<img
-					src="https://trancsitu.files.wordpress.com/2014/05/ethereum-logo.png"
-					width="20" align="top" /> <i>Powered by ethereum</i>
-			</p>
-			<a rel="license"
-				href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img
-				alt="Creative Commons License" style="border-width: 0"
-				src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a><br />This
-			work is licensed under a <a rel="license"
-				href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative
-				Commons Attribution-NonCommercial-ShareAlike 4.0 International
-				License</a>.
-		</div>
+	<div class="panel-footer">
+		<p>
+			<img
+				src="https://trancsitu.files.wordpress.com/2014/05/ethereum-logo.png"
+				width="20" align="top" /> <i>Powered by ethereum</i>
+		</p>
+		<a rel="license"
+			href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img
+			alt="Creative Commons License" style="border-width: 0"
+			src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a><br />This
+		work is licensed under a <a rel="license"
+			href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative
+			Commons Attribution-NonCommercial-ShareAlike 4.0 International
+			License</a>.
+	</div>
 </body>
 </html>
