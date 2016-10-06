@@ -14,11 +14,88 @@
 <script type="text/javascript" src="creditCommons.js"></script>
 <script type="text/javascript">
 	window.onload = function() {
-        document.getElementById('me').innerHTML = "ETH Account: <b>" + coinbase
-        + "<br></b> Credit Commons Member: <b>" + isMember + "</b> Alias: <b>" + myAlias
-        + "<br></b> Whisper Account: <b>" + whisperID
-        + "<br></b>Group ID: <b>" + myGroupID + "</b> Group Name: <b>" + groupName 
-        + "</b> Is Intertrade: <b>" + isIntertrade + "</b>" + "</b> Is Commune: <b>" + isCommune + "</b>";
+		document.getElementById('me').innerHTML = "ETH Account: <b>"
+				+ myCoinbase + "<br></b> Credit Commons Member: <b>"
+				+ myIsMember + "</b> Alias: <b>" + myAlias
+				+ "<br></b> Whisper Account: <b>" + myWhisper
+				+ "<br></b>Group ID: <b>" + myGroupNr + "</b> Group Name: <b>"
+				+ myGroupName + "<br></b> Is Intertrade: <b>" + isIntertrade
+				+ "</b> Is Commune: <b>" + isCommune + "</b>";
+
+		var now;
+		var d;
+		now = new Date().getTime();
+		d = new Date(now);
+
+		document.getElementById('context').innerHTML = "Total Number of Members: "
+				+ nrMembers
+				+ " Total Number of Groups: "
+				+ nrGroups
+				+ " Total Number of Polls: "
+				+ nrProposals
+				+ "<br/><span class=\"glyphicon glyphicon-time\"></span> " + d;
+
+		var openPolls = "";
+		var closedPolls = "";
+
+		for (i = 0; i < nrProposals; i++) {
+			var poll = "";
+			var infoPolls = creditCommons.getProposal(i);
+			var group = infoPolls[0];
+			var description = infoPolls[1];
+			var quorum = infoPolls[2];
+			var deadline = infoPolls[3];
+			var d = new Date(deadline * 1000);
+			var creator = infoPolls[4];
+			var infoP = "Proposal Number: <b>"
+					+ i
+					+ "</b> Creator: <b>"
+					+ creator
+					+ "</b> Group: <b>"
+					+ group
+					+ "</b><br/>"
+					+ "Description: <i>"
+					+ description
+					+ "</i><br/>"
+					+ " <span class=\"glyphicon glyphicon-time\"></span> Deadline: "
+					+ d;
+			var infoVotes = creditCommons.getProposalVotes(i);
+			var numberOfVotes = infoVotes[0];
+			var currentResult = infoVotes[1];
+			var closed = infoVotes[2];
+			var proposalPassed = infoVotes[3];
+			var totalVoters = creditCommons.getGroupDescription(group)[4];
+			var infoV = "Number of Voters: <b>" + totalVoters
+					+ "</b> Quoroum: <b>" + quorum + "</b> Voted: <b>"
+					+ numberOfVotes + "</b> Current result: <b>"
+					+ currentResult + "</b> Closed : <b>" + closed
+					+ "</b> Passed : <span class=\"badge\">" + proposalPassed
+					+ "</span>";
+
+			var percentage = numberOfVotes * 100 / totalVoters;
+			var bar = "<div class=\"progress\"><div class=\"progress-bar\" role=\"progressbar\" style=\"width:"
+					+ percentage
+					+ "%\">"
+					+ percentage.toFixed(0)
+					+ "%</div></div>";
+			poll += "<hr/><div class=\"well\">" + infoP + "<br/>" + infoV
+					+ "<br/></div>" + bar + "<br/>";
+			if (closed == false) {
+				openPolls += poll
+			}
+			if (closed == true) {
+				closedPolls += poll
+			}
+		}
+		document.getElementById('openPolls').innerHTML = openPolls;
+		document.getElementById('closedPolls').innerHTML = closedPolls;
+
+	}
+	
+	function vote () {
+		   var pollNumber = document.getElementById('pollNumber').value;
+	        var vote = document.getElementById('vote').value;
+	        creditCommons.poll (myGroupNr, vote);
 	}
 </script>
 <style>
@@ -31,15 +108,43 @@
 <body>
 
 	<div class="container bg-3 text-center">
-		<div class=container">
-			<script type="text/javascript" src="navbar.js"></script>
-		</div>
+		<script type="text/javascript" src="navbar.js"></script>
 		<small><p class="bg-info" id="me"></p></small>
 		<div class="row">
 			<div class="col-sm-12">
-
 				<h3>Polls</h3>
+				<p class="bg-info" id="context"></p>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4>Vote</h4>
+					</div>
+					<div class="panel-body">
+						<form class="form-horizontal" role="form">
+							<div class="form-group">
+								<label class="control-label col-sm-2" for="pollNumber">Poll
+									Number:</label>
+								<div class="col-sm-1">
+									<input type="text" class="form-control" id="pollNumber">
+								</div>
+							</div>
+							<label class="radio-inline"><input type="radio" name="vote" value="1">Agree</label>
+							<label class="radio-inline"><input type="radio" name="vote" value="0">No
+								Opinion</label> 
+							<label class="radio-inline"><input type="radio" name="vote" value="-1">Disagree</label>
+						</form>
+					</div>
+					<div class="panel-footer">
+						<button type="submit" class="btn btn-default"
+							onClick="vote();">Vote</button>
+					</div>
 
+				</div>
+				<h4>Open Polls</h4>
+				<div class="text-left" id="openPolls"></div>
+				<h4>Closed Polls</h4>
+				<div class="text-left" id="closedPolls"></div>
+				<h4>Events</h4>
+				<h5></h5>
 			</div>
 		</div>
 	</div>

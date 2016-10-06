@@ -27,6 +27,7 @@ document.write(
 		'        <li><a href="groupMngt.html"><span class="	glyphicon glyphicon-wrench"></span> Group Management</a></li> '+
 		'       	</ul>'+
 		'        </li>'+
+		/*
 		'        <li class="dropdown-submenu">'+
 		'          <a class="dropdown-toggle" data-toggle="dropdown" ><span class="glyphicon glyphicon-envelope"></span> Posts</a>'+
 		'          <ul class="dropdown-menu">'+
@@ -35,11 +36,15 @@ document.write(
 		'          <li><a href="announcements.html"><span class="glyphicon glyphicon-bullhorn"></span> Broadcast announcements</a></li>        '+
 		'          </ul>'+
 		'        </li>'+
+		*/
 		'        <li class="dropdown-submenu">'+
 		'          <a class="dropdown-toggle" data-toggle="dropdown" ><span class="glyphicon glyphicon-ok"></span> Polls</a>'+
 		'          <ul class="dropdown-menu">'+
-		'        <li><a href="polls.html"><span class="glyphicon glyphicon-ok-circle"></span> General Polls</a></li> '+
+		'        <li><a href="polls.html"><span class="glyphicon glyphicon-ok-circle"></span> Vote Polls</a></li> '+
+		/*
 		'        <li><a href="acceptance.html"><span class="glyphicon glyphicon-thumbs-up"></span> Members acceptance</a></li> '+
+		*/
+		'		<li><a href="createPoll.html"><span class="glyphicon glyphicon-inbox"></span> Create Poll</a></li> '+
 		'          </ul>'+
 		'        </li>'+
 		'      </ul>'+

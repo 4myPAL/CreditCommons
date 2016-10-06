@@ -448,13 +448,14 @@ contract creditCommons {
         ProposalResult(_proposalNumber, proposal[_proposalNumber].currentResult, proposal[_proposalNumber].numberOfVotes, proposal[_proposalNumber].proposalPassed);
 			}}}    
   
-    function getProposal (uint _proposalNumber) constant returns (uint, string, uint, uint, address) {
+    function getProposal (uint _proposalNumber) constant returns (uint, string, string, uint, uint, address) {
 		if (now > proposal[_proposalNumber].votingDeadline) {closeProposal(_proposalNumber);}	
-    	return (proposal[_proposalNumber].proposalGroup, 
+    	return (proposal[_proposalNumber].creator,
+    			proposal[_proposalNumber].proposalGroup, 
+    			proposal[_proposalNumber].title,
     			proposal[_proposalNumber].description, 
     			proposal[_proposalNumber].quorumProposal,
-    			proposal[_proposalNumber].votingDeadline,
-				proposal[_proposalNumber].creator
+    			proposal[_proposalNumber].votingDeadline				
     			);
     }
 	
