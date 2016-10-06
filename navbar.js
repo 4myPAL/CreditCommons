@@ -44,7 +44,7 @@ document.write(
 		/*
 		'        <li><a href="acceptance.html"><span class="glyphicon glyphicon-thumbs-up"></span> Members acceptance</a></li> '+
 		*/
-		'		<li><a href="createPoll.html"><span class="glyphicon glyphicon-inbox"></span> Create Poll</a></li> '+
+		'		<li><a href="createPolls.html"><span class="glyphicon glyphicon-inbox"></span> Create Poll</a></li> '+
 		'          </ul>'+
 		'        </li>'+
 		'      </ul>'+
