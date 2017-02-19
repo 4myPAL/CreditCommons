@@ -1,3 +1,5 @@
+pragma solidity ^0.4.6;
+
 contract creditCommons {
 
         // @title creditCommons
@@ -51,7 +53,7 @@ contract creditCommons {
 		int balance;
 		uint mDebitLimit;
 		uint mCreditLimit;
-		string imagelink;
+		string imageLink;
 	}
 	
 	// @notice map the members structure into an array indexed by the members ethereum address 
@@ -333,42 +335,8 @@ contract creditCommons {
 					} 
 			} 
  			Transaction (msg.sender, _fromAmount, _to, _toAmount, now);
-		}
-		
-		struct bills {
-		address payee;
-		address payer;
-		string description;
-		uint billAmount;
-		uint billDateTime;
-		bool paid;
-	    }
-
-	mapping(uint => bills) bill;    
-
-	function createBill (address _payer, string _description, uint _billAmount) {
-	    nrBills ++;
-		uint billNumber = nrBills;
-		bill[billNumber].payee = msg.sender;
-		bill[billNumber].payer = _payer;
-		bill[billNumber].description = _description;
-		bill[billNumber].billAmount = _billAmount;
-		bill[billNumber].billDateTime = now;
-		bill[billNumber].paid = false;	
-		Bill (nrBills, msg.sender, _payer, _description, _billAmount, now)
-	}
-
-	function payBill (uint _billNumber) {
-		if (bill[_billNumber].payer == msg.sender) {
-			transfer (bill[_billNumber].payee, bill[_billNumber].billAmount);
-			bill[_billNumber].paid = true;
-			}    	
-	}	
-	
-	function getBill (uint _billNumber) constant returns (address, address, string, uint, uint, bool) {
-		return (bill[_billNumber].payee, bill[_billNumber].payer, bill[_billNumber].description, bill[_billNumber].billAmount, bill[billNumber].billDateTime, bill[_billNumber].paid);
-	}
-    
+		}		
+ 
     event ProposalAdded(uint proposalNumber, uint group, string description, address creator);
     event Voted(address voter, uint proposalNumber, int8 vote, int result);
     event ProposalResult(uint proposalNumber, int result, uint quorum, bool active);
@@ -448,7 +416,7 @@ contract creditCommons {
         ProposalResult(_proposalNumber, proposal[_proposalNumber].currentResult, proposal[_proposalNumber].numberOfVotes, proposal[_proposalNumber].proposalPassed);
 			}}}    
   
-    function getProposal (uint _proposalNumber) constant returns (uint, string, string, uint, uint, address) {
+    function getProposal (uint _proposalNumber) constant returns ( address, uint, string, string, uint, uint) {
 		if (now > proposal[_proposalNumber].votingDeadline) {closeProposal(_proposalNumber);}	
     	return (proposal[_proposalNumber].creator,
     			proposal[_proposalNumber].proposalGroup, 

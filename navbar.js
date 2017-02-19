@@ -16,7 +16,6 @@ document.write(
 		'          <a class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-transfer"></span> Transactions</a>'+
 		'          <ul class="dropdown-menu">'+
 		'          <li><a href="transfers.html"><span class="glyphicon glyphicon-send"></span> Transfers</a></li> '+
-		'          <li><a href="bills.html"><span class="glyphicon glyphicon-file"></span> Bills</a></li>        '+
 		'          </ul>'+
 		'        </li>'+
 		'        <li class="dropdown-submenu">'+
