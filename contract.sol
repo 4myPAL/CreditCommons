@@ -1,4 +1,4 @@
-pragma solidity ^0.4.6;
+pragma solidity ^0.4.10;
 
 contract creditCommons {
 
@@ -6,7 +6,7 @@ contract creditCommons {
         // @author Rogelio SEGOVIA; Matthew Slatter	
 		// @param sysAdmin is the system administrator address, the creator of the contract
 
-		address public sysAdmin;   
+		address public sysAdmin = msg.sender;  
 		uint nrMembers;
 		uint nrGroups;
 		uint nrProposals;
@@ -15,7 +15,7 @@ contract creditCommons {
 	// @notice at creating the contract we declare the general variables
 	function creditCommons() {
 				// @param the initial sysAdmin is the address from which the contract is created
-				sysAdmin = msg.sender;
+				
 			    nrMembers = 0;
 			    nrGroups = 0;
 			    nrProposals = 0;
